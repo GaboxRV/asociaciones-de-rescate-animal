@@ -1,0 +1,37 @@
+
+.nav{
+    padding: 1rem;
+    background-color: #fbf8d5;
+}
+
+.nav__lista{
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+
+    display: flex;
+    flex-flow: row wrap;
+    justify-content: center;
+    align-items: center;
+    gap: 2rem;
+
+}
+
+.nav__lista li:first-child{
+    flex-basis: 100%;
+    text-align: center;
+}
+
+.nav__lista li:last-child {
+    background-color:#469ddb ;
+    
+}
+
+.nav__link{
+    text-decoration: none;
+    min-width: 120px;
+    text-align: center;
+    display: block;
+    padding: 0.5rem;
+    color:var(--color-home);
+}

@@ -1,0 +1,27 @@
+
+.footer{
+    background-color: #CEDEF2;
+    text-align: center;
+    padding: 2rem;
+    
+}
+
+.footer__nombre{
+    margin-bottom: 2rem;
+}
+
+.footer__lista{
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+
+    display: flex;
+    justify-content: center;
+    gap: 1rem;
+
+}
+
+.footer__link{
+    text-decoration: none;
+}
+

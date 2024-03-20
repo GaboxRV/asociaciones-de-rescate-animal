@@ -35,3 +35,20 @@ The easiest way to deploy your Next.js app is to use the [Vercel Platform](https
 
 Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
 # asociaciones-de-rescate-animal
+
+
+--------------------------------------------------------------------
+
+# Tareas 
+
+- Definir la base de datos.
+- Formulario de nueva mascota.
+- Operaciones CRUD en archivo actions.ts 
+- Construir la carta para cada mascota. 
+
+
+- 
+- Formulario para añadir una mascota desde una asociacion.
+- Consultar todas las mascotas en la base de datos.
+- Definir la paginacion. 
+- Desplegar los resultados en la página "Mascotas". 
