@@ -1,0 +1,12 @@
+
+.main{
+    background-color: brown;
+}
+
+.seccion_mascotas{
+    display: flex;
+    flex-wrap: wrap;
+    gap: 2rem;
+
+    padding: 2rem;
+}
