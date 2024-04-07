@@ -1,0 +1,13 @@
+
+.seccion_formulario{
+    background-color: bisque;
+    padding: 2rem;
+
+    
+}
+
+.formulario{
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}

@@ -5,7 +5,7 @@ DROP TABLE IF EXISTS usuarios;
 DROP TABLE IF EXISTS asociaciones;
 
 DROP TYPE IF EXISTS sexos_de_mascotas;
-DROP TYPE IF EXISTS tipo_de_mascotas;
+DROP TYPE IF EXISTS tipos_de_mascotas;
 
 CREATE TABLE IF NOT EXISTS usuarios (
     usuario_id SERIAL PRIMARY KEY,
@@ -23,15 +23,15 @@ CREATE TABLE IF NOT EXISTS asociaciones(
 );
 
 CREATE TYPE sexos_de_mascotas AS ENUM ('macho', 'hembra');
-CREATE TYPE tipo_de_mascotas AS ENUM ('perro', 'gato');
+CREATE TYPE tipos_de_mascotas AS ENUM ('perro', 'gato');
 
 CREATE TABLE IF NOT EXISTS mascotas(
 	mascota_id SERIAL PRIMARY KEY,
 	nombre CHARACTER VARYING(255),
 	edad INTEGER NOT NULL,
 	sexo sexos_de_mascotas NOT NULL,
-	tipo tipo_de_mascotas NOT NULL
-	
+	tipo tipos_de_mascotas NOT NULL,
+	foto BYTEA
 );
 
 /* ----------------- Añadiendo restricciones ----------------- */

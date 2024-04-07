@@ -20,4 +20,5 @@ export type Mascota = {
     edad: number;
     sexo: 'macho' | 'hembra';
     tipo: 'perro' | 'gato';
+    foto: string;
 }

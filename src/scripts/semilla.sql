@@ -38,7 +38,11 @@ select * from asociaciones;
 select * from usuarios;
 select * from mascotas;
 
+SELECT enum_range(NULL::sexos_de_mascotas);
+SELECT enum_range(NULL::tipos_de_mascotas);
 
 select nombre, edad, sexo, tipo from mascotas where sexo = 'hembra';
 
 SELECT sexo, COUNT(*) FROM mascotas GROUP BY sexo;
+
+SELECT foto FROM mascotas WHERE mascota_id = 6
