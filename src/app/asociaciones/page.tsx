@@ -15,11 +15,11 @@ export default async function Asociaciones(){
                 {
                     respuesta.map((asociacion: Asociacion) => (
                         <CartillaAsociacion
-                            key={asociacion.id}
-                            nombre={asociacion.nombre}
-                            telefono={asociacion.telefono}
-                            direccion={asociacion.direccion}
-                            puntuacion={asociacion.puntuacion}
+                            key={asociacion.asociacion_id}
+                            nombre={asociacion.nombre_asociacion}
+                            telefono={asociacion.telefono_asociacion}
+                            direccion={asociacion.direccion_asociacion}
+                            puntuacion={asociacion.puntuacion_asociacion}
                         />
                     ))
                 }

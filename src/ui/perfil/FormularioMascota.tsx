@@ -1,4 +1,4 @@
-import styles from "@/ui/perfil/formulariomascota.module.css";
+import styles from "@/ui/perfil/formularioMascota.module.css";
 import { useFormState } from 'react-dom';
 import { crearMascota } from "@/lib/actions";
 

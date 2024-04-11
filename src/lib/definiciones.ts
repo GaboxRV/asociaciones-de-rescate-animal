@@ -1,24 +1,24 @@
 
 
 export type Usuario = {
-    id: string;
-    nombre: string;
-    contrasena: string;
+    usuario_id: string;
+    nombre_usuario: string;
+    contrasena_usuario: string;
 }
 
 export type Asociacion = {
-    id: string;
-    nombre: string;
-    telefono: string;
-    direccion: string;
-    puntuacion: number;
+    asociacion_id: string;
+    nombre_asociacion: string;
+    telefono_asociacion: string;
+    direccion_asociacion: string;
+    puntuacion_asociacion: number;
 }
 
 export type Mascota = { 
-    id: string;
-    nombre: string;
-    edad: number;
-    sexo: 'macho' | 'hembra';
-    tipo: 'perro' | 'gato';
-    foto: string;
+    mascota_id: string;
+    nombre_mascota: string;
+    edad_mascota: number;
+    sexo_mascota: 'macho' | 'hembra';
+    tipo_mascota: 'perro' | 'gato';
+    foto_mascota: string;
 }

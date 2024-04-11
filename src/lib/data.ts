@@ -1,13 +1,23 @@
 import { unstable_noStore as noStore } from "next/cache";
 import { conn } from "./conexion";
-
+import { Mascota } from "./definiciones";
 
 export async function fetchMascotas(){
     noStore();
     try{
         const respuesta = await conn.query("SELECT * FROM mascotas");
 
-        return respuesta.rows;
+        const datos: Mascota[] = respuesta.rows;
+        
+        for (let index = 0; index < respuesta.rowCount; index++) {
+            const foto_data = datos[index].foto_mascota;
+            if (foto_data != null){
+                const foto = Buffer.from(foto_data).toString("base64");
+                datos[index].foto_mascota = foto;
+            } 
+        }
+        return datos;
+
     } catch (error){
         console.error("Error al obtener las mascotas: ", error); 
         throw new Error('Error al obtener las mascotas');
@@ -19,20 +29,13 @@ export async function fetchMascota(id: number){
     try{
         const respuesta = await conn.query("SELECT * FROM mascotas WHERE mascota_id = $1", [id]);
 
-        const datos = respuesta.rows[0];
+        const datos: Mascota = respuesta.rows[0];
 
-        console.log("Datos: ", datos);
 
-        /*datos contiene un campo "foto" que es un tipo BYTEA y fue guardado de esta forma const foto_data = await foto.arrayBuffer(); 
-        para poder mostrar la imagen en el frontend, se debe convertir a un formato que pueda ser interpretado por el navegador y mostrarse en un tag <img>
-        */
-        const foto_data = datos.foto;
+        const foto_data = datos.foto_mascota;
         const foto = Buffer.from(foto_data).toString("base64");
-        datos.foto = foto;
+        datos.foto_mascota = foto;
 
-        /* console.log("Datos foto: ", foto_data, " ", typeof datos.foto);
-        console.log("Foto: ", foto); */
-        
         return datos;
     } catch (error){
         console.error("Error al obtener la mascota: ", error); 

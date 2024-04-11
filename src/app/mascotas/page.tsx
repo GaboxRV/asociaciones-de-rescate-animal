@@ -8,38 +8,24 @@ export default async function Mascotas() {
 
     const mascotas = await fetchMascotas();
 
-    const mascota = await fetchMascota(6);
-
-    /** mascota tiene un campo foto, que fue guardada de esta forma const foto = Buffer.from(foto_data).toString("base64"); 
-     que tipo de dato es foto?
-    */
-
     return (
         <main className={styles.main}>
+            
             <h2>Página de mascotas</h2>
             <section className={styles.seccion_mascotas}>
-                {/* {
+                {
                     mascotas.map((mascota: Mascota) => (
                         <CartillaAnimal
-                            key={mascota.id}
-                            nombre={mascota.nombre}
-                            edad={mascota.edad}
-                            sexo={mascota.sexo}
-                            tipo={mascota.tipo}
-                            foto={mascota.foto}
+                            key={mascota.mascota_id + mascota.nombre_mascota}
+                            nombre={mascota.nombre_mascota}
+                            edad={mascota.edad_mascota}
+                            sexo={mascota.sexo_mascota}
+                            tipo={mascota.tipo_mascota}
+                            foto={mascota.foto_mascota}
                         />
                     ))
-                } */}
-                <CartillaAnimal
-                    nombre={mascota.nombre}
-                    edad={mascota.edad}
-                    sexo={mascota.sexo}
-                    tipo={mascota.tipo}
-                    foto={mascota.foto}
-                />
-
+                }
             </section>
-
 
         </main>
 

@@ -3,4 +3,16 @@
     background-color: aqua;
     padding: 1rem;
     border-radius: 20px;
+
+    width: 420px;
+}
+
+
+
+.cartilla img{
+    width: 100%;
+    /* Que la imagen se adapte al contenedor*/
+    object-fit: cover;
+
+    border-radius: 20px;
 }
