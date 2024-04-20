@@ -2,7 +2,10 @@
 
 import { conn } from "@/lib/conexion";
 import { z } from "zod";
-
+import { revalidatePath } from "next/cache";
+import { redirect } from "next/navigation";
+import { signIn } from "../../auth";
+import { AuthError } from 'next-auth';
 
 /**
  * Bloque de código para crear una mascota
@@ -47,6 +50,9 @@ export async function crearMascota(formData : FormData){
             mensaje: "Error en la Base de Datos: Error al crear la mascota",
         }
     } 
+
+    revalidatePath("/mascotas");
+
 }
 
 /**
@@ -55,22 +61,41 @@ export async function crearMascota(formData : FormData){
 
 const EsquemaUsuario = z.object({
     id: z.string(),
-    nombre_usuario: z.string(),
-    contrasena_usuario: z.string(),
-    nombre_asociacion: z.string()
+    nombre_usuario: z.string().min(3, "Ingrese un nombre de usuario valido"),
+    contrasena_usuario: z.string().min(5, "Ingrese una contraseña valida"),
+    nombre_asociacion: z.string().min(5, "Ingrese un nombre de asociacion valido")
 });
+
 
 const CrearUsuario = EsquemaUsuario.omit({id: true});
 
-export async function crearUsuario(formData: FormData){
+export type Prueba = {
+    errores?: {
+        nombre_usuario?: string[];
+        contrasena_usuario?: string[];
+        nombre_asociacion?: string[];
+    };
+    mensaje?: string | null;
+};
+
+export async function crearUsuario(estadoPrevio: Prueba, formData: FormData){
 
     console.log("Creando usuario...");
 
-    const {nombre_usuario, contrasena_usuario, nombre_asociacion} = CrearUsuario.parse({
+    const camposValidados = CrearUsuario.safeParse({
         nombre_usuario: formData.get("nombre_usuario"),
         contrasena_usuario: formData.get("contrasena"),
         nombre_asociacion: formData.get("nombre_asociacion")
     });
+
+    if(!camposValidados.success){
+        return{
+            errores: camposValidados.error.flatten().fieldErrors,
+            mensaje: "Error en los campos del formulario"
+        }
+    }
+
+    const {nombre_usuario, contrasena_usuario, nombre_asociacion} = camposValidados.data;
 
     try {
 
@@ -91,4 +116,23 @@ export async function crearUsuario(formData: FormData){
             mensaje: "Error en la Base de Datos: Error al crear el usuario"
         }
     }
+
+    redirect('/perfil');
 }
+
+export async function authenticate( prevState: string | undefined, formData: FormData,
+  ) {
+    try {
+      await signIn('credentials', formData);
+    } catch (error) {
+      if (error instanceof AuthError) {
+        switch (error.type) {
+          case 'CredentialsSignin':
+            return 'Invalid credentials.';
+          default:
+            return 'Something went wrong.';
+        }
+      }
+      throw error;
+    }
+  }

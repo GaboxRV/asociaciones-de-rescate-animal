@@ -82,3 +82,14 @@ export async function fetchSexoMascotas(){
         throw new Error("Error al obtener el sexo de las mascotas");
     }
 }
+
+export async function fetchUsuario(usuario: string){
+    console.log("fetchUsuario");
+    try{
+        const respuesta = await conn.query("SELECT * FROM usuarios where nombre_usuario = $1", usuario);
+        return respuesta.rows[0];
+    } catch (error){
+        console.error("Error al obtener el usuario: ", error);
+        throw new Error("Error al obtener el usuario");
+    }
+}

@@ -18,8 +18,8 @@ export default async function Perfil() {
                 tipo_mascota={tipos_mascotas}
                 sexo_mascota={sexos_mascotas} 
                 asociacion_id={2}
-            /> */}
-            <FormularioUsuario />
+            /> */}  
+            {/* <FormularioUsuario /> */}
         </main>
     );
 
