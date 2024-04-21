@@ -7,19 +7,24 @@ export const authConfig = {
     callbacks: {
       authorized({ auth, request: { nextUrl } }) {
 
-        console.log(auth, nextUrl);
+        const estaRegistrado = !!auth?.user;
+        const estaEnPerfil = nextUrl.pathname.startsWith('/perfil');
 
-        const isLoggedIn = !!auth?.user;
-        const isOnDashboard = nextUrl.pathname.startsWith('/perfil');
-        if (isOnDashboard) {
-          if (isLoggedIn) return true;
-          return Response.redirect('/login');  // Redirect unauthenticated users to login page
-        } else if (isLoggedIn) {
+        if (estaEnPerfil) {
+
+          if (estaRegistrado) return true;
+          return false;  // Redirect unauthenticated users to login page
+
+        } else if (estaRegistrado) {
+
           return Response.redirect('/perfil');
+
         }
         return true;
       },
+
     },
     providers: [], // Add providers with an empty array for now
+    
   } satisfies NextAuthConfig;
   

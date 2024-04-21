@@ -20,3 +20,13 @@ export default function FormularioLogin() {
         </form>
     );
 }
+
+function LoginButton() {
+    const { pending } = useFormStatus();
+  
+    return (
+      <button>
+        Log in 
+      </button>
+    );
+  }

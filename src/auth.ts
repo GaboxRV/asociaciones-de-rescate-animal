@@ -10,21 +10,19 @@ export const { auth, signIn, signOut } = NextAuth({
       Credentials({
         async authorize(credentials) {
           const parsedCredentials = z
-            .object({ email: z.string(), password: z.string().min(2) })
+            .object({ nombre_usuario: z.string(), contrasena: z.string().min(2) })
             .safeParse(credentials);
 
-            console.log(parsedCredentials);
-
             if (parsedCredentials.success) {
-              const { email, password } = parsedCredentials.data;
-              const user = await fetchUsuario(email);
+              const { nombre_usuario, contrasena } = parsedCredentials.data;
+              const usuario = await fetchUsuario(nombre_usuario);
 
-              if (!user) return null;
+              if (!usuario) return null;
 
-              if (password === user.contrasena_usuario) return user;
+              if (contrasena === usuario.contrasena_usuario) return usuario;
             }
      
-            console.log('Invalid credentials');
+            console.log('Credenciales invalidas');
             return null;
         },
       }),
