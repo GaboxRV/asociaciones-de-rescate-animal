@@ -4,19 +4,19 @@ import { useFormState, useFormStatus } from 'react-dom';
 import { authenticate } from '@/lib/actions';
 
 export default function FormularioLogin() {
-    const [errorMessage, dispatch] = useFormState(authenticate, undefined);
+    const [mensaje, mandar] = useFormState(authenticate, undefined);
+
 
     return (
 
 
-        <form action={dispatch}>
-            <h1>Por favor loggea para acceder</h1>
-
+        <form action={mandar}>
             <label>Usuario</label>
-            <input type="text" name="usuario" />
+            <input type="text" name="nombre_usuario" defaultValue={'nombre 5'} />
 
             <label>Contraseña</label>
-            <input type="text" name="contraseña" />
+            <input type="text" name="contrasena" defaultValue={'a235'}/>
+            <button>Enviar</button>
         </form>
     );
 }

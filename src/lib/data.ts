@@ -85,9 +85,8 @@ export async function fetchSexoMascotas(){
 
 export async function fetchUsuario(usuario: string){
     noStore();
-    console.log("fetchUsuario");
     try{
-        const respuesta = await conn.query("SELECT * FROM usuarios where nombre_usuario = $1", usuario);
+        const respuesta = await conn.query("SELECT * FROM usuarios where nombre_usuario = $1", [usuario]);
         return respuesta.rows[0];
     } catch (error){
         console.error("Error al obtener el usuario: ", error);

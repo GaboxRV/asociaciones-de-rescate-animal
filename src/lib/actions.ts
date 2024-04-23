@@ -120,19 +120,23 @@ export async function crearUsuario(estadoPrevio: Prueba, formData: FormData){
     redirect('/perfil');
 }
 
-export async function authenticate( prevState: string | undefined, formData: FormData,
-  ) {
+export async function authenticate( prevState: string | undefined, formData: FormData) {
     try {
-      await signIn('credentials', formData);
+
+      await signIn('credentials', formData)
+
     } catch (error) {
+
       if (error instanceof AuthError) {
+
         switch (error.type) {
           case 'CredentialsSignin':
-            return 'Invalid credentials.';
+            return 'Credenciales invalidas';
           default:
-            return 'Something went wrong.';
+            return 'Algo salio mal..';
         }
+
       }
       throw error;
     }
-  }
+}
