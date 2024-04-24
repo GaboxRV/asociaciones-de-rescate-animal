@@ -24,6 +24,28 @@ export async function fetchMascotas(){
     }
 }
 
+export async function fetchMascotasPorAsociacion(id: number){
+    noStore();
+    try{
+        const respuesta = await conn.query("SELECT * FROM mascotas where asociacion_id = $1", [id]);
+
+        const datos: Mascota[] = respuesta.rows;
+        
+        for (let index = 0; index < respuesta.rowCount; index++) {
+            const foto_data = datos[index].foto_mascota;
+            if (foto_data != null){
+                const foto = Buffer.from(foto_data).toString("base64");
+                datos[index].foto_mascota = foto;
+            } 
+        }
+        return datos;
+
+    } catch (error){
+        console.error("Error al obtener las mascotas: ", error); 
+        throw new Error('Error al obtener las mascotas');
+    }
+}
+
 export async function fetchMascota(id: number){
     noStore();
     try{

@@ -52,7 +52,7 @@ export async function crearMascota(formData : FormData){
     } 
 
     revalidatePath("/mascotas");
-
+    redirect("/perfil");
 }
 
 /**

@@ -8,7 +8,6 @@ export default async function Login() {
             <section>
                 <h2>Inicio de sesión</h2>
                 <FormularioLogin />
-
             </section>
 
             <section>

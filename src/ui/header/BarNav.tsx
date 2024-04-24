@@ -19,13 +19,6 @@ const mono = Oxygen_Mono({ weight: '400', subsets: ["latin"] });
 
 export default function BarNav() {
 
-    const [desplegado, setDesplegado] = useState(false);
-    const pathname = usePathname();
-
-    function toggleDesplegado() {
-        setDesplegado(!desplegado);
-    }
-
     return (
         <header className={mono.className}>
             <nav className={styles.nav}>

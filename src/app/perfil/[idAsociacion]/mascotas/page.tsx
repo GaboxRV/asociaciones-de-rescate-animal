@@ -1,18 +1,16 @@
-
-import { fetchMascotas, fetchMascota } from "@/lib/data";
-import CartillaAnimal from "@/ui/mascotas/CartillaAnimal";
+import { fetchMascotasPorAsociacion } from "@/lib/data";
 import { Mascota } from "@/lib/definiciones";
-import styles from "@/ui/mascotas/page.module.css";
+import CartillaAnimal from "@/ui/mascotas/CartillaAnimal";
 
-export default async function Mascotas() {
+export default async function MascotasAsociacion({ params } : { params: { idAsociacion: number} }){
+    const id = params.idAsociacion;
 
-    const mascotas = await fetchMascotas();
+    const mascotas : Mascota[] = await fetchMascotasPorAsociacion(id);
 
-    return (
-        <main className={styles.main}>
-            
-            <h2>Página de mascotas</h2>
-            <section className={styles.seccion_mascotas}>
+    return(
+        <div>
+            <h1>Estoy viendo las mascotas que tiene una asociacion con id: {id}</h1>
+            <section>
                 {
                     mascotas.map((mascota: Mascota) => (
                         <CartillaAnimal
@@ -26,8 +24,6 @@ export default async function Mascotas() {
                     ))
                 }
             </section>
-
-        </main>
-
+        </div>
     );
 }
