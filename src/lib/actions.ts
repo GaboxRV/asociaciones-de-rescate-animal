@@ -56,6 +56,20 @@ export async function crearMascota(formData : FormData){
 }
 
 /**
+ * Bloque de código para editar una mascota
+ */
+
+
+export async function editarMascota(id: string, formData : FormData){
+    console.log("Editando mascota con id: ", id);
+    console.log("Formulario: ", formData);
+
+    revalidatePath("/mascotas");
+    redirect("/perfil");
+}
+
+
+/**
  * Bloque de código para crear un usuario
  */
 

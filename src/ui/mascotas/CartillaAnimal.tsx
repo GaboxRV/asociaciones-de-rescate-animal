@@ -1,12 +1,11 @@
 import styles from "./cartillaanimal.module.css";
-import EditarMascota from "../perfil/botones/editarMascota";
+import BotonEditarMascota from "../perfil/botones/BotonEditarMascota";
 import EliminarMascota from "../perfil/botones/eliminarMascota";
 
 export default async function CartillaAnimal(
-{ id, nombre, edad, sexo, tipo, foto, mostrarBotones} : 
-{ id: string, nombre: string, edad: number, sexo: string, tipo: string , foto: string, mostrarBotones: boolean})
+{ asociacion_id, mascota_id, nombre, edad, sexo, tipo, foto, mostrarBotones} : 
+{ asociacion_id: string, mascota_id: string, nombre: string, edad: number, sexo: string, tipo: string , foto: string, mostrarBotones: boolean})
 {
-   
 
     return (
         <article className={styles.cartilla}>
@@ -17,12 +16,13 @@ export default async function CartillaAnimal(
             <img src={`data:image/jpeg;base64,${foto}`} alt={nombre} />
             {mostrarBotones && (
                 <>
-                    <EditarMascota
-                        id ={id} 
+                    <BotonEditarMascota
+                        asociacion_id={asociacion_id}
+                        mascota_id={mascota_id}
                     />
-                    <EliminarMascota 
-                        id = {id}
-                    />
+                    {/* <EliminarMascota 
+                        id = {mascota_id}
+                    /> */}
                 </>
             )}
         </article>

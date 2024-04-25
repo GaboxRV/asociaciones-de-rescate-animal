@@ -47,17 +47,17 @@ export async function fetchMascotasPorAsociacion(id: number){
 }
 
 export async function fetchMascota(id: number){
+    console.log('id en el fetch: ', id);
     noStore();
     try{
         const respuesta = await conn.query("SELECT * FROM mascotas WHERE mascota_id = $1", [id]);
 
         const datos: Mascota = respuesta.rows[0];
-
-
         const foto_data = datos.foto_mascota;
-        const foto = Buffer.from(foto_data).toString("base64");
-        datos.foto_mascota = foto;
-
+        if (foto_data != null){
+            const foto = Buffer.from(foto_data).toString("base64");
+            datos.foto_mascota = foto;
+        }
         return datos;
     } catch (error){
         console.error("Error al obtener la mascota: ", error); 

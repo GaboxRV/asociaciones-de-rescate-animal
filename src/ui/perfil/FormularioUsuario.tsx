@@ -2,7 +2,6 @@
 
 import styles from "./formularioUsuario.module.css";
 import { crearUsuario } from "@/lib/actions";
-import { error } from "console";
 import { useFormState } from "react-dom";
 
 export default function FormularioUsuario() {

@@ -21,4 +21,5 @@ export type Mascota = {
     sexo_mascota: 'macho' | 'hembra';
     tipo_mascota: 'perro' | 'gato';
     foto_mascota: string;
+    asociacion_id: string
 }

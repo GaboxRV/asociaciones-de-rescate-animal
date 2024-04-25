@@ -17,11 +17,14 @@ export default async function Mascotas() {
                     mascotas.map((mascota: Mascota) => (
                         <CartillaAnimal
                             key={mascota.mascota_id + mascota.nombre_mascota}
+                            asociacion_id={mascota.asociacion_id}
+                            mascota_id={mascota.mascota_id}
                             nombre={mascota.nombre_mascota}
                             edad={mascota.edad_mascota}
                             sexo={mascota.sexo_mascota}
                             tipo={mascota.tipo_mascota}
                             foto={mascota.foto_mascota}
+                            mostrarBotones={false}
                         />
                     ))
                 }
