@@ -14,12 +14,35 @@ export type Asociacion = {
     puntuacion_asociacion: number;
 }
 
-export type Mascota = { 
+export type MascotaGeneral = { 
     mascota_id: string;
     nombre_mascota: string;
     edad_mascota: number;
     sexo_mascota: 'macho' | 'hembra';
     tipo_mascota: 'perro' | 'gato';
+    talla_mascota: 'chica' | 'mediana' | 'grande';
     foto_mascota: string;
-    asociacion_id: string
+    nombre_asociacion: string;
+}
+
+export type MascotaAsociacion = { 
+    mascota_id: string;
+    nombre_mascota: string;
+    edad_mascota: number;
+    sexo_mascota: 'macho' | 'hembra';
+    tipo_mascota: 'perro' | 'gato';
+    talla_mascota: 'chica' | 'mediana' | 'grande';
+    foto_mascota: string;
+    asociacion_id: string;
+}
+
+export type MascotaEditar = { 
+    mascota_id: string;
+    nombre_mascota: string;
+    edad_mascota: number;
+    sexo_mascota: 'macho' | 'hembra';
+    tipo_mascota: 'perro' | 'gato';
+    talla_mascota: 'chica' | 'mediana' | 'grande';
+    foto_mascota: string;
+    asociacion_id: string;
 }

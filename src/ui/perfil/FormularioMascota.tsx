@@ -3,7 +3,8 @@ import { useFormState } from 'react-dom';
 import { crearMascota } from "@/lib/actions";
 
 
-export default async function FormularioMascota({ sexo_mascota, tipo_mascota, asociacion_id} : {sexo_mascota: string[] ,tipo_mascota: string[], asociacion_id: number}) {
+export default async function FormularioMascota({ sexo_mascota, tipo_mascota, talla_mascota, asociacion_id} : {sexo_mascota: string[] ,tipo_mascota: string[], talla_mascota: string[], asociacion_id: number}) {
+    
     return (
         <section className={styles.seccion_formulario}>
             <h3>Formulario de mascota</h3>
@@ -48,7 +49,22 @@ export default async function FormularioMascota({ sexo_mascota, tipo_mascota, as
                             </option>
                         ))
                     }
-                </select>              
+                </select>      
+                <select
+                    name="talla"
+                    defaultValue=""
+                >
+                    <option value="" disabled>
+                        Selecciona la talla de la mascota
+                    </option>
+                    {
+                        talla_mascota.map( tipo => (
+                            <option key={tipo} value={tipo}>
+                                {tipo}
+                            </option>
+                        ))
+                    }
+                </select>           
                 <input type="file" name="foto" />
                 <input type="hidden" name="asociacion_id" value={asociacion_id} />
                 <input type="submit" value="Enviar" />

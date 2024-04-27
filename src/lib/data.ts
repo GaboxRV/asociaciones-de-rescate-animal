@@ -1,13 +1,20 @@
 import { unstable_noStore as noStore } from "next/cache";
 import { conn } from "./conexion";
-import { Mascota } from "./definiciones";
+import { MascotaGeneral, MascotaAsociacion, MascotaEditar } from "./definiciones";
 
+
+/**
+ * Recuperar las mascotas de la base de datos para mostrarlas en la página principal.
+ */
 export async function fetchMascotas(){
     noStore();
-    try{
-        const respuesta = await conn.query("SELECT * FROM mascotas");
 
-        const datos: Mascota[] = respuesta.rows;
+    try{
+        const respuesta = await conn.query(
+            "SELECT mascotas.mascota_id, mascotas.nombre_mascota, mascotas.edad_mascota, mascotas.sexo_mascota, mascotas.tipo_mascota, mascotas.talla_mascota, mascotas.foto_mascota, asociaciones.nombre_asociacion FROM mascotas JOIN asociaciones ON mascotas.asociacion_id = asociaciones.asociacion_id"
+        );
+
+        const datos: MascotaGeneral[] = respuesta.rows;
         
         for (let index = 0; index < respuesta.rowCount; index++) {
             const foto_data = datos[index].foto_mascota;
@@ -24,12 +31,15 @@ export async function fetchMascotas(){
     }
 }
 
+/**
+ * Recuperar las mascotas de una asociación en específico.
+ */
 export async function fetchMascotasPorAsociacion(id: number){
     noStore();
     try{
         const respuesta = await conn.query("SELECT * FROM mascotas where asociacion_id = $1", [id]);
 
-        const datos: Mascota[] = respuesta.rows;
+        const datos: MascotaAsociacion[] = respuesta.rows;
         
         for (let index = 0; index < respuesta.rowCount; index++) {
             const foto_data = datos[index].foto_mascota;
@@ -46,13 +56,16 @@ export async function fetchMascotasPorAsociacion(id: number){
     }
 }
 
+/**
+ * Recuperar una mascota en específico.
+ */
+
 export async function fetchMascota(id: number){
-    console.log('id en el fetch: ', id);
     noStore();
     try{
         const respuesta = await conn.query("SELECT * FROM mascotas WHERE mascota_id = $1", [id]);
 
-        const datos: Mascota = respuesta.rows[0];
+        const datos: MascotaEditar = respuesta.rows[0];
         const foto_data = datos.foto_mascota;
         if (foto_data != null){
             const foto = Buffer.from(foto_data).toString("base64");
@@ -99,6 +112,20 @@ export async function fetchSexoMascotas(){
         sexos_mascotas = sexos_mascotas.replace(/[{}]/g, "").split(",");
 
         return sexos_mascotas;
+    } catch (error) {
+        console.error("Error al obtener el sexo de las mascotas: ",error);
+        throw new Error("Error al obtener el sexo de las mascotas");
+    }
+}
+
+export async function fetchTallaMascotas(){
+
+    try {
+        const respuesta = await conn.query("SELECT enum_range(NULL::tallas_de_mascotas)");
+        let tallas_mascotas = respuesta.rows[0].enum_range;
+        tallas_mascotas = tallas_mascotas.replace(/[{}]/g, "").split(",");
+
+        return tallas_mascotas;
     } catch (error) {
         console.error("Error al obtener el sexo de las mascotas: ",error);
         throw new Error("Error al obtener el sexo de las mascotas");

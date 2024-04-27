@@ -24,6 +24,7 @@ CREATE TABLE IF NOT EXISTS asociaciones(
 
 CREATE TYPE sexos_de_mascotas AS ENUM ('macho', 'hembra');
 CREATE TYPE tipos_de_mascotas AS ENUM ('perro', 'gato');
+CREATE TYPE tallas_de_mascotas AS ENUM ('chica', 'mediana', 'grande');
 
 CREATE TABLE IF NOT EXISTS mascotas(
 	mascota_id SERIAL PRIMARY KEY,
@@ -31,6 +32,7 @@ CREATE TABLE IF NOT EXISTS mascotas(
 	edad_mascota INTEGER NOT NULL,
 	sexo_mascota sexos_de_mascotas NOT NULL,
 	tipo_mascota tipos_de_mascotas NOT NULL,
+	talla_mascota tallas_de_mascotas NOT NULL,
 	foto_mascota BYTEA
 );
 

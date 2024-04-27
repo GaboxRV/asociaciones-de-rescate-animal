@@ -27,12 +27,12 @@ INSERT INTO usuarios (nombre_usuario, contrasena_usuario, asociacion_id) VALUES
 ('nombre 4', 'a234', 5),
 ('nombre 5', 'a235', 4);
 
-INSERT INTO mascotas (nombre_mascota, edad_mascota, sexo_mascota, tipo_mascota, asociacion_id) VALUES
-('mascota 1', 8,'macho','gato', 3),
-('mascota 2', 12,'hembra','perro', 3),
-('mascota 3', 42,'macho','gato', 1),
-('mascota 4', 31,'hembra','gato', 4),
-('mascota 5', 42,'hembra','perro', 5);
+INSERT INTO mascotas (nombre_mascota, edad_mascota, sexo_mascota, tipo_mascota, talla_mascota, asociacion_id) VALUES
+('mascota 1', 8,'macho','gato', 'chica', 3),
+('mascota 2', 12,'hembra','perro', 'mediana', 3),
+('mascota 3', 42,'macho','gato', 'mediana', 1),
+('mascota 4', 31,'hembra','gato', 'mediana', 4),
+('mascota 5', 42,'hembra','perro', 'grande', 5);
 
 select * from asociaciones;
 select * from usuarios;
@@ -44,3 +44,10 @@ SELECT enum_range(NULL::tipos_de_mascotas);
 select nombre_mascota, edad_mascota, sexo_mascota, tipo_mascota from mascotas where sexo_mascota = 'hembra';
 
 SELECT sexo_mascota, COUNT(*) FROM mascotas GROUP BY sexo_mascota;
+
+SELECT mascotas.mascota_id, mascotas.nombre_mascota, mascotas.edad_mascota, mascotas.sexo_mascota,
+mascotas.tipo_mascota, mascotas.foto_mascota, mascotas.talla_mascota, asociaciones.nombre_asociacion FROM mascotas JOIN asociaciones on mascotas.asociacion_id = asociaciones.asociacion_id;
+
+
+SELECT mascotas.mascota_id, mascotas.nombre_mascota, mascotas.edad_mascota, mascotas.sexo_mascota, mascotas.tipo_mascota, 
+mascotas.talla_mascota, mascotas.foto_mascota, asociaciones.nombre_asociacion FROM mascotas JOIN asociaciones ON mascotas.asociacion_id = asociaciones.asociacion_id

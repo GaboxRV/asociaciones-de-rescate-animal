@@ -1,13 +1,11 @@
 import { fetchMascota } from "@/lib/data";
+import { MascotaEditar } from "@/lib/definiciones";
 import FormularioEditarMascota from "@/ui/perfil/CartillaParaEditar";
-import { Mascota } from "@/lib/definiciones";
 
-export default async function EditarMascota({ params }: { params: { idMascota: number } }) {
-    const idMascota = params.idMascota;
+export default async function EditarMascota({ params }: { params: { idMascota: number, idAsociacion: string } }) {
+    const { idMascota,  idAsociacion } = params;
 
-    console.log('parametros: ', params);
-
-    const mascota : Mascota = await fetchMascota(idMascota);
+    const mascota : MascotaEditar = await fetchMascota(idMascota);
 
     return (
         <div>
@@ -18,7 +16,9 @@ export default async function EditarMascota({ params }: { params: { idMascota: n
                 edad={mascota.edad_mascota}
                 sexo={mascota.sexo_mascota}
                 tipo={mascota.tipo_mascota}
+                talla={mascota.talla_mascota}
                 foto={mascota.foto_mascota}
+                idAsociacion={mascota.asociacion_id}
             />
            
         </div>

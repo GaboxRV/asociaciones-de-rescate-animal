@@ -16,21 +16,23 @@ const EsquemaMascota = z.object({
     edad_mascota: z.coerce.number(),
     sexo_mascota: z.enum(["macho", "hembra"]),
     tipo_mascota: z.enum(["perro", "gato"]),
+    talla_mascota: z.enum(["chica", "mediana", "grande"]),
     foto_mascota: z.instanceof(File),
     asociacion_id: z.coerce.number(),
 });
 
-const CrearMascota = EsquemaMascota.omit({id: true});
+const CrearMascota = EsquemaMascota.omit({ id: true });
 
-export async function crearMascota(formData : FormData){
+export async function crearMascota(formData: FormData) {
 
     console.log("Creando mascota...");
 
-    const {nombre_mascota, edad_mascota, sexo_mascota, tipo_mascota, foto_mascota, asociacion_id} = CrearMascota.parse({
+    const { nombre_mascota, edad_mascota, sexo_mascota, tipo_mascota, talla_mascota, foto_mascota, asociacion_id } = CrearMascota.parse({
         nombre_mascota: formData.get("nombre"),
         edad_mascota: formData.get("edad"),
         sexo_mascota: formData.get("sexo"),
         tipo_mascota: formData.get("tipo"),
+        talla_mascota: formData.get("talla"),
         foto_mascota: formData.get("foto"),
         asociacion_id: formData.get("asociacion_id"),
     });
@@ -42,30 +44,89 @@ export async function crearMascota(formData : FormData){
 
     try {
         const respuesta = await conn.query(
-            "INSERT INTO mascotas (nombre_mascota, edad_mascota, sexo_mascota, tipo_mascota, foto_mascota, asociacion_id) VALUES ($1, $2, $3, $4, $5, $6)",
-            [nombre_mascota, edad_mascota, sexo_mascota, tipo_mascota, fotoBuffer, asociacion_id]
+            "INSERT INTO mascotas (nombre_mascota, edad_mascota, sexo_mascota, tipo_mascota, talla_mascota, foto_mascota, asociacion_id) VALUES ($1, $2, $3, $4, $5, $6, $7)",
+            [nombre_mascota, edad_mascota, sexo_mascota, tipo_mascota, talla_mascota ,fotoBuffer, asociacion_id]
         );
     } catch (error) {
         return {
             mensaje: "Error en la Base de Datos: Error al crear la mascota",
         }
-    } 
+    }
 
-    revalidatePath("/mascotas");
-    redirect("/perfil");
+    revalidatePath(`/perfil/${asociacion_id}/mascotas`);
+    redirect(`/perfil/${asociacion_id}/mascotas`);
 }
 
 /**
  * Bloque de código para editar una mascota
  */
 
+const EditarMascota = EsquemaMascota.omit({ id: true, asociacion_id: true });
 
-export async function editarMascota(id: string, formData : FormData){
-    console.log("Editando mascota con id: ", id);
-    console.log("Formulario: ", formData);
+export async function editarMascota(mascota_id: string, asociacion_id: string, formData: FormData) {
 
-    revalidatePath("/mascotas");
-    redirect("/perfil");
+    const camposValidados = EditarMascota.safeParse({
+        nombre_mascota: formData.get("nombre"),
+        edad_mascota: formData.get("edad"),
+        sexo_mascota: formData.get("sexo"),
+        tipo_mascota: formData.get("tipo"),
+        talla_mascota: formData.get("talla"),
+        foto_mascota: formData.get("foto"),
+    });
+
+    if (!camposValidados.success) {
+        return {
+            errores: camposValidados.error.flatten().fieldErrors,
+            mensaje: "Error en los campos del formulario"
+        }
+    }
+
+    const { nombre_mascota, edad_mascota, sexo_mascota, tipo_mascota, talla_mascota, foto_mascota } = camposValidados.data;
+
+    const foto_data = await foto_mascota.arrayBuffer();
+    const fotoBuffer = Buffer.from(new Uint8Array(foto_data));
+
+    try {
+        console.log("Editando mascota...");
+        if (foto_data.byteLength === 0) {
+            console.log("Sin foto");
+            const respuesta = await conn.query("UPDATE mascotas SET nombre_mascota = $1, edad_mascota = $2, sexo_mascota = $3, tipo_mascota = $4, talla_mascota = $5 WHERE mascota_id = $6",
+                [nombre_mascota, edad_mascota, sexo_mascota, tipo_mascota, talla_mascota, mascota_id]
+            );
+        } else {
+            console.log("Con foto");
+            const respuesta = await conn.query("UPDATE mascotas SET nombre_mascota = $1, edad_mascota = $2, sexo_mascota = $3, tipo_mascota = $4, talla_mascota = $5, foto_mascota = $6 WHERE mascota_id = $7",
+                [nombre_mascota, edad_mascota, sexo_mascota, tipo_mascota, talla_mascota, fotoBuffer, mascota_id]
+            );
+        }
+
+    } catch (error) {
+        return {
+            mensaje: "Error en la Base de Datos: Error al editar la mascota",
+        }
+    }
+
+    revalidatePath(`/perfil/${asociacion_id}/mascotas`);
+    redirect(`/perfil/${asociacion_id}/mascotas/${mascota_id}/editar`);
+}
+
+/**
+ * Bloque de código para eliminar una mascota
+ */
+
+export async function eliminarMascota(mascota_id: string, asociacion_id: string){
+    try {
+        console.log("Eliminando mascota...");
+        const respuesta = await conn.query("DELETE FROM mascotas WHERE mascota_id = $1", [mascota_id]);
+    } catch (error) {
+        return {
+            mensaje: "Error en la Base de Datos: Error al eliminar la mascota",
+        }
+    }
+
+    revalidatePath(`/perfil/${asociacion_id}/mascotas`);
+    redirect(`/perfil/${asociacion_id}/mascotas`);
+
 }
 
 
@@ -81,7 +142,7 @@ const EsquemaUsuario = z.object({
 });
 
 
-const CrearUsuario = EsquemaUsuario.omit({id: true});
+const CrearUsuario = EsquemaUsuario.omit({ id: true });
 
 export type Prueba = {
     errores?: {
@@ -92,7 +153,7 @@ export type Prueba = {
     mensaje?: string | null;
 };
 
-export async function crearUsuario(estadoPrevio: Prueba, formData: FormData){
+export async function crearUsuario(estadoPrevio: Prueba, formData: FormData) {
 
     console.log("Creando usuario...");
 
@@ -102,14 +163,14 @@ export async function crearUsuario(estadoPrevio: Prueba, formData: FormData){
         nombre_asociacion: formData.get("nombre_asociacion")
     });
 
-    if(!camposValidados.success){
-        return{
+    if (!camposValidados.success) {
+        return {
             errores: camposValidados.error.flatten().fieldErrors,
             mensaje: "Error en los campos del formulario"
         }
     }
 
-    const {nombre_usuario, contrasena_usuario, nombre_asociacion} = camposValidados.data;
+    const { nombre_usuario, contrasena_usuario, nombre_asociacion } = camposValidados.data;
 
     try {
 
@@ -124,9 +185,9 @@ export async function crearUsuario(estadoPrevio: Prueba, formData: FormData){
             "INSERT INTO usuarios (nombre_usuario, contrasena_usuario, asociacion_id) VALUES ($1, $2, $3)",
             [nombre_usuario, contrasena_usuario, asociacion_id]
         );
-        
+
     } catch (error) {
-        return{
+        return {
             mensaje: "Error en la Base de Datos: Error al crear el usuario"
         }
     }
@@ -134,23 +195,23 @@ export async function crearUsuario(estadoPrevio: Prueba, formData: FormData){
     redirect('/perfil');
 }
 
-export async function authenticate( prevState: string | undefined, formData: FormData) {
+export async function authenticate(prevState: string | undefined, formData: FormData) {
     try {
 
-      await signIn('credentials', formData)
+        await signIn('credentials', formData)
 
     } catch (error) {
 
-      if (error instanceof AuthError) {
+        if (error instanceof AuthError) {
 
-        switch (error.type) {
-          case 'CredentialsSignin':
-            return 'Credenciales invalidas';
-          default:
-            return 'Algo salio mal..';
+            switch (error.type) {
+                case 'CredentialsSignin':
+                    return 'Credenciales invalidas';
+                default:
+                    return 'Algo salio mal..';
+            }
+
         }
-
-      }
-      throw error;
+        throw error;
     }
 }
