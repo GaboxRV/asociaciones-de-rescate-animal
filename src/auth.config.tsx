@@ -1,5 +1,4 @@
 import type { NextAuthConfig } from "next-auth";
-import { Session } from 'next-auth'; 
 
 export const authConfig = {
     pages: {
@@ -13,22 +12,33 @@ export const authConfig = {
 
         const estaRegistrado = !!auth?.user;
         const estaEnPerfil = nextUrl.pathname.startsWith('/perfil');
-        const estaEnLogin = nextUrl.pathname.startsWith('/login');
-        
+        const estaEnAdmin = nextUrl.pathname.startsWith('/perfil/admin');
+        const esAdmin = auth?.user?.name?.includes('admin');
+        const estaVerificado = auth?.user?.name?.includes('verificado');
+
+        console.log('es admin: ',esAdmin);
+        console.log('esta verificado?: ', estaVerificado);
+
         if (estaEnPerfil) {
 
           if (estaRegistrado) {
+
+            if (estaEnAdmin && !esAdmin) {
+              console.log('No es administrador: ', auth, nextUrl);
+              return Response.redirect(new URL('/perfil', nextUrl).toString());
+            }
+
             return true;
           }
 
-          return false;  // Redirect unauthenticated users to login page
+          return false;  
 
         }  
         return true;
       },
 
     },
-    providers: [], // Add providers with an empty array for now
+    providers: [], 
 
   } satisfies NextAuthConfig;
   

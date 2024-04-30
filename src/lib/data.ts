@@ -11,7 +11,7 @@ export async function fetchMascotas(){
 
     try{
         const respuesta = await conn.query(
-            "SELECT mascotas.mascota_id, mascotas.nombre_mascota, mascotas.edad_mascota, mascotas.sexo_mascota, mascotas.tipo_mascota, mascotas.talla_mascota, mascotas.foto_mascota, asociaciones.nombre_asociacion FROM mascotas JOIN asociaciones ON mascotas.asociacion_id = asociaciones.asociacion_id"
+            "SELECT mascotas.*, asociaciones.nombre_asociacion FROM mascotas JOIN asociaciones ON mascotas.asociacion_id = asociaciones.asociacion_id"
         );
 
         const datos: MascotaGeneral[] = respuesta.rows;

@@ -1,5 +1,5 @@
 
-import { fetchMascotas, fetchMascota } from "@/lib/data";
+import { fetchMascotas} from "@/lib/data";
 import CartillaAnimal from "@/ui/mascotas/CartillaAnimal";
 import { MascotaGeneral } from "@/lib/definiciones";
 import styles from "@/ui/mascotas/page.module.css";
@@ -23,8 +23,10 @@ export default async function Mascotas() {
                             sexo={mascota.sexo_mascota}
                             tipo={mascota.tipo_mascota}
                             talla={mascota.talla_mascota}
-                            nombre_asociacion={mascota.nombre_asociacion}
                             foto={mascota.foto_mascota}
+                            asociacion_id={mascota.asociacion_id}
+                            nombre_asociacion={mascota.nombre_asociacion}
+
                         />
                     ))
                 }

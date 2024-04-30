@@ -22,6 +22,7 @@ export type MascotaGeneral = {
     tipo_mascota: 'perro' | 'gato';
     talla_mascota: 'chica' | 'mediana' | 'grande';
     foto_mascota: string;
+    asociacion_id: string;
     nombre_asociacion: string;
 }
 

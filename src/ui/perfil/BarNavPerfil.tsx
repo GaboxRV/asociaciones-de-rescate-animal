@@ -10,6 +10,9 @@ export default async function BarNavPerfil() {
 
     const asociacion_id = sesion?.user?.email;
 
+    const objetoDatos = JSON.parse(sesion?.user?.name || "");
+
+
     return (
         <nav>
             <ul>

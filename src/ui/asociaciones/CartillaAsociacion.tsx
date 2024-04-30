@@ -1,9 +1,10 @@
 
 import styles from "@/ui/asociaciones/asociacion.module.css";
+import Link from "next/link";
 
 export default async function CartillaAsociacion(
-{ nombre, telefono, direccion, puntuacion} :
-{ nombre: string, telefono: string, direccion: string, puntuacion: number})
+{ id, nombre, telefono, direccion, puntuacion} :
+{ id: string, nombre: string, telefono: string, direccion: string, puntuacion: number})
 {
     return(
         <article className={styles.asociacion}>
@@ -11,6 +12,10 @@ export default async function CartillaAsociacion(
             <p>Teléfono: {telefono}</p>
             <p>Dirección: {direccion}</p>
             <p>Puntuación: {puntuacion}</p>
+            <Link href={`/asociaciones/${id}`}>
+                Ver más
+            </Link>
+
         </article>
     );
 }

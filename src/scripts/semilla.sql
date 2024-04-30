@@ -19,13 +19,15 @@ INSERT INTO asociaciones (nombre_asociacion, telefono_asociacion, direccion_asoc
 ('Asociacion 4', '5566778899', 'Direccion 4'),
 ('Asociacion 5', '9988776655', 'Direccion 5');
 
+INSERT INTO usuarios (nombre_usuario, contrasena_usuario, rol_usuario) VALUES
+('nombre 5', 'a235','administrador');
 
-INSERT INTO usuarios (nombre_usuario, contrasena_usuario, asociacion_id) VALUES
-('nombre 1', 'a231', 2),
-('nombre 2', 'a232', 3),
-('nombre 3', 'a233', 1),
-('nombre 4', 'a234', 5),
-('nombre 5', 'a235', 4);
+INSERT INTO usuarios (nombre_usuario, contrasena_usuario, asociacion_id, rol_usuario) VALUES
+('nombre 1', 'a231', 2, 'usuario sin verificar'),
+('nombre 2', 'a232', 3, 'usuario verificado'),
+('nombre 3', 'a233', 1, 'usuario sin verificar'),
+('nombre 4', 'a234', 5, 'usuario verificado');
+
 
 INSERT INTO mascotas (nombre_mascota, edad_mascota, sexo_mascota, tipo_mascota, talla_mascota, asociacion_id) VALUES
 ('mascota 1', 8,'macho','gato', 'chica', 3),
@@ -49,5 +51,4 @@ SELECT mascotas.mascota_id, mascotas.nombre_mascota, mascotas.edad_mascota, masc
 mascotas.tipo_mascota, mascotas.foto_mascota, mascotas.talla_mascota, asociaciones.nombre_asociacion FROM mascotas JOIN asociaciones on mascotas.asociacion_id = asociaciones.asociacion_id;
 
 
-SELECT mascotas.mascota_id, mascotas.nombre_mascota, mascotas.edad_mascota, mascotas.sexo_mascota, mascotas.tipo_mascota, 
-mascotas.talla_mascota, mascotas.foto_mascota, asociaciones.nombre_asociacion FROM mascotas JOIN asociaciones ON mascotas.asociacion_id = asociaciones.asociacion_id
+SELECT mascotas.mascota_id, mascotas.nombre_mascota, mascotas.edad_mascota, mascotas.sexo_mascota, mascotas.tipo_mascota, mascotas.talla_mascota, mascotas.foto_mascota, asociaciones.nombre_asociacion FROM mascotas JOIN asociaciones ON mascotas.asociacion_id = asociaciones.asociacion_id

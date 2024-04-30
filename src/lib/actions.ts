@@ -144,7 +144,7 @@ const EsquemaUsuario = z.object({
 
 const CrearUsuario = EsquemaUsuario.omit({ id: true });
 
-export type Prueba = {
+export type prev = {
     errores?: {
         nombre_usuario?: string[];
         contrasena_usuario?: string[];
@@ -153,9 +153,11 @@ export type Prueba = {
     mensaje?: string | null;
 };
 
-export async function crearUsuario(estadoPrevio: Prueba, formData: FormData) {
+export async function crearUsuario(estadoPrevio: prev, formData: FormData) {
 
     console.log("Creando usuario...");
+
+    console.log(formData);
 
     const camposValidados = CrearUsuario.safeParse({
         nombre_usuario: formData.get("nombre_usuario"),
@@ -173,26 +175,37 @@ export async function crearUsuario(estadoPrevio: Prueba, formData: FormData) {
     const { nombre_usuario, contrasena_usuario, nombre_asociacion } = camposValidados.data;
 
     try {
-
+        // Iniciar una transacción
+        await conn.query('BEGIN');
+      
         const respuestaAsociacion = await conn.query(
-            "INSERT INTO asociaciones (nombre_asociacion) VALUES ($1) RETURNING asociacion_id",
-            [nombre_asociacion]
+          "INSERT INTO asociaciones (nombre_asociacion) VALUES ($1) RETURNING asociacion_id",
+          [nombre_asociacion]
         );
-
+      
         const asociacion_id = respuestaAsociacion.rows[0].asociacion_id;
 
+        console.log('intento de id asociacion: ', asociacion_id);
+      
         const respuestaUsuarios = await conn.query(
-            "INSERT INTO usuarios (nombre_usuario, contrasena_usuario, asociacion_id) VALUES ($1, $2, $3)",
-            [nombre_usuario, contrasena_usuario, asociacion_id]
+          "INSERT INTO usuarios (nombre_usuario, contrasena_usuario, rol_usuario, asociacion_id) VALUES ($1, $2, $3, $4)",
+          [nombre_usuario, contrasena_usuario, 'usuario sin verificar' ,asociacion_id]
         );
-
-    } catch (error) {
+      
+        // Si todo salió bien, confirmar la transacción
+        await conn.query('COMMIT');
+        
+      } catch (error) {
+        // Si algo salió mal, revertir todas las operaciones de la transacción
+        console.log('Error, retrosediendo en los cambios...');
+        await conn.query('ROLLBACK');
         return {
             mensaje: "Error en la Base de Datos: Error al crear el usuario"
         }
     }
 
     redirect('/perfil');
+
 }
 
 export async function authenticate(prevState: string | undefined, formData: FormData) {

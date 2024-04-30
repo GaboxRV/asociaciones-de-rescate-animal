@@ -6,11 +6,20 @@ DROP TABLE IF EXISTS asociaciones;
 
 DROP TYPE IF EXISTS sexos_de_mascotas;
 DROP TYPE IF EXISTS tipos_de_mascotas;
+DROP TYPE IF EXISTS tallas_de_mascotas;
+DROP TYPE IF EXISTS roles_de_usuario;
+
+
+CREATE TYPE sexos_de_mascotas AS ENUM ('macho', 'hembra');
+CREATE TYPE tipos_de_mascotas AS ENUM ('perro', 'gato');
+CREATE TYPE tallas_de_mascotas AS ENUM ('chica', 'mediana', 'grande');
+CREATE TYPE roles_de_usuario AS ENUM ('administrador', 'usuario sin verificar', 'usuario verificado');
 
 CREATE TABLE IF NOT EXISTS usuarios (
     usuario_id SERIAL PRIMARY KEY,
     nombre_usuario CHARACTER VARYING(255) UNIQUE NOT NULL,
-    contrasena_usuario CHARACTER VARYING(255) NOT NULL
+    contrasena_usuario CHARACTER VARYING(255) NOT NULL,
+	rol_usuario roles_de_usuario NOT NULL
 );
 
 CREATE TABLE IF NOT EXISTS asociaciones(
@@ -21,10 +30,6 @@ CREATE TABLE IF NOT EXISTS asociaciones(
 	puntuacion_asociacion INTEGER DEFAULT 0
 	
 );
-
-CREATE TYPE sexos_de_mascotas AS ENUM ('macho', 'hembra');
-CREATE TYPE tipos_de_mascotas AS ENUM ('perro', 'gato');
-CREATE TYPE tallas_de_mascotas AS ENUM ('chica', 'mediana', 'grande');
 
 CREATE TABLE IF NOT EXISTS mascotas(
 	mascota_id SERIAL PRIMARY KEY,
@@ -40,7 +45,7 @@ CREATE TABLE IF NOT EXISTS mascotas(
 
 /* Restricciones de tabla usuarios */
 
-ALTER TABLE usuarios ADD COLUMN asociacion_id INTEGER NOT NULL,
+ALTER TABLE usuarios ADD COLUMN asociacion_id INTEGER,
 ADD CONSTRAINT usuarios_asociacion_id_fkey
 FOREIGN KEY (asociacion_id) REFERENCES asociaciones(asociacion_id)
 ON DELETE CASCADE
