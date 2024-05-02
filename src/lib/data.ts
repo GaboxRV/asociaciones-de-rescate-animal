@@ -90,6 +90,19 @@ export async function fetchAsociaciones(){
     }
 }
 
+export async function fetchAsociacionPorId(id: string){
+    noStore();
+    try{
+        const respuesta = await conn.query("SELECT * FROM asociaciones WHERE asociacion_id = $1", [id]);
+
+        return respuesta.rows[0];
+    } catch (error){
+        console.error("Error al obtener la asociación: ", error); 
+        throw new Error("Error al obtener la asociación");
+    }
+
+}
+
 export async function fetchTipoMascotas(){
 
     try {

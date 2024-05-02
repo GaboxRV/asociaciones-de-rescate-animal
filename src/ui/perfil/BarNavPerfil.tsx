@@ -1,42 +1,23 @@
 import Link from "next/link";
 import { auth, signOut } from "@/auth";
+import { DatosSesion } from "@/lib/definiciones";
 
 export default async function BarNavPerfil() {
-    /**
-     * name: usuario id
-     * email: asociacion id
-     */
+ 
     const sesion = await auth();
 
-    const asociacion_id = sesion?.user?.email;
+    const asociacion_id = sesion?.user?.email ?? "";
 
-    const objetoDatos = JSON.parse(sesion?.user?.name || "");
+    const objetoDatos: DatosSesion = JSON.parse(sesion?.user?.name || "");
 
+    console.log('sesion: ', objetoDatos);
 
     return (
-        <nav>
-            <ul>
-                <li>
-                    <Link href={'/perfil'}>
-                        Inicio
-                    </Link>
-                </li>
-                <li>
-                    <Link href={`/perfil/${asociacion_id}/mascotas`}>
-                        Mascotas
-                    </Link>
-                </li>
-                <li>
-                    <Link href={`/perfil/${asociacion_id}/mascotas/registrar`}>
-                        Registrar mascota
-                    </Link>
-                </li>
-                <li>
-                    <CerrarSesion />
-                </li>
-            </ul>
+        <>
+            {objetoDatos.rol === 'usuario verificado' && <NavegacionUsuarioVerificado asociacion_id={asociacion_id} />}
 
-        </nav>
+            <CerrarSesion />
+        </>
     );
 }
 
@@ -49,5 +30,31 @@ function CerrarSesion() {
         }}>
             <button>Cerrar sesión</button>
         </form>
+    );
+}
+
+
+function NavegacionUsuarioVerificado({ asociacion_id }: { asociacion_id: string }) {
+    return (
+        <nav>
+            <ul>
+                <li>
+                    <Link href={'/perfil/asociacion'}>
+                        Inicio
+                    </Link>
+                </li>
+                <li>
+                    <Link href={`/perfil/asociacion/${asociacion_id}/mascotas`}>
+                        Mascotas
+                    </Link>
+                </li>
+                <li>
+                    <Link href={`/perfil/asociacion/${asociacion_id}/mascotas/registrar`}>
+                        Registrar mascota
+                    </Link>
+                </li>
+            </ul>
+
+        </nav>
     );
 }

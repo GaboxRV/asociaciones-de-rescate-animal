@@ -47,3 +47,8 @@ export type MascotaEditar = {
     foto_mascota: string;
     asociacion_id: string;
 }
+
+export type DatosSesion = {
+    usuario_id: string;
+    rol: string;
+}

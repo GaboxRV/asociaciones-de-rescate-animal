@@ -22,7 +22,7 @@ export const { auth, signIn, signOut } = NextAuth({
               
               if (contrasena === usuario.contrasena_usuario){
                 return { 
-                  name: JSON.stringify({ asociacion: usuario.usuario_id, rol: usuario.rol_usuario }), 
+                  name: JSON.stringify({ usuario: usuario.usuario_id, rol: usuario.rol_usuario }), 
                   email: usuario.asociacion_id
                 };
               } 
