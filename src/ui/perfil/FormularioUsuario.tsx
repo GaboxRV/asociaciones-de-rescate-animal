@@ -85,6 +85,13 @@ export default function FormularioUsuario() {
                         }
                     </section>
                 </div>
+                <div>
+                    <input 
+                        type="file" 
+                        name="imagen_asociacion"
+                        
+                    />
+                </div>
 
                 <input type="submit" value="Enviar" />
             </form>

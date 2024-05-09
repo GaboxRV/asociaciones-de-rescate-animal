@@ -27,8 +27,9 @@ CREATE TABLE IF NOT EXISTS asociaciones(
 	nombre_asociacion CHARACTER VARYING(255) UNIQUE NOT NULL,
 	telefono_asociacion CHARACTER VARYING(255) UNIQUE,
 	direccion_asociacion CHARACTER VARYING(255),
-	puntuacion_asociacion INTEGER DEFAULT 0
-	
+	puntuacion_asociacion INTEGER DEFAULT 0,
+	descripcion_asociacion TEXT,
+	foto_asociacion BYTEA NOT NULL
 );
 
 CREATE TABLE IF NOT EXISTS mascotas(
@@ -38,7 +39,7 @@ CREATE TABLE IF NOT EXISTS mascotas(
 	sexo_mascota sexos_de_mascotas NOT NULL,
 	tipo_mascota tipos_de_mascotas NOT NULL,
 	talla_mascota tallas_de_mascotas NOT NULL,
-	foto_mascota BYTEA
+	foto_mascota BYTEA NOT NULL
 );
 
 /* ----------------- Añadiendo restricciones ----------------- */

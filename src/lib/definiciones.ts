@@ -12,6 +12,16 @@ export type Asociacion = {
     telefono_asociacion: string;
     direccion_asociacion: string;
     puntuacion_asociacion: number;
+    foto_asociacion: string;
+    descripcion_asociacion: string;
+}
+
+export type AsociacionConRol = {
+    asociacion_id: string;
+    nombre_asociacion: string;
+    puntuacion_asociacion: number;
+    foto_asociacion: string;
+    rol_usuario: string;
 }
 
 export type MascotaGeneral = { 

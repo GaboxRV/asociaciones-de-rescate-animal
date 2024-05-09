@@ -16,6 +16,8 @@ export default async function BarNavPerfil() {
         <>
             {objetoDatos.rol === 'usuario verificado' && <NavegacionUsuarioVerificado asociacion_id={asociacion_id} />}
 
+            {objetoDatos.rol === 'administrador' && <NavegacionAdministrador />}
+
             <CerrarSesion />
         </>
     );
@@ -55,6 +57,20 @@ function NavegacionUsuarioVerificado({ asociacion_id }: { asociacion_id: string 
                 </li>
             </ul>
 
+        </nav>
+    );
+}
+
+function NavegacionAdministrador() {
+    return(
+        <nav>
+            <ul>
+                <li>
+                    <Link href={'/perfil/admin/asociaciones'}>
+                        Asociaciones
+                    </Link>
+                </li>
+            </ul>
         </nav>
     );
 }

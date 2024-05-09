@@ -138,7 +138,8 @@ const EsquemaUsuario = z.object({
     id: z.string(),
     nombre_usuario: z.string().min(3, "Ingrese un nombre de usuario valido"),
     contrasena_usuario: z.string().min(5, "Ingrese una contraseña valida"),
-    nombre_asociacion: z.string().min(5, "Ingrese un nombre de asociacion valido")
+    nombre_asociacion: z.string().min(5, "Ingrese un nombre de asociacion valido"),
+    imagen_asociacion: z.instanceof(File)
 });
 
 
@@ -149,6 +150,7 @@ export type prev = {
         nombre_usuario?: string[];
         contrasena_usuario?: string[];
         nombre_asociacion?: string[];
+        imagen_asociacion?: string[];
     };
     mensaje?: string | null;
 };
@@ -162,7 +164,8 @@ export async function crearUsuario(estadoPrevio: prev, formData: FormData) {
     const camposValidados = CrearUsuario.safeParse({
         nombre_usuario: formData.get("nombre_usuario"),
         contrasena_usuario: formData.get("contrasena"),
-        nombre_asociacion: formData.get("nombre_asociacion")
+        nombre_asociacion: formData.get("nombre_asociacion"),
+        imagen_asociacion: formData.get("imagen_asociacion")
     });
 
     if (!camposValidados.success) {
@@ -172,15 +175,18 @@ export async function crearUsuario(estadoPrevio: prev, formData: FormData) {
         }
     }
 
-    const { nombre_usuario, contrasena_usuario, nombre_asociacion } = camposValidados.data;
+    const { nombre_usuario, contrasena_usuario, nombre_asociacion, imagen_asociacion } = camposValidados.data;
+
+    const foto_data = await imagen_asociacion.arrayBuffer();
+    const fotoBuffer = Buffer.from(new Uint8Array(foto_data));
 
     try {
         // Iniciar una transacción
         await conn.query('BEGIN');
       
         const respuestaAsociacion = await conn.query(
-          "INSERT INTO asociaciones (nombre_asociacion) VALUES ($1) RETURNING asociacion_id",
-          [nombre_asociacion]
+          "INSERT INTO asociaciones (nombre_asociacion, foto_asociacion) VALUES ($1, $2) RETURNING asociacion_id",
+          [nombre_asociacion, fotoBuffer]
         );
       
         const asociacion_id = respuestaAsociacion.rows[0].asociacion_id;

@@ -3,15 +3,14 @@ import styles from "@/ui/asociaciones/asociacion.module.css";
 import Link from "next/link";
 
 export default async function CartillaAsociacion(
-{ id, nombre, telefono, direccion, puntuacion} :
-{ id: string, nombre: string, telefono: string, direccion: string, puntuacion: number})
+{ id, nombre, puntuacion, foto} :
+{ id: string, nombre: string, puntuacion: number, foto: string})
 {
     return(
         <article className={styles.asociacion}>
             <h3>{nombre}</h3>
-            <p>Teléfono: {telefono}</p>
-            <p>Dirección: {direccion}</p>
             <p>Puntuación: {puntuacion}</p>
+            <img src={`data:image/jpeg;base64,${foto}`} alt={`Foto de ${nombre}`} />
             <Link href={`/asociaciones/${id}`}>
                 Ver más
             </Link>

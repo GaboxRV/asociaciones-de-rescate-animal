@@ -16,17 +16,16 @@ INSERT INTO asociaciones (nombre_asociacion, telefono_asociacion, direccion_asoc
 ('Asociacion 1', '1234567890', 'Direccion 1'),
 ('Asociacion 2', '0987654321', 'Direccion 2'),
 ('Asociacion 3', '1122334455', 'Direccion 3'),
-('Asociacion 4', '5566778899', 'Direccion 4'),
-('Asociacion 5', '9988776655', 'Direccion 5');
+('Asociacion 4', '5566778899', 'Direccion 4');
 
 INSERT INTO usuarios (nombre_usuario, contrasena_usuario, rol_usuario) VALUES
-('nombre 5', 'a235','administrador');
+('admin', 'a235','administrador');
 
 INSERT INTO usuarios (nombre_usuario, contrasena_usuario, asociacion_id, rol_usuario) VALUES
 ('nombre 1', 'a231', 2, 'usuario sin verificar'),
 ('nombre 2', 'a232', 3, 'usuario verificado'),
 ('nombre 3', 'a233', 1, 'usuario sin verificar'),
-('nombre 4', 'a234', 5, 'usuario verificado');
+('nombre 4', 'a234', 4, 'usuario verificado');
 
 
 INSERT INTO mascotas (nombre_mascota, edad_mascota, sexo_mascota, tipo_mascota, talla_mascota, asociacion_id) VALUES
@@ -34,7 +33,7 @@ INSERT INTO mascotas (nombre_mascota, edad_mascota, sexo_mascota, tipo_mascota, 
 ('mascota 2', 12,'hembra','perro', 'mediana', 3),
 ('mascota 3', 42,'macho','gato', 'mediana', 1),
 ('mascota 4', 31,'hembra','gato', 'mediana', 4),
-('mascota 5', 42,'hembra','perro', 'grande', 5);
+('mascota 5', 42,'hembra','perro', 'grande', 1);
 
 select * from asociaciones;
 select * from usuarios;
@@ -51,4 +50,8 @@ SELECT mascotas.mascota_id, mascotas.nombre_mascota, mascotas.edad_mascota, masc
 mascotas.tipo_mascota, mascotas.foto_mascota, mascotas.talla_mascota, asociaciones.nombre_asociacion FROM mascotas JOIN asociaciones on mascotas.asociacion_id = asociaciones.asociacion_id;
 
 
-SELECT mascotas.mascota_id, mascotas.nombre_mascota, mascotas.edad_mascota, mascotas.sexo_mascota, mascotas.tipo_mascota, mascotas.talla_mascota, mascotas.foto_mascota, asociaciones.nombre_asociacion FROM mascotas JOIN asociaciones ON mascotas.asociacion_id = asociaciones.asociacion_id
+SELECT mascotas.mascota_id, mascotas.nombre_mascota, mascotas.edad_mascota, mascotas.sexo_mascota, mascotas.tipo_mascota, mascotas.talla_mascota, 
+mascotas.foto_mascota, asociaciones.nombre_asociacion FROM mascotas JOIN asociaciones ON mascotas.asociacion_id = asociaciones.asociacion_id;
+
+SELECT asociaciones.*, usuarios.rol_usuario FROM asociaciones JOIN usuarios ON asociaciones.asociacion_id = usuarios.asociacion_id;
+

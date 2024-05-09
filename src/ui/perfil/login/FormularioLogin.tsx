@@ -9,10 +9,10 @@ export default function FormularioLogin() {
     return (
         <form action={mandar}>
             <label>Usuario</label>
-            <input type="text" name="nombre_usuario" defaultValue={'nombre 2'} />
+            <input type="text" name="nombre_usuario" defaultValue={'admin'} />
 
             <label>Contraseña</label>
-            <input type="text" name="contrasena" defaultValue={'a232'}/>
+            <input type="text" name="contrasena" defaultValue={'a235'}/>
             <button>Enviar</button>
         </form>
     );

@@ -1,6 +1,6 @@
 import { unstable_noStore as noStore } from "next/cache";
 import { conn } from "./conexion";
-import { MascotaGeneral, MascotaAsociacion, MascotaEditar } from "./definiciones";
+import { MascotaGeneral, MascotaAsociacion, MascotaEditar, Asociacion, AsociacionConRol } from "./definiciones";
 
 
 /**
@@ -78,12 +78,45 @@ export async function fetchMascota(id: number){
     }
 }
 
-export async function fetchAsociaciones(){
+export async function fetchAsociacionesConRol(){
     noStore();
     try{
-        const respuesta = await conn.query("SELECT * FROM asociaciones");
+        const respuesta = await conn.query("SELECT asociaciones.nombre_asociacion, asociaciones.puntuacion_asociacion, asociaciones.foto_asociacion, usuarios.rol_usuario FROM asociaciones JOIN usuarios ON asociaciones.asociacion_id = usuarios.asociacion_id");
 
-        return respuesta.rows;
+
+        const datos: AsociacionConRol[] = respuesta.rows;
+
+        for (let index = 0; index < respuesta.rowCount; index++){
+            const foto_data = datos[index].foto_asociacion;
+            if (foto_data != null){
+                const foto = Buffer.from(foto_data).toString("base64");
+                datos[index].foto_asociacion = foto;
+            }
+        }
+
+        return datos;
+    } catch (error){
+        console.error("Error al obtener las asociaciones: ", error); 
+        throw new Error("Error al obtener las asociaciones");
+    }
+}
+
+export async function fetchAsociacionesVerificadas(){
+    noStore();
+    try{
+        const respuesta = await conn.query("SELECT * FROM asociaciones JOIN usuarios ON asociaciones.asociacion_id = usuarios.asociacion_id WHERE usuarios.rol_usuario = 'usuario verificado'");
+
+        const datos: Asociacion[] = respuesta.rows;
+
+        for (let index = 0; index < respuesta.rowCount; index++){
+            const foto_data = datos[index].foto_asociacion;
+            if (foto_data != null){
+                const foto = Buffer.from(foto_data).toString("base64");
+                datos[index].foto_asociacion = foto;
+            }
+        }
+
+        return datos;
     } catch (error){
         console.error("Error al obtener las asociaciones: ", error); 
         throw new Error("Error al obtener las asociaciones");
@@ -95,7 +128,13 @@ export async function fetchAsociacionPorId(id: string){
     try{
         const respuesta = await conn.query("SELECT * FROM asociaciones WHERE asociacion_id = $1", [id]);
 
-        return respuesta.rows[0];
+        const datos: Asociacion = respuesta.rows[0];
+        const foto_data = datos.foto_asociacion;
+
+        const foto = Buffer.from(foto_data).toString("base64");
+        datos.foto_asociacion = foto;
+
+        return datos;
     } catch (error){
         console.error("Error al obtener la asociación: ", error); 
         throw new Error("Error al obtener la asociación");
