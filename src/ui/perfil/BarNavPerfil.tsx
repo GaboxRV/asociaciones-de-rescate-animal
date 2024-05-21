@@ -10,8 +10,6 @@ export default async function BarNavPerfil() {
 
     const objetoDatos: DatosSesion = JSON.parse(sesion?.user?.name || "");
 
-    console.log('sesion: ', objetoDatos);
-
     return (
         <>
             {objetoDatos.rol === 'usuario verificado' && <NavegacionUsuarioVerificado asociacion_id={asociacion_id} />}
@@ -41,7 +39,7 @@ function NavegacionUsuarioVerificado({ asociacion_id }: { asociacion_id: string 
         <nav>
             <ul>
                 <li>
-                    <Link href={'/perfil/asociacion'}>
+                    <Link href={'/perfil'}>
                         Inicio
                     </Link>
                 </li>

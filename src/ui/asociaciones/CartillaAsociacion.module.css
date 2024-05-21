@@ -1,6 +1,6 @@
 
 .asociacion {
-    background-color: aqua;
+    background-color: var(--color-asociacion);
     padding: 1rem;
     border-radius: 20px;
 }

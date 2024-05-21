@@ -1,11 +1,10 @@
+
 .main{
     background-color: var(--background-color-home);
 }
 
-.seccion_asociaciones{
+.lista_mascotas{
     display: flex;
     flex-wrap: wrap;
-    gap: 2rem;
-
-    padding: 2rem;
+    justify-content: space-between;
 }

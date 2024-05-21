@@ -1,5 +1,5 @@
 
-import styles from "@/ui/asociaciones/asociacion.module.css";
+import styles from "@/ui/asociaciones/CartillaAsociacion.module.css";
 import Link from "next/link";
 
 export default async function CartillaAsociacion(

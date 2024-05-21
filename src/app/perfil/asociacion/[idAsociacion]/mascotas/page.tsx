@@ -1,6 +1,7 @@
 import { fetchMascotasPorAsociacion } from "@/lib/data";
 import { MascotaAsociacion } from "@/lib/definiciones";
-import CartillaMascotaAsociacion from "@/ui/perfil/mascotas/CartillaMascotaAsociacion";
+import CartillaMascotaAsociacion from "@/ui/perfil/asociacion/mascotas/CartillaMascotaAsociacion";
+import styles from "@/ui/perfil/asociacion/mascotas/page.module.css";
 
 export default async function MascotasAsociacion({ params } : { params: { idAsociacion: number} }){
     const asociacion_id = params.idAsociacion;
@@ -8,9 +9,9 @@ export default async function MascotasAsociacion({ params } : { params: { idAsoc
     const mascotas : MascotaAsociacion[] = await fetchMascotasPorAsociacion(asociacion_id);
 
     return(
-        <div>
+        <main className={styles.main}>
             <h1>Estoy viendo las mascotas que tiene una asociacion con id: {asociacion_id}</h1>
-            <section>
+            <section className={styles.lista_mascotas}>
                 {
                     mascotas.map((mascota: MascotaAsociacion) => (
                         <CartillaMascotaAsociacion
@@ -26,6 +27,6 @@ export default async function MascotasAsociacion({ params } : { params: { idAsoc
                     ))
                 }
             </section>
-        </div>
+        </main>
     );
 }

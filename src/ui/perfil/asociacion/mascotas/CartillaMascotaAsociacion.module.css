@@ -11,21 +11,10 @@
     gap: 1rem;
 }
 
-
-
 .cartilla img{
     width: 100%;
     object-fit: cover;
     height: 300px;
 
     border-radius: 20px;
-}
-
-.contenedor_imagen{
-
-    
-    
-}
-
-.contenedor_informacion{
 }

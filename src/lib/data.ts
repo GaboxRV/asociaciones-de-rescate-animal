@@ -81,7 +81,7 @@ export async function fetchMascota(id: number){
 export async function fetchAsociacionesConRol(){
     noStore();
     try{
-        const respuesta = await conn.query("SELECT asociaciones.nombre_asociacion, asociaciones.puntuacion_asociacion, asociaciones.foto_asociacion, usuarios.rol_usuario FROM asociaciones JOIN usuarios ON asociaciones.asociacion_id = usuarios.asociacion_id");
+        const respuesta = await conn.query("SELECT asociaciones.asociacion_id, asociaciones.nombre_asociacion, asociaciones.puntuacion_asociacion, asociaciones.foto_asociacion, usuarios.rol_usuario FROM asociaciones JOIN usuarios ON asociaciones.asociacion_id = usuarios.asociacion_id");
 
 
         const datos: AsociacionConRol[] = respuesta.rows;

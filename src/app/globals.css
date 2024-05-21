@@ -1,7 +1,9 @@
 /* Variables globales */
 :root {
-  --background-color-home:#E1F8E4 ;
+  --background-color-home:ghostwhite  ;
   --color-home: #171321;
+  --color-mascota: #DFE9F0;
+  --color-asociacion: #E1F8E4 ;
   --font-size: 1.2rem;
   --mono: "Oxygen mono", monospace;
   --sans: Oxygen, sans-serif;
@@ -25,7 +27,6 @@ body {
   margin: 0 auto;
   max-width: 1200px;
   font-size: var(--font-size);
-  background-color:var(--background-color-home);
   color: var(--color-home);
 }
 

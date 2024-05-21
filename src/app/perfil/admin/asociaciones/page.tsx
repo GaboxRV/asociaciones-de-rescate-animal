@@ -15,6 +15,7 @@ export default async function Asociaciones() {
             {asociaciones.map( (asociacion : AsociacionConRol) => (
                 <FichaAsociaciones 
                     key={asociacion.asociacion_id}
+                    id={asociacion.asociacion_id}
                     nombre={asociacion.nombre_asociacion}
                     estado={asociacion.rol_usuario}
                     foto={asociacion.foto_asociacion}

@@ -53,8 +53,8 @@ export async function crearMascota(formData: FormData) {
         }
     }
 
-    revalidatePath(`/perfil/${asociacion_id}/mascotas`);
-    redirect(`/perfil/${asociacion_id}/mascotas`);
+    revalidatePath(`/perfil/asociacion/${asociacion_id}/mascotas`);
+    redirect(`/perfil/asociacion/${asociacion_id}/mascotas`);
 }
 
 /**
@@ -106,8 +106,8 @@ export async function editarMascota(mascota_id: string, asociacion_id: string, f
         }
     }
 
-    revalidatePath(`/perfil/${asociacion_id}/mascotas`);
-    redirect(`/perfil/${asociacion_id}/mascotas/${mascota_id}/editar`);
+    revalidatePath(`/perfil/asociacion/${asociacion_id}/mascotas`);
+    redirect(`/perfil/asociacion/${asociacion_id}/mascotas/${mascota_id}/editar`);
 }
 
 /**
@@ -124,8 +124,8 @@ export async function eliminarMascota(mascota_id: string, asociacion_id: string)
         }
     }
 
-    revalidatePath(`/perfil/${asociacion_id}/mascotas`);
-    redirect(`/perfil/${asociacion_id}/mascotas`);
+    revalidatePath(`/perfil/asociacion/${asociacion_id}/mascotas`);
+    redirect(`/perfil/asociacion/${asociacion_id}/mascotas`);
 
 }
 
