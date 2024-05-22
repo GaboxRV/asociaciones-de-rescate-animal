@@ -9,7 +9,7 @@ export default async function Asociaciones() {
     return (
         <main>
 
-            <h2>Asociaciones dentro de administrador prueba</h2>
+            <h2>Asociaciones dentro de administrador</h2>
 
 
             {asociaciones.map( (asociacion : AsociacionConRol) => (

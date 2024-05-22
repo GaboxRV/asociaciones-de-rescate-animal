@@ -1,3 +1,4 @@
+import FormularioEditarAsociacion from "@/ui/perfil/admin/FormularioEditarAsociacion";
 
 export default async function Asociacion({params}: {params: {idAsociacion: string}}){
 
@@ -6,8 +7,7 @@ export default async function Asociacion({params}: {params: {idAsociacion: strin
 
     return (
         <div>
-            <h1>Asociación</h1>
-            <p>Esta es la página de la asociación {asociacion_id}</p>
+            <FormularioEditarAsociacion asociacion_id={asociacion_id} />
         </div>
     );
 }

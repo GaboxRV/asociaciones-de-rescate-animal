@@ -1,11 +1,12 @@
-import { fetchAsociacionPorId } from "@/lib/data";
+import { fetchAsociacionPorId, fetchRolesUsuarios } from "@/lib/data";
 import { Asociacion } from "@/lib/definiciones";
 import { editarAsociacion } from "@/lib/actions";
 
 
-export default async function FormularioPerfilAsociacion( { asociacion_id }: { asociacion_id : string }) {
+export default async function FormularioEditarAsociacion( { asociacion_id }: { asociacion_id : string }) {
 
     const asociacion: Asociacion = await fetchAsociacionPorId(asociacion_id);
+    const roles = await fetchRolesUsuarios();
 
     const editarAsociacionConId = editarAsociacion.bind(null, asociacion_id);
 
@@ -30,10 +31,23 @@ export default async function FormularioPerfilAsociacion( { asociacion_id }: { a
                     <textarea name="descripcion" defaultValue={asociacion.descripcion_asociacion}/>
                 </label>
                 <label>
+                    Puntuación:
+                    <input type="number" name="puntuacion" defaultValue={asociacion.puntuacion_asociacion}/>
+                </label>
+                <label>
+                    Rol de usuario:
+                    <select name="rol">
+                        {roles.map((rol : string) => (
+                            <option key={rol} value={rol}>{rol}</option>
+                        ))}
+                    </select>
+                </label>
+                <label>
                     Imagen:
                     <input type="file" name="imagen" accept="image/*"/>
                 </label>
                 <img src={`data:image/jpeg;base64,${asociacion.foto_asociacion}`} alt={asociacion.nombre_asociacion} />
+                
                 <button type="submit">Actualizar</button>
 
             </form>

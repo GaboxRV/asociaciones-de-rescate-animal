@@ -10,7 +10,7 @@ export default async function MascotasAsociacion({ params } : { params: { idAsoc
 
     return(
         <main className={styles.main}>
-            <h1>Estoy viendo las mascotas que tiene una asociacion con id: {asociacion_id}</h1>
+            <h1>Mis mascotas</h1>
             <section className={styles.lista_mascotas}>
                 {
                     mascotas.map((mascota: MascotaAsociacion) => (

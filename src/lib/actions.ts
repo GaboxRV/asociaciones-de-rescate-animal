@@ -214,6 +214,67 @@ export async function crearUsuario(estadoPrevio: prev, formData: FormData) {
 
 }
 
+/**
+ * Bloque de código para editar una asociación
+ */
+
+const EsquemaAsociacion = z.object({
+    id: z.string(),
+    nombre_asociacion: z.string(),
+    direccion_asociacion: z.string(),
+    telefono_asociacion: z.string(),
+    descripcion_asociacion: z.string(),
+    foto_asociacion: z.instanceof(File),
+    puntuacion_asociacion: z.coerce.number(),
+});
+
+const EditarAsociacion = EsquemaAsociacion.omit({ id: true, puntuacion_asociacion: true });
+
+export async function editarAsociacion( asociacion_id: string, formData: FormData){
+
+    const camposValidados = EditarAsociacion.safeParse({
+        nombre_asociacion: formData.get("nombre"),
+        direccion_asociacion: formData.get("direccion"),
+        telefono_asociacion: formData.get("telefono"),
+        descripcion_asociacion: formData.get("descripcion"),
+        foto_asociacion: formData.get("imagen"),
+    });
+
+    if (!camposValidados.success) {
+        return {
+            errores: camposValidados.error.flatten().fieldErrors,
+            mensaje: "Error en los campos del formulario"
+        }
+    }
+
+    const { nombre_asociacion, direccion_asociacion, telefono_asociacion, descripcion_asociacion, foto_asociacion } = camposValidados.data;
+
+    const foto_data = await foto_asociacion.arrayBuffer();
+    const fotoBuffer = Buffer.from(new Uint8Array(foto_data));
+
+    try {
+        console.log("Editando asociacion...");
+        if (foto_data.byteLength === 0) {
+            console.log("Sin foto");
+            const respuesta = await conn.query("UPDATE asociaciones SET nombre_asociacion = $1, direccion_asociacion = $2, telefono_asociacion = $3, descripcion_asociacion = $4 WHERE asociacion_id = $5",
+                [nombre_asociacion, direccion_asociacion, telefono_asociacion, descripcion_asociacion, asociacion_id]
+            );
+        } else {
+            console.log("Con foto");
+            const respuesta = await conn.query("UPDATE asociaciones SET nombre_asociacion = $1, direccion_asociacion = $2, telefono_asociacion = $3, descripcion_asociacion = $4, foto_asociacion = $5 WHERE asociacion_id = $6",
+                [nombre_asociacion, direccion_asociacion, telefono_asociacion, descripcion_asociacion, fotoBuffer, asociacion_id]
+            );
+        }
+    } catch (error) {
+        return {
+            mensaje: "Error en la Base de Datos: Error al editar la asociacion",
+        }
+    }
+
+    revalidatePath(`/perfil`);
+
+}
+
 export async function authenticate(prevState: string | undefined, formData: FormData) {
     try {
 

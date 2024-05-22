@@ -7,6 +7,13 @@ export default async function Login() {
         <main>
             <section>
                 <h2>Inicio de sesión</h2>
+
+                <p>administrador: admin</p>
+                <p>contraseña: a235</p>
+
+                <p>usuario: nombre 2</p>
+                <p>contraseña: a23222</p>
+
                 <FormularioLogin />
             </section>
 
@@ -16,8 +23,6 @@ export default async function Login() {
                     Registrarse
                 </Link>
             </section>
-
-
 
         </main>
     );
