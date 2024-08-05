@@ -32,6 +32,27 @@ export async function fetchMascotas() {
 }
 
 /**
+ * Recuperar las mascotas con filtros de la base de datos para mostrarlas en la página principal.
+ */
+
+export async function fetchMascotasFiltradas() {
+    noStore();
+
+    try {
+        const respuesta = await conn.query(
+            "SELECT NOW()"
+        );
+        const datos: MascotaGeneral[] = [];
+
+        return datos;
+
+    } catch (error) {
+        console.error("Error al obtener las mascotas: ", error);
+        throw new Error('Error al obtener las mascotas');
+    }
+}
+
+/**
  * Recuperar las mascotas de una asociación en específico.
  */
 export async function fetchMascotasPorAsociacion(id: number) {

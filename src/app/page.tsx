@@ -2,7 +2,6 @@
 import Image from "next/image";
 import styles from "./page.module.css";
 import {conn} from "../lib/conexion";
-import BotonUbicacion from "@/ui/botonUbicacion";
 
 export default async function Home() {
 
@@ -15,7 +14,6 @@ export default async function Home() {
   return (
     <main>
       <p>{prueba}</p>
-      <BotonUbicacion />
     </main>
 
   );
