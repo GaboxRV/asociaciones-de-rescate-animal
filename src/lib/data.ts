@@ -35,13 +35,16 @@ export async function fetchMascotas() {
  * Recuperar las mascotas con filtros de la base de datos para mostrarlas en la página principal.
  */
 
-export async function fetchMascotasFiltradas() {
+const OBJETOS_POR_PAGINA = 4;
+export async function fetchMascotasFiltradas(ubicacion: string, tipo: string, sexo: string, talla: string, pagina: number) {
     noStore();
+
+    console.log(ubicacion, tipo, sexo, talla, pagina);
+    const offset = (pagina - 1) * OBJETOS_POR_PAGINA;
 
     try {
         const respuesta = await conn.query(
-            "SELECT NOW()"
-        );
+            "SELECT now()");
         const datos: MascotaGeneral[] = [];
 
         return datos;
