@@ -1,6 +1,6 @@
 import { unstable_noStore as noStore } from "next/cache";
 import { conn } from "./conexion";
-import { MascotaGeneral, MascotaAsociacion, MascotaEditar, Asociacion, AsociacionConRol } from "./definiciones";
+import { MascotaGeneral, MascotaAsociacion, MascotaEditar, Asociacion, AsociacionConRol, Alcaldia } from "./definiciones";
 
 
 /**
@@ -39,7 +39,6 @@ const OBJETOS_POR_PAGINA = 4;
 export async function fetchMascotasFiltradas(ubicacion: string, tipo: string, sexo: string, talla: string, pagina: number) {
     noStore();
 
-    console.log(ubicacion, tipo, sexo, talla, pagina);
     const offset = (pagina - 1) * OBJETOS_POR_PAGINA;
 
     try {
@@ -219,6 +218,18 @@ export async function fetchRolesUsuarios() {
     } catch (error) {
         console.error("Error al obtener los roles de los usuarios: ", error);
         throw new Error("Error al obtener los roles de los usuarios");
+    }
+}
+
+export async function fetchAlcaldias(){
+    try {
+        const respuesta = await conn.query("SELECT * FROM alcaldias");
+        const datos: Alcaldia[] = respuesta.rows;
+        return datos;
+
+    } catch (error) {
+        console.error("Error al obtener las alcaldías: ", error);
+        throw new Error("Error al obtener las alcaldías");
     }
 }
 

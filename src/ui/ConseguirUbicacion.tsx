@@ -1,14 +1,21 @@
 'use client'
 
-import {useEffect } from "react"
+import { useEffect } from "react"
 
 export function getCookie(name: string) {
-    const nameString = name + "=";
-    const value = document.cookie.split('; ').find(row => row.startsWith(nameString));
-    if (value) {
-        return value.split('=')[1];
+
+    try {
+        const nameString = name + "=";
+        const value = document.cookie.split('; ').find(row => row.startsWith(nameString));
+        if (value) {
+            return value.split('=')[1];
+        }
+        return null;
+
+    } catch (error) {
+        return null;
     }
-    return null;
+
 }
 
 export default function ConseguirUbicacion() {
@@ -28,7 +35,7 @@ export default function ConseguirUbicacion() {
             enableHighAccuracy: true, // Solicita la máxima precisión posible
             maximumAge: 0 // No aceptar ubicaciones cacheadas
         };
-    
+
         navigator.geolocation.getCurrentPosition(
             (position) => {
                 const coords = { lat: position.coords.latitude, lon: position.coords.longitude };
@@ -53,7 +60,7 @@ export default function ConseguirUbicacion() {
     }, []);
 
     return (
-        <>  
+        <>
         </>
     )
 }

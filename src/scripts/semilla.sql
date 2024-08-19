@@ -42,6 +42,8 @@ select * from mascotas;
 SELECT enum_range(NULL::sexos_de_mascotas);
 SELECT enum_range(NULL::tipos_de_mascotas);
 
+SHOW SERVER_ENCODING;
+
 select nombre_mascota, edad_mascota, sexo_mascota, tipo_mascota from mascotas where sexo_mascota = 'hembra';
 
 SELECT sexo_mascota, COUNT(*) FROM mascotas GROUP BY sexo_mascota;

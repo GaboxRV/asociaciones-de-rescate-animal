@@ -1,4 +1,7 @@
-
+export type Alcaldia = {
+    alcaldia_id: string;
+    nombre_alcaldia: string;
+}
 
 export type Usuario = {
     usuario_id: string;

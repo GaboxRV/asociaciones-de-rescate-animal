@@ -2,9 +2,10 @@
 
 DROP TABLE IF EXISTS mascotas;
 DROP TABLE IF EXISTS usuarios;
+DROP TABLE IF EXISTS eventos;
 DROP TABLE IF EXISTS asociaciones;
 DROP TABLE IF EXISTS alcaldias;
-DROP TABLE IF EXISTS eventos;
+
 
 DROP TYPE IF EXISTS sexos_de_mascotas;
 DROP TYPE IF EXISTS tipos_de_mascotas;
@@ -91,7 +92,7 @@ ON DELETE CASCADE
 ON UPDATE CASCADE;
 
 
-/* Restricciones de tabla asociaciones */
+/* Restricciones de tabla mascotas */
 ALTER TABLE mascotas ADD COLUMN asociacion_id INTEGER NOT NULL,
 ADD CONSTRAINT mascotas_asociacion_id_fkey 
 FOREIGN KEY (asociacion_id) REFERENCES asociaciones(asociacion_id)
@@ -100,3 +101,22 @@ ON UPDATE CASCADE;
 
 
 /* ----------------- Añadiendo ejemplos ----------------- */
+
+INSERT INTO alcaldias (nombre_alcaldia) VALUES 
+('Álvaro Obregón'),
+('Azcapotzalco'),
+('Benito Juárez'),
+('Coyoacán'),
+('Cuajimalpa de Morelos'),
+('Cuauhtémoc'),
+('Gustavo A. Madero'),
+('Iztacalco'),
+('Iztapalapa'),
+('Magdalena Contreras'),
+('Miguel Hidalgo'),
+('Milpa Alta'),
+('Tláhuac'),
+('Tlalpan'),
+('Venustiano Carranza'),
+('Xochimilco');
+

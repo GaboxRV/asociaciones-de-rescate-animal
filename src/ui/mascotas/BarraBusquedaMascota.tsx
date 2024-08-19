@@ -3,12 +3,22 @@
 import { useSearchParams, usePathname, useRouter } from "next/navigation";
 import { getCookie } from "@/ui/ConseguirUbicacion";
 import { useEffect, useState } from "react";
+import { Alcaldia } from "@/lib/definiciones";
 
-export default function RutaActual({ tiposMascotas, sexosMascotas, tallasMascotas }: { tiposMascotas: string[], sexosMascotas: string[], tallasMascotas: string[] }) {
+export default function RutaActual({ tiposMascotas, sexosMascotas, tallasMascotas, alcaldias, ubicacionAlcaldia }: 
+    { 
+        tiposMascotas: string[], 
+        sexosMascotas: string[], 
+        tallasMascotas: string[],
+        alcaldias: Alcaldia[],
+        ubicacionAlcaldia: string
+    }) 
+{
+    const ubicacion = getCookie('ubicacion');
     const searchParams = useSearchParams();
     const pathname = usePathname();
     const { replace } = useRouter();
-    const [ubicacion, setUbicacion] = useState<string | null>(null);
+    const [selectedAlcaldia, setSelectedAlcaldia] = useState(ubicacionAlcaldia);
 
     function handleSearch(e: React.FormEvent<HTMLFormElement>) {
         e.preventDefault();
@@ -19,7 +29,7 @@ export default function RutaActual({ tiposMascotas, sexosMascotas, tallasMascota
         const talla = (e.target as any).talla.value;
 
         params.set('page', '1');
-        params.set('ubicacion', ubicacion || '');
+        params.set('ubicacion', selectedAlcaldia);
         params.set('tipo', tipo);
         params.set('sexo', sexo);
         params.set('talla', talla);
@@ -28,8 +38,12 @@ export default function RutaActual({ tiposMascotas, sexosMascotas, tallasMascota
 
     }
 
+    function handleAlcaldiaChange(e: React.ChangeEvent<HTMLSelectElement>) {
+        setSelectedAlcaldia(e.target.value);
+    }
+
     useEffect(() => {
-        setUbicacion(getCookie('ubicacion') || 'Ubicación no disponible');
+        setSelectedAlcaldia(getCookie('ubicacion') || '');
     }, []);
 
     return (
@@ -37,7 +51,20 @@ export default function RutaActual({ tiposMascotas, sexosMascotas, tallasMascota
             <form onSubmit={handleSearch}>
                 <div>
                     <label>Ubicación: </label>
-                    <span>{ubicacion}</span>
+                    <select 
+                        name="ubicacion"
+                        value={selectedAlcaldia} 
+                        onChange={handleAlcaldiaChange}
+                    >
+                        <option value="">Selecciona una alcaldía</option>
+                        {
+                            alcaldias.map(alcaldia => (
+                                <option key={alcaldia.alcaldia_id} value={alcaldia.nombre_alcaldia}>
+                                    {alcaldia.nombre_alcaldia}
+                                </option>
+                            ))
+                        }
+                    </select>
 
                 </div>
                 <div>
