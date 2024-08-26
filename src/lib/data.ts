@@ -233,6 +233,21 @@ export async function fetchAlcaldias(){
     }
 }
 
+export async function fetchAlcaldiaPorId(id: string) {
+    noStore();
+    try {
+        const respuesta = await conn.query("SELECT * FROM alcaldias WHERE alcaldia_id = $1", [id]);
+
+        const datos: Alcaldia = respuesta.rows[0];
+   
+        return datos;
+    } catch (error) {
+        console.error("Error al obtener la alcaldía: ", error);
+        throw new Error("Error al obtener la alcaldía");
+    }
+
+}
+
 export async function fetchUsuario(usuario: string) {
     noStore();
     try {

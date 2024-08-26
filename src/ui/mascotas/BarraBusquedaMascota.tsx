@@ -5,6 +5,7 @@ import { getCookie } from "@/ui/ConseguirUbicacion";
 import { useEffect, useState } from "react";
 import { Alcaldia } from "@/lib/definiciones";
 
+
 export default function RutaActual({ tiposMascotas, sexosMascotas, tallasMascotas, alcaldias, ubicacionAlcaldia }: 
     { 
         tiposMascotas: string[], 

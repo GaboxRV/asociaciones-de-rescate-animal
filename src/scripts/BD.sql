@@ -30,6 +30,7 @@ CREATE TABLE IF NOT EXISTS alcaldias (
     nombre_alcaldia CHARACTER VARYING(255) UNIQUE NOT NULL
 );
 
+
 CREATE TABLE IF NOT EXISTS asociaciones(
 	asociacion_id SERIAL PRIMARY KEY,
 	nombre_asociacion CHARACTER VARYING(255) UNIQUE NOT NULL,
@@ -78,6 +79,8 @@ ON DELETE CASCADE
 ON UPDATE CASCADE;
 
 
+
+
 /* Restricciones de tabla eventos */
 ALTER TABLE eventos ADD COLUMN asociacion_id INTEGER,
 ADD CONSTRAINT eventos_asociacion_id_fkey
@@ -120,3 +123,7 @@ INSERT INTO alcaldias (nombre_alcaldia) VALUES
 ('Venustiano Carranza'),
 ('Xochimilco');
 
+INSERT INTO asociaciones (nombre_asociacion, alcaldia_id, foto_asociacion) VALUES
+('Patitas felices', 2, );
+INSERT INTO usuarios (nombre_usuario, contrasena_usuario, rol_usuario, asociacion_id) VALUES
+('ejemplo@gmail.com', 'gatitos1234', 'usuario sin verificar', 1)

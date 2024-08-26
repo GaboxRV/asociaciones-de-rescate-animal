@@ -136,7 +136,13 @@ export async function eliminarMascota(mascota_id: string, asociacion_id: string)
 
 const EsquemaUsuario = z.object({
     id: z.string(),
-    nombre_usuario: z.string().min(3, "Ingrese un nombre de usuario valido"),
+    nombre_usuario: z.string().refine((val) => {
+        const telefonoRegex = /^55\d{8}$/;
+        const correoRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        return telefonoRegex.test(val) || correoRegex.test(val);
+    }, {
+        message: "Ingrese un número de teléfono que inicie con 55 o correo electrónico"
+    }),
     contrasena_usuario: z.string().min(5, "Ingrese una contraseña valida"),
     nombre_asociacion: z.string().min(5, "Ingrese un nombre de asociacion valido"),
     imagen_asociacion: z.instanceof(File)
@@ -222,25 +228,28 @@ export async function crearUsuario(estadoPrevio: prev, formData: FormData) {
 const EsquemaAsociacion = z.object({
     id: z.string(),
     nombre_asociacion: z.string(),
-    direccion_asociacion: z.string(),
     telefono_asociacion: z.string(),
+    direccion_asociacion: z.string(),
+    puntuacion_asociacion: z.coerce.number(),
     descripcion_asociacion: z.string(),
     foto_asociacion: z.instanceof(File),
-    puntuacion_asociacion: z.coerce.number(),
+    alcaldia_id: z.string(),
 });
 
-const EditarAsociacion = EsquemaAsociacion.omit({ id: true, puntuacion_asociacion: true });
+const EditarAsociacionUsuario = EsquemaAsociacion.omit({ id: true, puntuacion_asociacion: true});
 
-export async function editarAsociacion( asociacion_id: string, formData: FormData){
+export async function editarAsociacionUsuario( asociacion_id: string, formData: FormData){
 
-    const camposValidados = EditarAsociacion.safeParse({
+    const camposValidados = EditarAsociacionUsuario.safeParse({
         nombre_asociacion: formData.get("nombre"),
         direccion_asociacion: formData.get("direccion"),
+        alcaldia_id: formData.get("alcaldia"),
         telefono_asociacion: formData.get("telefono"),
         descripcion_asociacion: formData.get("descripcion"),
         foto_asociacion: formData.get("imagen"),
     });
 
+    
     if (!camposValidados.success) {
         return {
             errores: camposValidados.error.flatten().fieldErrors,
@@ -248,22 +257,20 @@ export async function editarAsociacion( asociacion_id: string, formData: FormDat
         }
     }
 
-    const { nombre_asociacion, direccion_asociacion, telefono_asociacion, descripcion_asociacion, foto_asociacion } = camposValidados.data;
+    const { nombre_asociacion, alcaldia_id, direccion_asociacion, telefono_asociacion, descripcion_asociacion, foto_asociacion } = camposValidados.data;
 
+    console.log(foto_asociacion);
     const foto_data = await foto_asociacion.arrayBuffer();
     const fotoBuffer = Buffer.from(new Uint8Array(foto_data));
 
     try {
-        console.log("Editando asociacion...");
         if (foto_data.byteLength === 0) {
-            console.log("Sin foto");
-            const respuesta = await conn.query("UPDATE asociaciones SET nombre_asociacion = $1, direccion_asociacion = $2, telefono_asociacion = $3, descripcion_asociacion = $4 WHERE asociacion_id = $5",
-                [nombre_asociacion, direccion_asociacion, telefono_asociacion, descripcion_asociacion, asociacion_id]
+            const respuesta = await conn.query("UPDATE asociaciones SET nombre_asociacion = $1, direccion_asociacion = $2, telefono_asociacion = $3, descripcion_asociacion = $4, alcaldia_id = $5 WHERE asociacion_id = $6",
+                [nombre_asociacion, direccion_asociacion, telefono_asociacion, descripcion_asociacion, alcaldia_id, asociacion_id]
             );
         } else {
-            console.log("Con foto");
-            const respuesta = await conn.query("UPDATE asociaciones SET nombre_asociacion = $1, direccion_asociacion = $2, telefono_asociacion = $3, descripcion_asociacion = $4, foto_asociacion = $5 WHERE asociacion_id = $6",
-                [nombre_asociacion, direccion_asociacion, telefono_asociacion, descripcion_asociacion, fotoBuffer, asociacion_id]
+            const respuesta = await conn.query("UPDATE asociaciones SET nombre_asociacion = $1, direccion_asociacion = $2, telefono_asociacion = $3, descripcion_asociacion = $4, foto_asociacion = $5, alcaldia_id = $6 WHERE asociacion_id = $7",
+                [nombre_asociacion, direccion_asociacion, telefono_asociacion, descripcion_asociacion, fotoBuffer, alcaldia_id, asociacion_id]
             );
         }
     } catch (error) {

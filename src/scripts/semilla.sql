@@ -12,32 +12,10 @@ SELECT setval(pg_get_serial_sequence('asociaciones', 'asociacion_id'), 1, false)
 SELECT setval(pg_get_serial_sequence('usuarios', 'usuario_id'), 1, false);
 SELECT setval(pg_get_serial_sequence('mascotas', 'mascota_id'), 1, false);
 
-INSERT INTO asociaciones (nombre_asociacion, telefono_asociacion, direccion_asociacion) VALUES
-('Asociacion 1', '1234567890', 'Direccion 1'),
-('Asociacion 2', '0987654321', 'Direccion 2'),
-('Asociacion 3', '1122334455', 'Direccion 3'),
-('Asociacion 4', '5566778899', 'Direccion 4');
-
-INSERT INTO usuarios (nombre_usuario, contrasena_usuario, rol_usuario) VALUES
-('admin', 'a235','administrador');
-
-INSERT INTO usuarios (nombre_usuario, contrasena_usuario, asociacion_id, rol_usuario) VALUES
-('nombre 1', 'a231', 2, 'usuario sin verificar'),
-('nombre 2', 'a232', 3, 'usuario verificado'),
-('nombre 3', 'a233', 1, 'usuario sin verificar'),
-('nombre 4', 'a234', 4, 'usuario verificado');
-
-
-INSERT INTO mascotas (nombre_mascota, edad_mascota, sexo_mascota, tipo_mascota, talla_mascota, asociacion_id) VALUES
-('mascota 1', 8,'macho','gato', 'chica', 3),
-('mascota 2', 12,'hembra','perro', 'mediana', 3),
-('mascota 3', 42,'macho','gato', 'mediana', 1),
-('mascota 4', 31,'hembra','gato', 'mediana', 4),
-('mascota 5', 42,'hembra','perro', 'grande', 1);
-
 select * from asociaciones;
 select * from usuarios;
 select * from mascotas;
+select * from alcaldias;
 
 SELECT enum_range(NULL::sexos_de_mascotas);
 SELECT enum_range(NULL::tipos_de_mascotas);

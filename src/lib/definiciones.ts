@@ -15,8 +15,9 @@ export type Asociacion = {
     telefono_asociacion: string;
     direccion_asociacion: string;
     puntuacion_asociacion: number;
-    foto_asociacion: string;
     descripcion_asociacion: string;
+    foto_asociacion: string;
+    alcaldia_id: string;
 }
 
 export type AsociacionConRol = {

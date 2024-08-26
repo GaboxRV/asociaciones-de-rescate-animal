@@ -27,6 +27,8 @@ export default function ConseguirUbicacion() {
         const datosJson = await data.json();
         const delegacionJson = datosJson.address.borough;
         document.cookie = `ubicacion=${delegacionJson};path=/;max-age=${segundosCookie}`;
+        //recargar pagina para que se actualice la ubicación
+        location.reload();
 
     }
 
