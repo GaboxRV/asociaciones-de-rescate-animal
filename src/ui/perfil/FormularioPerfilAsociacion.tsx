@@ -55,7 +55,6 @@ export default async function FormularioPerfilAsociacion( { asociacion_id }: { a
                 <button type="submit">Actualizar</button>
 
             </form>
-            <textarea name= "imagen" defaultValue={asociacion.foto_asociacion}/>
         </>
     );
 }

@@ -123,7 +123,7 @@ INSERT INTO alcaldias (nombre_alcaldia) VALUES
 ('Venustiano Carranza'),
 ('Xochimilco');
 
-INSERT INTO asociaciones (nombre_asociacion, alcaldia_id, foto_asociacion) VALUES
-('Patitas felices', 2, );
-INSERT INTO usuarios (nombre_usuario, contrasena_usuario, rol_usuario, asociacion_id) VALUES
-('ejemplo@gmail.com', 'gatitos1234', 'usuario sin verificar', 1)
+INSERT INTO usuarios (nombre_usuario, contrasena_usuario, rol_usuario) VALUES
+('gabriel@sistema.com', 'gatitos1234', 'administrador'),
+('leonardo@sistema.com', 'perros1234', 'administrador')
+

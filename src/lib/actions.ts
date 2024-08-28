@@ -190,12 +190,15 @@ export async function crearUsuario(estadoPrevio: prev, formData: FormData) {
         // Iniciar una transacción
         await conn.query('BEGIN');
       
+        console.log('Iniciando transacción...');
         const respuestaAsociacion = await conn.query(
           "INSERT INTO asociaciones (nombre_asociacion, foto_asociacion) VALUES ($1, $2) RETURNING asociacion_id",
           [nombre_asociacion, fotoBuffer]
         );
       
         const asociacion_id = respuestaAsociacion.rows[0].asociacion_id;
+
+        console.log('intento de id asociacion: ', asociacion_id);
 
         console.log('intento de id asociacion: ', asociacion_id);
       
@@ -210,6 +213,7 @@ export async function crearUsuario(estadoPrevio: prev, formData: FormData) {
       } catch (error) {
         // Si algo salió mal, revertir todas las operaciones de la transacción
         console.log('Error, retrosediendo en los cambios...');
+        console.error('Error al insertar en la tabla asociaciones:', error);
         await conn.query('ROLLBACK');
         return {
             mensaje: "Error en la Base de Datos: Error al crear el usuario"

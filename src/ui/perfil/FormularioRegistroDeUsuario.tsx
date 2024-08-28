@@ -4,7 +4,7 @@ import styles from "./formularioUsuario.module.css";
 import { crearUsuario } from "@/lib/actions";
 import { useFormState } from "react-dom";
 
-export default function FormularioUsuario() {
+export default function FormularioRegistroDeUsuario() {
 
     const estadoInicial = { mensaje: "", errores: {} }
     const [estado, mandar] = useFormState(crearUsuario, estadoInicial);

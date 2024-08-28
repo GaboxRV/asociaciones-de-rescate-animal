@@ -1,6 +1,30 @@
 # Base de datos
-post123e
 
+- Instalar PostgreSQL, dejar el puerto por defecto(_5432_), usuario por defecto(_postgres_) y la contraseña se recomienda dejar (_post123e_). Esto con el fin de facilitar la configuración inicial, si modifica estos valores tendrás que cambiar los comandos a continuación.
+
+Ejemplo Completo en PowerShell
+```powershell
+# Creando variable de entorno para la sesion de PowerShell
+$env:PGPASSWORD = "post123e"
+
+# Crear la base de datos
+& "C:\Program Files\PostgreSQL\16\bin\psql.exe" -U postgres -h localhost -p 5432 -c "CREATE DATABASE asociaciones_de_rescate;"
+
+# Restaurar la base de datos desde el archivo SQL
+& "C:\Program Files\PostgreSQL\16\bin\psql.exe" -U postgres -h localhost -p 5432 -d asociaciones_de_rescate -f BD_CON_DATOS.sql
+
+# Respaldar la base de datos
+& "C:\Program Files\PostgreSQL\16\bin\pg_dump.exe" -U postgres -h localhost -p 5432 asociaciones_de_rescate > BD_CON_DATOS.sql  
+
+# Conectarse a PostgreSQL y terminar todas las conexiones activas
+& "C:\Program Files\PostgreSQL\16\bin\psql.exe" -U postgres -h localhost -p 5432 -d postgres -c "SELECT pg_terminate_backend(pg_stat_activity.pid) FROM pg_stat_activity WHERE pg_stat_activity.datname = 'asociaciones_de_rescate' AND pid <> pg_backend_pid();"
+
+# Eliminar la base de datos
+& "C:\Program Files\PostgreSQL\16\bin\psql.exe" -U postgres -h localhost -p 5432 -d postgres -c "DROP DATABASE asociaciones_de_rescate;"
+
+# Conectarse a PostgreSQL y listar las bases de datos
+& "C:\Program Files\PostgreSQL\16\bin\psql.exe" -U postgres -h localhost -p 5432 -d postgres -c "\l"
+```
 
 ## Operaciones de las asociaciones
 
