@@ -8,6 +8,7 @@ import { signIn } from "../auth";
 import { AuthError } from 'next-auth';
 
 /**
+ * ===========================================================================================
  * Bloque de código para crear una mascota
  */
 const EsquemaMascota = z.object({
@@ -58,6 +59,7 @@ export async function crearMascota(formData: FormData) {
 }
 
 /**
+ * ===========================================================================================
  * Bloque de código para editar una mascota
  */
 
@@ -111,6 +113,7 @@ export async function editarMascota(mascota_id: string, asociacion_id: string, f
 }
 
 /**
+ * ===========================================================================================
  * Bloque de código para eliminar una mascota
  */
 
@@ -131,6 +134,7 @@ export async function eliminarMascota(mascota_id: string, asociacion_id: string)
 
 
 /**
+ * ===========================================================================================
  * Bloque de código para crear un usuario
  */
 
@@ -145,32 +149,31 @@ const EsquemaUsuario = z.object({
     }),
     contrasena_usuario: z.string().min(5, "Ingrese una contraseña valida"),
     nombre_asociacion: z.string().min(5, "Ingrese un nombre de asociacion valido"),
+    alcaldia_asociacion: z.string(),
     imagen_asociacion: z.instanceof(File)
 });
 
 
 const CrearUsuario = EsquemaUsuario.omit({ id: true });
 
-export type prev = {
+export type prevCrearUsuario = {
     errores?: {
         nombre_usuario?: string[];
         contrasena_usuario?: string[];
         nombre_asociacion?: string[];
+        alcaldia_asociacion?: string[];
         imagen_asociacion?: string[];
     };
     mensaje?: string | null;
 };
 
-export async function crearUsuario(estadoPrevio: prev, formData: FormData) {
-
-    console.log("Creando usuario...");
-
-    console.log(formData);
+export async function crearUsuario(estadoPrevio: prevCrearUsuario, formData: FormData) {
 
     const camposValidados = CrearUsuario.safeParse({
         nombre_usuario: formData.get("nombre_usuario"),
         contrasena_usuario: formData.get("contrasena"),
         nombre_asociacion: formData.get("nombre_asociacion"),
+        alcaldia_asociacion: formData.get("alcaldia_asociacion"),
         imagen_asociacion: formData.get("imagen_asociacion")
     });
 
@@ -181,39 +184,32 @@ export async function crearUsuario(estadoPrevio: prev, formData: FormData) {
         }
     }
 
-    const { nombre_usuario, contrasena_usuario, nombre_asociacion, imagen_asociacion } = camposValidados.data;
+    const { nombre_usuario, contrasena_usuario, nombre_asociacion, alcaldia_asociacion, imagen_asociacion } = camposValidados.data;
 
     const foto_data = await imagen_asociacion.arrayBuffer();
     const fotoBuffer = Buffer.from(new Uint8Array(foto_data));
 
     try {
-        // Iniciar una transacción
         await conn.query('BEGIN');
       
-        console.log('Iniciando transacción...');
         const respuestaAsociacion = await conn.query(
-          "INSERT INTO asociaciones (nombre_asociacion, foto_asociacion) VALUES ($1, $2) RETURNING asociacion_id",
-          [nombre_asociacion, fotoBuffer]
+          "INSERT INTO asociaciones (nombre_asociacion, foto_asociacion, alcaldia_id) VALUES ($1, $2, $3) RETURNING asociacion_id",
+          [nombre_asociacion, fotoBuffer, alcaldia_asociacion]
         );
       
         const asociacion_id = respuestaAsociacion.rows[0].asociacion_id;
 
         console.log('intento de id asociacion: ', asociacion_id);
 
-        console.log('intento de id asociacion: ', asociacion_id);
       
         const respuestaUsuarios = await conn.query(
           "INSERT INTO usuarios (nombre_usuario, contrasena_usuario, rol_usuario, asociacion_id) VALUES ($1, $2, $3, $4)",
           [nombre_usuario, contrasena_usuario, 'usuario sin verificar' ,asociacion_id]
         );
       
-        // Si todo salió bien, confirmar la transacción
         await conn.query('COMMIT');
         
       } catch (error) {
-        // Si algo salió mal, revertir todas las operaciones de la transacción
-        console.log('Error, retrosediendo en los cambios...');
-        console.error('Error al insertar en la tabla asociaciones:', error);
         await conn.query('ROLLBACK');
         return {
             mensaje: "Error en la Base de Datos: Error al crear el usuario"
@@ -221,28 +217,43 @@ export async function crearUsuario(estadoPrevio: prev, formData: FormData) {
     }
 
     redirect('/perfil');
-
 }
 
 
 /**
+ * ===========================================================================================
  * Bloque de código para editar una asociación
  */
 
+
 const EsquemaAsociacion = z.object({
     id: z.string(),
-    nombre_asociacion: z.string(),
+    nombre_asociacion: z.string().min(5, "Ingrese un nombre de asociacion valido"),
     telefono_asociacion: z.string(),
     direccion_asociacion: z.string(),
     puntuacion_asociacion: z.coerce.number(),
     descripcion_asociacion: z.string(),
-    foto_asociacion: z.instanceof(File),
+    imagen_asociacion: z.instanceof(File),
     alcaldia_id: z.string(),
 });
 
 const EditarAsociacionUsuario = EsquemaAsociacion.omit({ id: true, puntuacion_asociacion: true});
 
-export async function editarAsociacionUsuario( asociacion_id: string, formData: FormData){
+export type prevEditarAsociacion = {
+    errores?: {
+        nombre_asociacion?: string[];
+        direccion_asociacion?: string[];
+        alcaldia_id?: string[];
+        telefono_asociacion?: string[];
+        descripcion_asociacion?: string[];
+        imagen_asociacion?: string[];
+        
+    };
+    mensaje?: string | null;
+};
+
+
+export async function editarAsociacionUsuario( asociacion_id: string, estadoPrevio: prevEditarAsociacion, formData: FormData){
 
     const camposValidados = EditarAsociacionUsuario.safeParse({
         nombre_asociacion: formData.get("nombre"),
@@ -250,21 +261,20 @@ export async function editarAsociacionUsuario( asociacion_id: string, formData: 
         alcaldia_id: formData.get("alcaldia"),
         telefono_asociacion: formData.get("telefono"),
         descripcion_asociacion: formData.get("descripcion"),
-        foto_asociacion: formData.get("imagen"),
+        imagen_asociacion: formData.get("imagen"),
     });
 
-    
     if (!camposValidados.success) {
         return {
             errores: camposValidados.error.flatten().fieldErrors,
-            mensaje: "Error en los campos del formulario"
-        }
+            mensaje: "Error en los campos del formulario",
+        };
     }
 
-    const { nombre_asociacion, alcaldia_id, direccion_asociacion, telefono_asociacion, descripcion_asociacion, foto_asociacion } = camposValidados.data;
+    const { nombre_asociacion, alcaldia_id, direccion_asociacion, telefono_asociacion, descripcion_asociacion, imagen_asociacion } = camposValidados.data;
 
-    console.log(foto_asociacion);
-    const foto_data = await foto_asociacion.arrayBuffer();
+    console.log(imagen_asociacion);
+    const foto_data = await imagen_asociacion.arrayBuffer();
     const fotoBuffer = Buffer.from(new Uint8Array(foto_data));
 
     try {
@@ -277,6 +287,7 @@ export async function editarAsociacionUsuario( asociacion_id: string, formData: 
                 [nombre_asociacion, direccion_asociacion, telefono_asociacion, descripcion_asociacion, fotoBuffer, alcaldia_id, asociacion_id]
             );
         }
+        
     } catch (error) {
         return {
             mensaje: "Error en la Base de Datos: Error al editar la asociacion",
@@ -284,8 +295,13 @@ export async function editarAsociacionUsuario( asociacion_id: string, formData: 
     }
 
     revalidatePath(`/perfil`);
-
+    return { mensaje: "", errores: {} };
 }
+
+/**
+ * ===========================================================================================
+ * Bloque de código para la autenticación
+ */
 
 export async function authenticate(prevState: string | undefined, formData: FormData) {
     try {

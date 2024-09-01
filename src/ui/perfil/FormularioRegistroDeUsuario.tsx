@@ -3,13 +3,12 @@
 import styles from "./formularioUsuario.module.css";
 import { crearUsuario } from "@/lib/actions";
 import { useFormState } from "react-dom";
+import { Alcaldia } from "@/lib/definiciones";
 
-export default function FormularioRegistroDeUsuario() {
+export default function FormularioRegistroDeUsuario({alcaldias}: {alcaldias: Alcaldia[]}) {
 
     const estadoInicial = { mensaje: "", errores: {} }
     const [estado, mandar] = useFormState(crearUsuario, estadoInicial);
-
-    console.log(estado.errores);
 
     return (
         <section className={styles.seccion_formulario}>
@@ -18,8 +17,8 @@ export default function FormularioRegistroDeUsuario() {
 
             <form action={mandar} className={styles.formulario}>
 
-                <div>
-                    <section>
+                <section>
+                    <div>
                         <label> Nombre de usuario: </label>
                         <input
                             type="text"
@@ -28,9 +27,9 @@ export default function FormularioRegistroDeUsuario() {
                             aria-describedby="error-nombre_usuario"
 
                         />
-                    </section>
+                    </div>
 
-                    <section id="error-nombre_usuario">
+                    <div id="error-nombre_usuario">
                         {estado.errores?.nombre_usuario &&
                             estado.errores.nombre_usuario.map((error: string) => (
                                 <p key={error}>
@@ -38,11 +37,11 @@ export default function FormularioRegistroDeUsuario() {
                                 </p>
                             ))
                         }
-                    </section>
-                </div>
+                    </div>
+                </section>
 
-                <div>
-                    <section>
+                <section>
+                    <div>
                         <label> Contraseña: </label>
                         <input
                             type="text"
@@ -50,11 +49,11 @@ export default function FormularioRegistroDeUsuario() {
                             placeholder="Ingrese su contraseña"
                             aria-describedby="error-contrasena"
                         />
-                    </section>
+                    </div>
 
 
 
-                    <section id="error-contrasena">
+                    <div id="error-contrasena">
                         {estado.errores?.contrasena_usuario &&
                             estado.errores.contrasena_usuario.map((error: string) => (
                                 <p key={error}>
@@ -62,11 +61,11 @@ export default function FormularioRegistroDeUsuario() {
                                 </p>
                             ))
                         }
-                    </section>
+                    </div>
 
-                </div>
-                <div>
-                    <section>
+                </section>
+                <section>
+                    <div>
                         <label> Nombre de la asociacion: </label>
                         <input
                             type="text"
@@ -74,8 +73,8 @@ export default function FormularioRegistroDeUsuario() {
                             placeholder="Ingrese el nombre de su asociacion"
                             aria-describedby="error-nombre_asociacion"
                         />
-                    </section>
-                    <section id="error-nombre_asociacion">
+                    </div>
+                    <div id="error-nombre_asociacion">
                         {estado.errores?.nombre_asociacion &&
                             estado.errores.nombre_asociacion.map((error: string) => (
                                 <p key={error}>
@@ -83,15 +82,44 @@ export default function FormularioRegistroDeUsuario() {
                                 </p>
                             ))
                         }
-                    </section>
-                </div>
-                <div>
+                    </div>
+                </section>
+
+                <section>
+                    <div>
+                        <label> Alcaldía: </label>
+                        <select
+                            name="alcaldia_asociacion"
+                            aria-describedby="error-alcaldia"
+                        >
+                            <option value="">Selecciona una alcaldía</option>
+                            {
+                                alcaldias.map((alcaldia: Alcaldia) => (
+                                    <option key={alcaldia.alcaldia_id} value={alcaldia.alcaldia_id}>
+                                        {alcaldia.nombre_alcaldia}
+                                    </option>
+                                ))
+                            }
+                        </select>
+                    </div>
+                    <div id="error-alcaldia">
+                        {estado.errores?.alcaldia_asociacion &&
+                            estado.errores.alcaldia_asociacion.map((error: string) => (
+                                <p key={error}>
+                                    <small>{error}</small>
+                                </p>
+                            ))
+                        }
+                    </div>
+                
+                </section>
+                <section>
                     <input 
                         type="file" 
                         name="imagen_asociacion"
                         
                     />
-                </div>
+                </section>
 
                 <input type="submit" value="Enviar" />
             </form>

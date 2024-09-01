@@ -125,5 +125,5 @@ INSERT INTO alcaldias (nombre_alcaldia) VALUES
 
 INSERT INTO usuarios (nombre_usuario, contrasena_usuario, rol_usuario) VALUES
 ('gabriel@sistema.com', 'gatitos1234', 'administrador'),
-('leonardo@sistema.com', 'perros1234', 'administrador')
+('leonardo@sistema.com', 'perros1234', 'administrador');
 

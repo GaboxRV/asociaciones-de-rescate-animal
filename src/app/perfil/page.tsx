@@ -1,7 +1,8 @@
 import styles from "@/ui/perfil/page.module.css";
 import { auth } from "@/auth";
 import { DatosSesion } from "@/lib/definiciones";
-import FormularioPerfilAsociacion from "@/ui/perfil/FormularioPerfilAsociacion";
+import PerfilAsociacion from "@/ui/perfil/asociacion/PerfilAsociacion";
+import PerfilAdministrador from "@/ui/perfil/admin/PerfilAdministrador";
 
 export default async function Perfil() {
 
@@ -14,11 +15,12 @@ export default async function Perfil() {
     return (
         <main >
             {
-                objetoDatos.rol !== 'administrador' 
-                    && 
-                <FormularioPerfilAsociacion
-                    asociacion_id={asociacion_id} 
+                objetoDatos.rol === 'administrador' 
+                ? <PerfilAdministrador />
+                : <PerfilAsociacion 
+                    asociacion_id={asociacion_id}
                 />
+                
             }
 
         </main>

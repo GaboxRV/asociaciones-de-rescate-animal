@@ -11,10 +11,10 @@ $env:PGPASSWORD = "post123e"
 & "C:\Program Files\PostgreSQL\16\bin\psql.exe" -U postgres -h localhost -p 5432 -c "CREATE DATABASE asociaciones_de_rescate;"
 
 # Restaurar la base de datos desde el archivo SQL
-& "C:\Program Files\PostgreSQL\16\bin\psql.exe" -U postgres -h localhost -p 5432 -d asociaciones_de_rescate -f BD_CON_DATOS.sql
+& "C:\Program Files\PostgreSQL\16\bin\psql.exe" -U postgres -h localhost -p 5432 -d asociaciones_de_rescate -f ./src/scripts/BD_CON_DATOS.sql 
 
 # Respaldar la base de datos
-& "C:\Program Files\PostgreSQL\16\bin\pg_dump.exe" -U postgres -h localhost -p 5432 asociaciones_de_rescate > BD_CON_DATOS.sql  
+& "C:\Program Files\PostgreSQL\16\bin\pg_dump.exe" -U postgres -h localhost -p 5432 asociaciones_de_rescate > ./src/scripts/BD_CON_DATOS.sql  
 
 # Conectarse a PostgreSQL y terminar todas las conexiones activas
 & "C:\Program Files\PostgreSQL\16\bin\psql.exe" -U postgres -h localhost -p 5432 -d postgres -c "SELECT pg_terminate_backend(pg_stat_activity.pid) FROM pg_stat_activity WHERE pg_stat_activity.datname = 'asociaciones_de_rescate' AND pid <> pg_backend_pid();"

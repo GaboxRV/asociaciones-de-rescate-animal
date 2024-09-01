@@ -3,23 +3,21 @@ import Link from "next/link";
 
 export default async function Login() {
 
+
     return (
         <main>
             <section>
                 <h2>Inicio de sesión</h2>
 
-                <p>administrador: admin</p>
-                <p>contraseña: a235</p>
-
-                <p>usuario: nombre 2</p>
-                <p>contraseña: a23222</p>
+                <p>administrador: gabriel@sistema.com</p>
+                <p>contraseña: gatitos1234</p>
 
                 <FormularioLogin />
             </section>
 
             <section>
                 <h2>Registro</h2>
-                <Link href={'/registro'} >
+                <Link href={'/registro'}>
                     Registrarse
                 </Link>
             </section>
