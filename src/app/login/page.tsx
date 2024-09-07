@@ -12,6 +12,9 @@ export default async function Login() {
                 <p>administrador: gabriel@sistema.com</p>
                 <p>contraseña: gatitos1234</p>
 
+                <p>usuario: gabriel@gmail.com</p>
+                <p>contraseña: asd123</p>
+
                 <FormularioLogin />
             </section>
 

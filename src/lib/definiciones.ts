@@ -20,6 +20,18 @@ export type Asociacion = {
     alcaldia_id: string;
 }
 
+export type AsociacionAdmin = {
+    asociacion_id: string;
+    nombre_asociacion: string;
+    telefono_asociacion: string;
+    direccion_asociacion: string;
+    puntuacion_asociacion: number;
+    descripcion_asociacion: string;
+    foto_asociacion: string;
+    alcaldia_id: string;
+    rol_usuario: string;
+}
+
 export type AsociacionConRol = {
     asociacion_id: string;
     nombre_asociacion: string;

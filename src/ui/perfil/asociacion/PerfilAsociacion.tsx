@@ -6,6 +6,7 @@ export default async function PerfilAsociacion({ asociacion_id }: { asociacion_i
 
     const asociacion: Asociacion = await fetchAsociacionPorId(asociacion_id);
     const alcaldias: Alcaldia[] = await fetchAlcaldias();
+
     return (
         <>
             <h2>{`Perfil de la asociación ${asociacion.nombre_asociacion}`}</h2>

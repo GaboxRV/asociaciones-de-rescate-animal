@@ -4,11 +4,11 @@ import { useSearchParams, usePathname, useRouter } from "next/navigation";
 import { getCookie } from "@/ui/ConseguirUbicacion";
 import { useEffect, useState } from "react";
 import { Alcaldia } from "@/lib/definiciones";
-
+import { TipoMascota } from "@/lib/definiciones";
 
 export default function RutaActual({ tiposMascotas, sexosMascotas, tallasMascotas, alcaldias, ubicacionAlcaldia }: 
     { 
-        tiposMascotas: string[], 
+        tiposMascotas: TipoMascota[], 
         sexosMascotas: string[], 
         tallasMascotas: string[],
         alcaldias: Alcaldia[],

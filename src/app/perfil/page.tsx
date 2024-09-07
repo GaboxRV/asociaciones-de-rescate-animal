@@ -2,7 +2,7 @@ import styles from "@/ui/perfil/page.module.css";
 import { auth } from "@/auth";
 import { DatosSesion } from "@/lib/definiciones";
 import PerfilAsociacion from "@/ui/perfil/asociacion/PerfilAsociacion";
-import PerfilAdministrador from "@/ui/perfil/admin/PerfilAdministrador";
+import { redirect } from "next/navigation";
 
 export default async function Perfil() {
 
@@ -16,13 +16,11 @@ export default async function Perfil() {
         <main >
             {
                 objetoDatos.rol === 'administrador' 
-                ? <PerfilAdministrador />
+                ? redirect('/perfil/admin')
                 : <PerfilAsociacion 
                     asociacion_id={asociacion_id}
                 />
-                
             }
-
         </main>
     );
 

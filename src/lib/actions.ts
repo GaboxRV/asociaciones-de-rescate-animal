@@ -204,7 +204,7 @@ export async function crearUsuario(estadoPrevio: prevCrearUsuario, formData: For
       
         const respuestaUsuarios = await conn.query(
           "INSERT INTO usuarios (nombre_usuario, contrasena_usuario, rol_usuario, asociacion_id) VALUES ($1, $2, $3, $4)",
-          [nombre_usuario, contrasena_usuario, 'usuario sin verificar' ,asociacion_id]
+          [nombre_usuario, contrasena_usuario, 'usuario no verificado' ,asociacion_id]
         );
       
         await conn.query('COMMIT');
@@ -239,7 +239,7 @@ const EsquemaAsociacion = z.object({
 
 const EditarAsociacionUsuario = EsquemaAsociacion.omit({ id: true, puntuacion_asociacion: true});
 
-export type prevEditarAsociacion = {
+export type prevEditarAsociacionUsuario = {
     errores?: {
         nombre_asociacion?: string[];
         direccion_asociacion?: string[];
@@ -252,8 +252,7 @@ export type prevEditarAsociacion = {
     mensaje?: string | null;
 };
 
-
-export async function editarAsociacionUsuario( asociacion_id: string, estadoPrevio: prevEditarAsociacion, formData: FormData){
+export async function editarAsociacionUsuario( asociacion_id: string, estadoPrevio: prevEditarAsociacionUsuario, formData: FormData){
 
     const camposValidados = EditarAsociacionUsuario.safeParse({
         nombre_asociacion: formData.get("nombre"),
@@ -273,7 +272,65 @@ export async function editarAsociacionUsuario( asociacion_id: string, estadoPrev
 
     const { nombre_asociacion, alcaldia_id, direccion_asociacion, telefono_asociacion, descripcion_asociacion, imagen_asociacion } = camposValidados.data;
 
-    console.log(imagen_asociacion);
+    const foto_data = await imagen_asociacion.arrayBuffer();
+    const fotoBuffer = Buffer.from(new Uint8Array(foto_data));
+
+    try {
+        if (foto_data.byteLength === 0) {
+            const respuesta = await conn.query("UPDATE asociaciones SET nombre_asociacion = $1, direccion_asociacion = $2, telefono_asociacion = $3, descripcion_asociacion = $4, alcaldia_id = $5 WHERE asociacion_id = $6",
+                [nombre_asociacion, direccion_asociacion, telefono_asociacion, descripcion_asociacion, alcaldia_id, asociacion_id]
+            );
+        } else {
+            const respuesta = await conn.query("UPDATE asociaciones SET nombre_asociacion = $1, direccion_asociacion = $2, telefono_asociacion = $3, descripcion_asociacion = $4, foto_asociacion = $5, alcaldia_id = $6 WHERE asociacion_id = $7",
+                [nombre_asociacion, direccion_asociacion, telefono_asociacion, descripcion_asociacion, fotoBuffer, alcaldia_id, asociacion_id]
+            );
+        }
+        
+    } catch (error) {
+        return {
+            mensaje: "Error en la Base de Datos: Error al editar la asociacion",
+        }
+    }
+
+    revalidatePath(`/perfil`);
+    return { mensaje: "", errores: {} };
+}
+
+export type prevEditarAsociacionAdmin = {
+    errores?: {
+        nombre_asociacion?: string[];
+        direccion_asociacion?: string[];
+        alcaldia_id?: string[];
+        telefono_asociacion?: string[];
+        descripcion_asociacion?: string[];
+        puntuacion_asociacion?: string[];
+        rol_asociacion?: string[];
+        imagen_asociacion?: string[];
+        
+    };
+    mensaje?: string | null;
+};
+
+export async function editarAsociacionAdmin( asociacion_id: string, estadoPrevio: prevEditarAsociacionAdmin, formData: FormData){
+
+    const camposValidados = EditarAsociacionUsuario.safeParse({
+        nombre_asociacion: formData.get("nombre_asociacion"),
+        direccion_asociacion: formData.get("direccion_asociacion"),
+        alcaldia_id: formData.get("alcaldia"),
+        telefono_asociacion: formData.get("telefono_asociacion"),
+        descripcion_asociacion: formData.get("descripcion_asociacion"),
+        imagen_asociacion: formData.get("imagen_asociacion"),
+    });
+
+    if (!camposValidados.success) {
+        return {
+            errores: camposValidados.error.flatten().fieldErrors,
+            mensaje: "Error en los campos del formulario",
+        };
+    }
+
+    const { nombre_asociacion, alcaldia_id, direccion_asociacion, telefono_asociacion, descripcion_asociacion, imagen_asociacion } = camposValidados.data;
+
     const foto_data = await imagen_asociacion.arrayBuffer();
     const fotoBuffer = Buffer.from(new Uint8Array(foto_data));
 

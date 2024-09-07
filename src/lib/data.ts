@@ -1,6 +1,7 @@
 import { unstable_noStore as noStore } from "next/cache";
 import { conn } from "./conexion";
-import { MascotaGeneral, MascotaAsociacion, MascotaEditar, Asociacion, AsociacionConRol, Alcaldia } from "./definiciones";
+import { MascotaGeneral, MascotaAsociacion, MascotaEditar, Asociacion, AsociacionConRol, AsociacionAdmin, Alcaldia} from "./definiciones";
+import { string } from "zod";
 
 
 /**
@@ -162,15 +163,31 @@ export async function fetchAsociacionPorId(id: string) {
         console.error("Error al obtener la asociación: ", error);
         throw new Error("Error al obtener la asociación");
     }
-
 }
 
-export async function fetchTipoMascotas() {
+export async function fetchAsociacionAdmin(id: string) {
+    noStore();
+    try {
+        const respuesta = await conn.query("SELECT asociaciones.*, usuarios.rol_usuario FROM asociaciones JOIN usuarios ON asociaciones.asociacion_id = usuarios.asociacion_id WHERE asociaciones.asociacion_id = $1", [id]);
+
+        const datos: AsociacionAdmin = respuesta.rows[0];
+        const foto_data = datos.foto_asociacion;
+
+        const foto = Buffer.from(foto_data).toString("base64");
+        datos.foto_asociacion = foto;
+
+        return datos;
+    } catch (error) {
+        console.error("Error al obtener la asociación: ", error);
+        throw new Error("Error al obtener la asociación");
+    }
+}
+
+export async function fetchTiposMascotas() {
 
     try {
         const respuesta = await conn.query("SELECT enum_range(NULL::tipos_de_mascotas)");
-        let tipos_mascotas = respuesta.rows[0].enum_range;
-        tipos_mascotas = tipos_mascotas.replace(/[{}]/g, "").split(",");
+        const tipos_mascotas: string[] = respuesta.rows[0].enum_range.replace(/[{}]/g, "").split(",");
 
         return tipos_mascotas;
     } catch (error) {
@@ -179,12 +196,11 @@ export async function fetchTipoMascotas() {
     }
 }
 
-export async function fetchSexoMascotas() {
+export async function fetchSexosMascotas() {
 
     try {
         const respuesta = await conn.query("SELECT enum_range(NULL::sexos_de_mascotas)");
-        let sexos_mascotas = respuesta.rows[0].enum_range;
-        sexos_mascotas = sexos_mascotas.replace(/[{}]/g, "").split(",");
+        const sexos_mascotas: string[] = respuesta.rows[0].enum_range.replace(/[{}]/g, "").split(",");
 
         return sexos_mascotas;
     } catch (error) {
@@ -193,12 +209,11 @@ export async function fetchSexoMascotas() {
     }
 }
 
-export async function fetchTallaMascotas() {
+export async function fetchTallasMascotas() {
 
     try {
         const respuesta = await conn.query("SELECT enum_range(NULL::tallas_de_mascotas)");
-        let tallas_mascotas = respuesta.rows[0].enum_range;
-        tallas_mascotas = tallas_mascotas.replace(/[{}]/g, "").split(",");
+        const tallas_mascotas: string[] = respuesta.rows[0].enum_range.replace(/[{}]/g, "").split(",");
 
         return tallas_mascotas;
     } catch (error) {
@@ -211,8 +226,7 @@ export async function fetchRolesUsuarios() {
 
     try {
         const respuesta = await conn.query("SELECT enum_range(NULL::roles_de_usuario)");
-        let roles_usuarios = respuesta.rows[0].enum_range;
-        roles_usuarios = roles_usuarios.replace(/[{}]/g, "").split(",");
+        const roles_usuarios: string[] = respuesta.rows[0].enum_range.replace(/[{}]/g, "").split(",").map((role: string) => role.replace(/"/g, ""));
 
         return roles_usuarios;
     } catch (error) {

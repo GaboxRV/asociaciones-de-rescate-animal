@@ -11,13 +11,15 @@ export default async function BarNavPerfil() {
     const objetoDatos: DatosSesion = JSON.parse(sesion?.user?.name || "");
 
     return (
-        <>
+        <nav>
             {objetoDatos.rol === 'usuario verificado' && <NavegacionUsuarioVerificado asociacion_id={asociacion_id} />}
 
             {objetoDatos.rol === 'administrador' && <NavegacionAdministrador />}
 
+            {objetoDatos.rol === 'usuario no verificado' && "Rellenar los campos y esperar a que un administrador verifique la información."}
+
             <CerrarSesion />
-        </>
+        </nav>
     );
 }
 

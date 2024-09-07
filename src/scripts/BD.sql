@@ -16,7 +16,7 @@ DROP TYPE IF EXISTS roles_de_usuario;
 CREATE TYPE sexos_de_mascotas AS ENUM ('macho', 'hembra');
 CREATE TYPE tipos_de_mascotas AS ENUM ('perro', 'gato');
 CREATE TYPE tallas_de_mascotas AS ENUM ('chica', 'mediana', 'grande');
-CREATE TYPE roles_de_usuario AS ENUM ('administrador', 'usuario sin verificar', 'usuario verificado');
+CREATE TYPE roles_de_usuario AS ENUM ('administrador', 'usuario no verificado', 'usuario verificado');
 
 CREATE TABLE IF NOT EXISTS usuarios (
     usuario_id SERIAL PRIMARY KEY,
