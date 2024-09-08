@@ -20,7 +20,7 @@ export function getCookie(name: string) {
 
 export default function ConseguirUbicacion() {
 
-    const segundosCookie = 3600;
+    const segundosCookie = 7200;
 
     async function getUbication(lat: number, lon: number) {
         const data = await fetch(`https://nominatim.openstreetmap.org/reverse?format=json&lat=${lat}&lon=${lon}`);

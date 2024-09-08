@@ -1,8 +1,7 @@
 import styles from "@/ui/mascotas/page.module.css";
 import BarraBusquedaMascota from "@/ui/mascotas/BarraBusquedaMascota";
-import { fetchTipoMascotas, fetchSexoMascotas, fetchTallaMascotas, fetchAlcaldias} from "@/lib/data";
+import { fetchTiposMascotas, fetchSexosMascotas, fetchTallasMascotas, fetchAlcaldias} from "@/lib/data";
 import TablaMascotas from "@/ui/mascotas/TablaMascotas";
-import { TipoMascota } from "@/lib/definiciones";
 
 
 export default async function Mascotas({
@@ -17,9 +16,9 @@ export default async function Mascotas({
     };
   }) {
 
-    const tipos_mascotas: TipoMascota[] = await fetchTipoMascotas();
-    const sexos_mascotas = await fetchSexoMascotas();
-    const tallas_mascotas = await fetchTallaMascotas();
+    const tipos_mascotas: string[] = await fetchTiposMascotas();
+    const sexos_mascotas = await fetchSexosMascotas();
+    const tallas_mascotas = await fetchTallasMascotas();
     const alcaldias = await fetchAlcaldias();
     const ubicacion = searchParams?.ubicacion || '';
     const tipo = searchParams?.tipo || '';

@@ -11,10 +11,7 @@ export default function FormularioRegistroDeUsuario({alcaldias}: {alcaldias: Alc
     const [estado, mandar] = useFormState(crearUsuario, estadoInicial);
 
     return (
-        <section className={styles.seccion_formulario}>
-            <h3>Formulario de nuevo Usuario</h3>
-            <p>Este es el formulario para crear su cuenta</p>
-
+        <>
             <form action={mandar} className={styles.formulario}>
 
                 <section>
@@ -127,6 +124,6 @@ export default function FormularioRegistroDeUsuario({alcaldias}: {alcaldias: Alc
             <div>
                 {estado.mensaje && <p>{estado.mensaje}</p>}
             </div>
-        </section>
+        </>
     );
 }

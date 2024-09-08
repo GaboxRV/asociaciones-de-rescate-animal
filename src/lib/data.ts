@@ -227,6 +227,7 @@ export async function fetchRolesUsuarios() {
     try {
         const respuesta = await conn.query("SELECT enum_range(NULL::roles_de_usuario)");
         const roles_usuarios: string[] = respuesta.rows[0].enum_range.replace(/[{}]/g, "").split(",").map((role: string) => role.replace(/"/g, ""));
+        roles_usuarios.shift();
 
         return roles_usuarios;
     } catch (error) {

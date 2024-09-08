@@ -18,7 +18,7 @@ export default function FormularioPerfilAsociacion({ asociacion, alcaldias }: { 
             <div>
                 <label>
                     Nombre:
-                    <input type="text" name="nombre" defaultValue={asociacion.nombre_asociacion} />
+                    <input type="text" name="nombre_asociacion" defaultValue={asociacion.nombre_asociacion} />
                 </label>
 
                 <div id="error-nombre_asociacion">
@@ -38,7 +38,7 @@ export default function FormularioPerfilAsociacion({ asociacion, alcaldias }: { 
                     Alcaldía:
                 </label>
                 <select
-                    name="alcaldia"
+                    name="alcaldia_asociacion"
                     defaultValue={alcaldia_id}
                 >
                     <option value="">Selecciona una alcaldía</option>
@@ -56,7 +56,7 @@ export default function FormularioPerfilAsociacion({ asociacion, alcaldias }: { 
             <div>
                 <label>
                     Dirección:
-                    <input type="text" name="direccion" defaultValue={asociacion.direccion_asociacion} />
+                    <input type="text" name="direccion_asociacion" defaultValue={asociacion.direccion_asociacion} />
                 </label>
                 <div id="error-direccion_asociacion">
                     {estado.errores?.direccion_asociacion &&
@@ -73,7 +73,7 @@ export default function FormularioPerfilAsociacion({ asociacion, alcaldias }: { 
             <div>
                 <label>
                     Teléfono:
-                    <input type="text" name="telefono" defaultValue={asociacion.telefono_asociacion} />
+                    <input type="text" name="telefono_asociacion" defaultValue={asociacion.telefono_asociacion} />
                 </label>
                 <div id="error-telefono_asociacion">
                     {estado.errores?.telefono_asociacion &&
@@ -89,7 +89,7 @@ export default function FormularioPerfilAsociacion({ asociacion, alcaldias }: { 
             <div>
                 <label>
                     Descripción:
-                    <textarea name="descripcion" defaultValue={asociacion.descripcion_asociacion} />
+                    <textarea name="descripcion_asociacion" defaultValue={asociacion.descripcion_asociacion} />
                 </label>
                 <div id="error-descripcion_asociacion">
                     {estado.errores?.descripcion_asociacion &&
@@ -105,7 +105,7 @@ export default function FormularioPerfilAsociacion({ asociacion, alcaldias }: { 
             <div>
                 <label>
                     Imagen:
-                    <input type="file" name="imagen" accept="image/*" />
+                    <input type="file" name="imagen_asociacion" accept="image/*" />
                 </label>
                 <img src={`data:image/jpeg;base64,${asociacion.foto_asociacion}`} alt={asociacion.nombre_asociacion} />
             </div>

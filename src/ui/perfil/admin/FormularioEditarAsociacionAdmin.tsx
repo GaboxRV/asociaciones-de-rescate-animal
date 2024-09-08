@@ -21,7 +21,6 @@ export default function FormularioPerfilAsociacionAdmin({ asociacion, rolesUsuar
             <label> Alcaldía: </label>
             <select
                 name="alcaldia_asociacion"
-                aria-describedby="error-alcaldia"
                 defaultValue={asociacion.alcaldia_id}
             >
                 <option value="" disabled>Selecciona una alcaldía</option>
@@ -53,7 +52,7 @@ export default function FormularioPerfilAsociacionAdmin({ asociacion, rolesUsuar
             <label>
                 Rol de usuario:
                 <select
-                    name="rol_asociacion"
+                    name="rol_usuario"
                     defaultValue={asociacion.rol_usuario}
                 >
                     {rolesUsuario.map((rol: string, index) => (

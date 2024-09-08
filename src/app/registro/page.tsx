@@ -8,7 +8,8 @@ export default async function Registro(){
 
     return(
         <main>
-            <h1>Registro</h1>
+            <h3>Formulario de nuevo Usuario</h3>
+            <p>Este es el formulario para crear su cuenta</p>
             <FormularioRegistroDeUsuario 
                 alcaldias={alcaldias}
             />

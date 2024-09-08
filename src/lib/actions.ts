@@ -227,7 +227,7 @@ export async function crearUsuario(estadoPrevio: prevCrearUsuario, formData: For
 
 
 const EsquemaAsociacion = z.object({
-    id: z.string(),
+    asociacion_id: z.string(),
     nombre_asociacion: z.string().min(5, "Ingrese un nombre de asociacion valido"),
     telefono_asociacion: z.string(),
     direccion_asociacion: z.string(),
@@ -235,9 +235,10 @@ const EsquemaAsociacion = z.object({
     descripcion_asociacion: z.string(),
     imagen_asociacion: z.instanceof(File),
     alcaldia_id: z.string(),
+    rol_usuario: z.string()
 });
 
-const EditarAsociacionUsuario = EsquemaAsociacion.omit({ id: true, puntuacion_asociacion: true});
+const EditarAsociacionUsuario = EsquemaAsociacion.omit({ asociacion_id: true, puntuacion_asociacion: true, rol_usuario: true });
 
 export type prevEditarAsociacionUsuario = {
     errores?: {
@@ -255,68 +256,9 @@ export type prevEditarAsociacionUsuario = {
 export async function editarAsociacionUsuario( asociacion_id: string, estadoPrevio: prevEditarAsociacionUsuario, formData: FormData){
 
     const camposValidados = EditarAsociacionUsuario.safeParse({
-        nombre_asociacion: formData.get("nombre"),
-        direccion_asociacion: formData.get("direccion"),
-        alcaldia_id: formData.get("alcaldia"),
-        telefono_asociacion: formData.get("telefono"),
-        descripcion_asociacion: formData.get("descripcion"),
-        imagen_asociacion: formData.get("imagen"),
-    });
-
-    if (!camposValidados.success) {
-        return {
-            errores: camposValidados.error.flatten().fieldErrors,
-            mensaje: "Error en los campos del formulario",
-        };
-    }
-
-    const { nombre_asociacion, alcaldia_id, direccion_asociacion, telefono_asociacion, descripcion_asociacion, imagen_asociacion } = camposValidados.data;
-
-    const foto_data = await imagen_asociacion.arrayBuffer();
-    const fotoBuffer = Buffer.from(new Uint8Array(foto_data));
-
-    try {
-        if (foto_data.byteLength === 0) {
-            const respuesta = await conn.query("UPDATE asociaciones SET nombre_asociacion = $1, direccion_asociacion = $2, telefono_asociacion = $3, descripcion_asociacion = $4, alcaldia_id = $5 WHERE asociacion_id = $6",
-                [nombre_asociacion, direccion_asociacion, telefono_asociacion, descripcion_asociacion, alcaldia_id, asociacion_id]
-            );
-        } else {
-            const respuesta = await conn.query("UPDATE asociaciones SET nombre_asociacion = $1, direccion_asociacion = $2, telefono_asociacion = $3, descripcion_asociacion = $4, foto_asociacion = $5, alcaldia_id = $6 WHERE asociacion_id = $7",
-                [nombre_asociacion, direccion_asociacion, telefono_asociacion, descripcion_asociacion, fotoBuffer, alcaldia_id, asociacion_id]
-            );
-        }
-        
-    } catch (error) {
-        return {
-            mensaje: "Error en la Base de Datos: Error al editar la asociacion",
-        }
-    }
-
-    revalidatePath(`/perfil`);
-    return { mensaje: "", errores: {} };
-}
-
-export type prevEditarAsociacionAdmin = {
-    errores?: {
-        nombre_asociacion?: string[];
-        direccion_asociacion?: string[];
-        alcaldia_id?: string[];
-        telefono_asociacion?: string[];
-        descripcion_asociacion?: string[];
-        puntuacion_asociacion?: string[];
-        rol_asociacion?: string[];
-        imagen_asociacion?: string[];
-        
-    };
-    mensaje?: string | null;
-};
-
-export async function editarAsociacionAdmin( asociacion_id: string, estadoPrevio: prevEditarAsociacionAdmin, formData: FormData){
-
-    const camposValidados = EditarAsociacionUsuario.safeParse({
         nombre_asociacion: formData.get("nombre_asociacion"),
         direccion_asociacion: formData.get("direccion_asociacion"),
-        alcaldia_id: formData.get("alcaldia"),
+        alcaldia_id: formData.get("alcaldia_asociacion"),
         telefono_asociacion: formData.get("telefono_asociacion"),
         descripcion_asociacion: formData.get("descripcion_asociacion"),
         imagen_asociacion: formData.get("imagen_asociacion"),
@@ -352,6 +294,75 @@ export async function editarAsociacionAdmin( asociacion_id: string, estadoPrevio
     }
 
     revalidatePath(`/perfil`);
+    return { mensaje: "", errores: {} };
+}
+
+
+const EditarAsociacionAdmin = EsquemaAsociacion.omit({ asociacion_id: true});
+
+export type prevEditarAsociacionAdmin = {
+    errores?: {
+        nombre_asociacion?: string[];
+        direccion_asociacion?: string[];
+        alcaldia_id?: string[];
+        telefono_asociacion?: string[];
+        descripcion_asociacion?: string[];
+        puntuacion_asociacion?: string[];
+        rol_asociacion?: string[];
+        imagen_asociacion?: string[];
+    };
+    mensaje?: string | null;
+};
+
+export async function editarAsociacionAdmin( asociacion_id: string, estadoPrevio: prevEditarAsociacionAdmin, formData: FormData){
+
+    console.log('editando asociacion: ', asociacion_id);
+    const camposValidados = EditarAsociacionAdmin.safeParse({
+        nombre_asociacion: formData.get("nombre_asociacion"),
+        direccion_asociacion: formData.get("direccion_asociacion"),
+        alcaldia_id: formData.get("alcaldia_asociacion"),
+        telefono_asociacion: formData.get("telefono_asociacion"),
+        descripcion_asociacion: formData.get("descripcion_asociacion"),
+        puntuacion_asociacion: formData.get("puntuacion_asociacion"),
+        rol_usuario: formData.get("rol_usuario"),
+        imagen_asociacion: formData.get("imagen_asociacion"),
+    });
+
+    if (!camposValidados.success) {
+        return {
+            errores: camposValidados.error.flatten().fieldErrors,
+            mensaje: "Error en los campos del formulario",
+        };
+    }
+
+    const { nombre_asociacion, direccion_asociacion, alcaldia_id, telefono_asociacion, descripcion_asociacion, puntuacion_asociacion, rol_usuario, imagen_asociacion } = camposValidados.data;
+
+    const foto_data = await imagen_asociacion.arrayBuffer();
+    const fotoBuffer = Buffer.from(new Uint8Array(foto_data));
+
+    try {
+        await conn.query('BEGIN');
+        if (foto_data.byteLength === 0) {
+            const respuesta = await conn.query("UPDATE asociaciones SET nombre_asociacion = $1, direccion_asociacion = $2, alcaldia_id = $3, telefono_asociacion = $4, descripcion_asociacion = $5, puntuacion_asociacion = $6 WHERE asociacion_id = $7",
+                [nombre_asociacion, direccion_asociacion, alcaldia_id, telefono_asociacion, descripcion_asociacion, puntuacion_asociacion, asociacion_id]
+            );
+        } else {
+            const respuesta = await conn.query("UPDATE asociaciones SET nombre_asociacion = $1, direccion_asociacion = $2, alcaldia_id = $3,  telefono_asociacion = $4, descripcion_asociacion = $5, puntuacion_asociacion = $6, foto_asociacion = $7 WHERE asociacion_id = $8",
+                [nombre_asociacion, direccion_asociacion, alcaldia_id, telefono_asociacion, descripcion_asociacion, puntuacion_asociacion, fotoBuffer,  asociacion_id]
+            );
+        }
+
+        const respuesta = await conn.query("UPDATE usuarios SET rol_usuario = $1 WHERE asociacion_id = $2", [rol_usuario, asociacion_id]);
+
+        await conn.query('COMMIT');
+    } catch (error) {
+        await conn.query('ROLLBACK');
+        return {
+            mensaje: "Error en la Base de Datos: Error al editar la asociacion",
+        }
+    }
+
+    revalidatePath(`/perfil/admin/asociaciones/${asociacion_id}`);
     return { mensaje: "", errores: {} };
 }
 
