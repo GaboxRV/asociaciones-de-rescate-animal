@@ -3,7 +3,7 @@ import { Inter } from "next/font/google";
 import "./globals.css";
 import BarNav from "@/ui/header/BarNav";
 import Footer from "@/ui/footer/Footer";
-import ConseguirUbicacion from "@/ui/ConseguirUbicacion";
+
 
 
 const inter = Inter({ subsets: ["latin"] });
@@ -19,7 +19,6 @@ export default function RootLayout({ children, }: Readonly<{ children: React.Rea
     <html lang="es">
       <body className={inter.className}>
           <BarNav />
-          <ConseguirUbicacion />
           {children}
           <Footer />
       </body>

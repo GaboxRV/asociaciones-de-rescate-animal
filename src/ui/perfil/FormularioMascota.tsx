@@ -1,33 +1,65 @@
+'use client';
+
 import styles from "@/ui/perfil/formularioMascota.module.css";
 import { useFormState } from 'react-dom';
 import { crearMascota } from "@/lib/actions";
 
 
-export default async function FormularioMascota({ sexo_mascota, tipo_mascota, talla_mascota, asociacion_id} : {sexo_mascota: string[] ,tipo_mascota: string[], talla_mascota: string[], asociacion_id: number}) {
-    
-    return (
-        <section className={styles.seccion_formulario}>
-            <h3>Formulario de mascota</h3>
-            <p>Este es el formulario para ingresar una nueva mascota</p>
+export default function FormularioMascota({ sexos_mascota, tipos_mascota, tallas_mascota, asociacion_id }: { sexos_mascota: string[], tipos_mascota: string[], tallas_mascota: string[], asociacion_id: string }) {
 
-            <form action={crearMascota} className={styles.formulario}>
+    const estadoInicial = { mensaje: "", errores: {} }
+    const crearMascotaConAsociacionId = crearMascota.bind(null, asociacion_id);
+    const [estado, mandar] = useFormState(crearMascotaConAsociacionId, estadoInicial);
+
+    console.log(estado);
+
+    return (
+        <form action={mandar} className={styles.formulario}>
+
+            <div>
                 <label>
                     Nombre:
-                    <input type="text" name="nombre" />
+                    <input type="text" name="nombre_mascota" />
                 </label>
+
+                <div id="error-nombre_asociacion">
+                    {estado.errores?.nombre_mascota &&
+                        estado.errores.nombre_mascota.map((error: string) => (
+                            <p key={error}>
+                                <small>{error}</small>
+                            </p>
+                        ))
+                    }
+                </div>
+            </div>
+
+            <div>
                 <label>
                     Edad en meses:
-                    <input type="number" name="edad" />
+                    <input type="number" name="edad_mascota" />
                 </label>
+                <div id="error-nombre_asociacion">
+                    {estado.errores?.edad_mascota &&
+                        estado.errores.edad_mascota.map((error: string) => (
+                            <p key={error}>
+                                <small>{error}</small>
+                            </p>
+                        ))
+                    }
+                </div>
+            </div>
+
+
+            <div>
                 <select
-                    name="sexo"
+                    name="sexo_mascota"
                     defaultValue=""
                 >
                     <option value="" disabled>
                         Selecciona un sexo
                     </option>
                     {
-                        sexo_mascota.map( sexo => (
+                        sexos_mascota.map(sexo => (
                             <option key={sexo} value={sexo}>
                                 {sexo}
                             </option>
@@ -35,40 +67,91 @@ export default async function FormularioMascota({ sexo_mascota, tipo_mascota, ta
                     }
 
                 </select>
+
+                <div id="error-nombre_asociacion">
+                    {estado.errores?.sexo_mascota &&
+                        estado.errores.sexo_mascota.map((error: string) => (
+                            <p key={error}>
+                                <small>{error}</small>
+                            </p>
+                        ))
+                    }
+                </div>
+            </div>
+
+
+            <div>
                 <select
-                    name="tipo"
+                    name="tipo_mascota"
                     defaultValue=""
                 >
                     <option value="" disabled>
                         Selecciona un tipo de mascota
                     </option>
                     {
-                        tipo_mascota.map( tipo => (
+                        tipos_mascota.map(tipo => (
                             <option key={tipo} value={tipo}>
                                 {tipo}
                             </option>
                         ))
                     }
-                </select>      
+                </select>
+
+                <div id="error-nombre_asociacion">
+                    {estado.errores?.tipo_mascota &&
+                        estado.errores.tipo_mascota.map((error: string) => (
+                            <p key={error}>
+                                <small>{error}</small>
+                            </p>
+                        ))
+                    }
+                </div>
+            </div>
+
+            <div>
                 <select
-                    name="talla"
+                    name="talla_mascota"
                     defaultValue=""
                 >
                     <option value="" disabled>
                         Selecciona la talla de la mascota
                     </option>
                     {
-                        talla_mascota.map( tipo => (
+                        tallas_mascota.map(tipo => (
                             <option key={tipo} value={tipo}>
                                 {tipo}
                             </option>
                         ))
                     }
-                </select>           
-                <input type="file" name="foto" />
-                <input type="hidden" name="asociacion_id" value={asociacion_id} />
-                <input type="submit" value="Enviar" />
-            </form>
-        </section>
+                </select>
+
+                <div id="error-nombre_asociacion">
+                    {estado.errores?.talla_mascota &&
+                        estado.errores.talla_mascota.map((error: string) => (
+                            <p key={error}>
+                                <small>{error}</small>
+                            </p>
+                        ))
+                    }
+                </div>
+            </div>
+
+            <div>
+                <input type="file" name="foto_mascota" />
+
+                <div id="error-nombre_asociacion">
+                    {estado.errores?.foto_mascota &&
+                        estado.errores.foto_mascota.map((error: string) => (
+                            <p key={error}>
+                                <small>{error}</small>
+                            </p>
+                        ))
+                    }
+                </div>
+            </div>
+
+
+            <input type="submit" value="Enviar" />
+        </form>
     );
 }

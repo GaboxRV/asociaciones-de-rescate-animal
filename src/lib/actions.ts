@@ -13,33 +13,58 @@ import { AuthError } from 'next-auth';
  */
 const EsquemaMascota = z.object({
     id: z.string(),
-    nombre_mascota: z.string(),
-    edad_mascota: z.coerce.number(),
-    sexo_mascota: z.enum(["macho", "hembra"]),
-    tipo_mascota: z.enum(["perro", "gato"]),
-    talla_mascota: z.enum(["chica", "mediana", "grande"]),
-    foto_mascota: z.instanceof(File),
+    nombre_mascota: z.string().min(3, "El nombre de la mascota debe tener al menos 3 caracteres"),
+    edad_mascota: z.coerce.number().positive({ message: "La edad de la mascota debe ser mayor a 0 meses" }),
+    sexo_mascota:z.enum(["macho", "hembra"], {
+        errorMap: () => ({ message: "El sexo de la mascota debe ser macho o hembra" })
+      }),
+    tipo_mascota: z.enum(["perro", "gato"], {
+        errorMap: () => ({ message: "El tipo de la mascota debe ser perro o gato" })
+      }),
+    talla_mascota: z.enum(["chica", "mediana", "grande"], {
+        errorMap: () => ({ message: "La talla de la mascota debe ser chica, mediana o grande" })
+      }),
+    foto_mascota: z.instanceof(File).refine(file => file.type.startsWith('image/'), {
+        message: "El archivo debe ser una imagen"
+      }),
     asociacion_id: z.coerce.number(),
 });
 
-const CrearMascota = EsquemaMascota.omit({ id: true });
+const CrearMascota = EsquemaMascota.omit({ id: true, asociacion_id: true });
 
-export async function crearMascota(formData: FormData) {
+export type prevCrearMascota = {
+    errores?: {
+        nombre_mascota?: string[];
+        edad_mascota?: string[];
+        sexo_mascota?: string[];
+        tipo_mascota?: string[];
+        talla_mascota?: string[];
+        foto_mascota?: string[];
+        asociacion_id?: string[];
+    };
+    mensaje?: string | null;
+};
 
-    console.log("Creando mascota...");
+export async function crearMascota(asociacion_id: string, estadoPrevio: prevCrearMascota, formData: FormData) {
 
-    const { nombre_mascota, edad_mascota, sexo_mascota, tipo_mascota, talla_mascota, foto_mascota, asociacion_id } = CrearMascota.parse({
-        nombre_mascota: formData.get("nombre"),
-        edad_mascota: formData.get("edad"),
-        sexo_mascota: formData.get("sexo"),
-        tipo_mascota: formData.get("tipo"),
-        talla_mascota: formData.get("talla"),
-        foto_mascota: formData.get("foto"),
-        asociacion_id: formData.get("asociacion_id"),
+    const camposValidados = CrearMascota.safeParse({
+        nombre_mascota: formData.get("nombre_mascota"),
+        edad_mascota: formData.get("edad_mascota"),
+        sexo_mascota: formData.get("sexo_mascota"),
+        tipo_mascota: formData.get("tipo_mascota"),
+        talla_mascota: formData.get("talla_mascota"),
+        foto_mascota: formData.get("foto_mascota"),
     });
 
+    if (!camposValidados.success) {
+        return {
+            errores: camposValidados.error.flatten().fieldErrors,
+            mensaje: "Error en los campos del formulario",
+        };
+    }
 
-    /* Tomar foto del formulario y transformarlo en algo que pueda almacenarse en un BYTEA de postresql */
+    const { nombre_mascota, edad_mascota, sexo_mascota, tipo_mascota, talla_mascota, foto_mascota} = camposValidados.data;
+
     const foto_data = await foto_mascota.arrayBuffer();
     const fotoBuffer = Buffer.from(new Uint8Array(foto_data));
 

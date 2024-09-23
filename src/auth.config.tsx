@@ -17,7 +17,7 @@ export const authConfig = {
         const estaEnAsociacion = nextUrl.pathname.startsWith('/perfil/asociacion');
 
         const esAdmin = auth?.user?.name?.includes('admin');
-        const estaVerificado = auth?.user?.name?.includes('verificado');
+        const estaVerificado = auth?.user?.name?.includes('usuario verificado');
 
         if (estaEnPerfil) {
 

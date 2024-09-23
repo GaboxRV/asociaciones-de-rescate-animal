@@ -2,7 +2,7 @@ import styles from "@/ui/mascotas/page.module.css";
 import BarraBusquedaMascota from "@/ui/mascotas/BarraBusquedaMascota";
 import { fetchTiposMascotas, fetchSexosMascotas, fetchTallasMascotas, fetchAlcaldias} from "@/lib/data";
 import TablaMascotas from "@/ui/mascotas/TablaMascotas";
-
+import ConseguirUbicacion from "@/ui/ConseguirUbicacion";
 
 export default async function Mascotas({
     searchParams,
@@ -28,7 +28,7 @@ export default async function Mascotas({
 
     return (
         <main className={styles.main}>
-            
+            <ConseguirUbicacion />
             <h2>Página de mascotas</h2>
             <BarraBusquedaMascota 
                 tiposMascotas={tipos_mascotas}
