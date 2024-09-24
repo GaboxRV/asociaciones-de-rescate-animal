@@ -16,13 +16,13 @@ export default async function MascotasAsociacion({ params } : { params: { idAsoc
                     mascotas.map((mascota: MascotaAsociacion) => (
                         <CartillaMascotaAsociacion
                             key={mascota.mascota_id + mascota.nombre_mascota}
-                            asociacion_id={mascota.asociacion_id}
+                            nombre_mascota={mascota.nombre_mascota}
+                            foto_mascota={mascota.foto_mascota}
+                            edad_mascota={mascota.edad_mascota}
+                            sexo_mascota={mascota.sexo_mascota}
+                            tipo_mascota={mascota.tipo_mascota}
+                            asociacion_id={asociacion_id}
                             mascota_id={mascota.mascota_id}
-                            nombre={mascota.nombre_mascota}
-                            edad={mascota.edad_mascota}
-                            sexo={mascota.sexo_mascota}
-                            tipo={mascota.tipo_mascota}
-                            foto={mascota.foto_mascota}
                         />
                     ))
                 }

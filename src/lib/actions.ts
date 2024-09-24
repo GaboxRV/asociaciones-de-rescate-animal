@@ -26,8 +26,7 @@ const EsquemaMascota = z.object({
       }),
     foto_mascota: z.instanceof(File).refine(file => file.type.startsWith('image/'), {
         message: "El archivo debe ser una imagen"
-      }),
-    asociacion_id: z.coerce.number(),
+      })
 });
 
 const CrearMascota = EsquemaMascota.omit({ id: true, asociacion_id: true });
@@ -90,7 +89,20 @@ export async function crearMascota(asociacion_id: string, estadoPrevio: prevCrea
 
 const EditarMascota = EsquemaMascota.omit({ id: true, asociacion_id: true });
 
-export async function editarMascota(mascota_id: string, asociacion_id: string, formData: FormData) {
+export type prevEditarMascota = {
+    errores?: {
+        nombre_mascota?: string[];
+        edad_mascota?: string[];
+        sexo_mascota?: string[];
+        tipo_mascota?: string[];
+        talla_mascota?: string[];
+        foto_mascota?: string[];
+        asociacion_id?: string[];
+    };
+    mensaje?: string | null;
+};
+
+export async function editarMascota(mascota_id: string, asociacion_id: string, estadoPrevio: prevEditarMascota, formData: FormData) {
 
     const camposValidados = EditarMascota.safeParse({
         nombre_mascota: formData.get("nombre"),
@@ -175,7 +187,9 @@ const EsquemaUsuario = z.object({
     contrasena_usuario: z.string().min(5, "Ingrese una contraseña valida"),
     nombre_asociacion: z.string().min(5, "Ingrese un nombre de asociacion valido"),
     alcaldia_asociacion: z.string(),
-    imagen_asociacion: z.instanceof(File)
+    imagen_asociacion: z.instanceof(File).refine(file => file.type.startsWith('image/'), {
+        message: "El archivo debe ser una imagen"
+      })
 });
 
 
@@ -258,7 +272,9 @@ const EsquemaAsociacion = z.object({
     direccion_asociacion: z.string(),
     puntuacion_asociacion: z.coerce.number(),
     descripcion_asociacion: z.string(),
-    imagen_asociacion: z.instanceof(File),
+    foto_asociacion: z.instanceof(File).refine(file => file.type.startsWith('image/'), {
+        message: "El archivo debe ser una imagen"
+      }),
     alcaldia_id: z.string(),
     rol_usuario: z.string()
 });
@@ -272,7 +288,7 @@ export type prevEditarAsociacionUsuario = {
         alcaldia_id?: string[];
         telefono_asociacion?: string[];
         descripcion_asociacion?: string[];
-        imagen_asociacion?: string[];
+        foto_asociacion?: string[];
         
     };
     mensaje?: string | null;
@@ -286,7 +302,7 @@ export async function editarAsociacionUsuario( asociacion_id: string, estadoPrev
         alcaldia_id: formData.get("alcaldia_asociacion"),
         telefono_asociacion: formData.get("telefono_asociacion"),
         descripcion_asociacion: formData.get("descripcion_asociacion"),
-        imagen_asociacion: formData.get("imagen_asociacion"),
+        foto_asociacion: formData.get("foto_asociacion"),
     });
 
     if (!camposValidados.success) {
@@ -296,9 +312,9 @@ export async function editarAsociacionUsuario( asociacion_id: string, estadoPrev
         };
     }
 
-    const { nombre_asociacion, alcaldia_id, direccion_asociacion, telefono_asociacion, descripcion_asociacion, imagen_asociacion } = camposValidados.data;
+    const { nombre_asociacion, alcaldia_id, direccion_asociacion, telefono_asociacion, descripcion_asociacion, foto_asociacion } = camposValidados.data;
 
-    const foto_data = await imagen_asociacion.arrayBuffer();
+    const foto_data = await foto_asociacion.arrayBuffer();
     const fotoBuffer = Buffer.from(new Uint8Array(foto_data));
 
     try {
@@ -334,7 +350,7 @@ export type prevEditarAsociacionAdmin = {
         descripcion_asociacion?: string[];
         puntuacion_asociacion?: string[];
         rol_asociacion?: string[];
-        imagen_asociacion?: string[];
+        foto_asociacion?: string[];
     };
     mensaje?: string | null;
 };
@@ -350,7 +366,7 @@ export async function editarAsociacionAdmin( asociacion_id: string, estadoPrevio
         descripcion_asociacion: formData.get("descripcion_asociacion"),
         puntuacion_asociacion: formData.get("puntuacion_asociacion"),
         rol_usuario: formData.get("rol_usuario"),
-        imagen_asociacion: formData.get("imagen_asociacion"),
+        foto_asociacion: formData.get("foto_asociacion"),
     });
 
     if (!camposValidados.success) {
@@ -360,9 +376,9 @@ export async function editarAsociacionAdmin( asociacion_id: string, estadoPrevio
         };
     }
 
-    const { nombre_asociacion, direccion_asociacion, alcaldia_id, telefono_asociacion, descripcion_asociacion, puntuacion_asociacion, rol_usuario, imagen_asociacion } = camposValidados.data;
+    const { nombre_asociacion, direccion_asociacion, alcaldia_id, telefono_asociacion, descripcion_asociacion, puntuacion_asociacion, rol_usuario, foto_asociacion } = camposValidados.data;
 
-    const foto_data = await imagen_asociacion.arrayBuffer();
+    const foto_data = await foto_asociacion.arrayBuffer();
     const fotoBuffer = Buffer.from(new Uint8Array(foto_data));
 
     try {

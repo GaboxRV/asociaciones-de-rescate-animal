@@ -1,19 +1,18 @@
-import { fetchSexoMascotas, fetchTipoMascotas, fetchTallaMascotas } from "@/lib/data";
+'use client';
+
 import { editarMascota } from "@/lib/actions";
+import { useFormState } from 'react-dom';
 
-export default async function FormularioEditarMascota(
-{ mascota_id, idAsociacion, nombre, edad, sexo, tipo, talla, foto }:
-{ mascota_id: string, idAsociacion: string, nombre: string, edad: number, sexo: string, tipo: string, talla: string, foto: string }) {
+export default function FormularioEditarMascota(
+{ mascota_id, asociacion_id, nombre, edad, sexo, tipo, talla, foto, sexos_mascota, tipos_mascota, tallas_mascota }:
+{ mascota_id: string, asociacion_id: string, nombre: string, edad: number, sexo: string, tipo: string, talla: string, foto: string, sexos_mascota: string[], tipos_mascota: string[], tallas_mascota: string[] }) {
 
-
-    const sexo_mascota = await fetchSexoMascotas();
-    const tipo_mascota = await fetchTipoMascotas();
-    const talla_mascota = await fetchTallaMascotas();
-
-    const editarMascotaConId= editarMascota.bind(null, mascota_id, idAsociacion);
+    const estadoInicial = { mensaje: "", errores: {} }
+    const editarMascotaConAsociacionId = editarMascota.bind(null, mascota_id, asociacion_id);
+    const [estado, mandar] = useFormState(editarMascotaConAsociacionId, estadoInicial);
 
     return (
-        <form action={editarMascotaConId}>
+        <form action={mandar}>
             <label>
                 Nombre:
                 <input type="text" name="nombre" defaultValue={nombre}/>
@@ -30,7 +29,7 @@ export default async function FormularioEditarMascota(
                     Selecciona un sexo
                 </option>
                 {
-                    sexo_mascota.map( (sexo : string) => (
+                    sexos_mascota.map( (sexo : string) => (
                         <option key={sexo} value={sexo}>
                             {sexo}
                         </option>
@@ -46,7 +45,7 @@ export default async function FormularioEditarMascota(
                     Selecciona un tipo de mascota
                 </option>
                 {
-                    tipo_mascota.map( (tipo : string) => (
+                    tipos_mascota.map( (tipo : string) => (
                         <option key={tipo} value={tipo}>
                             {tipo}
                         </option>
@@ -61,7 +60,7 @@ export default async function FormularioEditarMascota(
                     Selecciona una talla de mascota
                 </option>
                 {
-                    talla_mascota.map( (tipo : string) => (
+                    tallas_mascota.map( (tipo : string) => (
                         <option key={tipo} value={tipo}>
                             {tipo}
                         </option>

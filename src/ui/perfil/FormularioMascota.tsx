@@ -11,8 +11,6 @@ export default function FormularioMascota({ sexos_mascota, tipos_mascota, tallas
     const crearMascotaConAsociacionId = crearMascota.bind(null, asociacion_id);
     const [estado, mandar] = useFormState(crearMascotaConAsociacionId, estadoInicial);
 
-    console.log(estado);
-
     return (
         <form action={mandar} className={styles.formulario}>
 
@@ -149,7 +147,6 @@ export default function FormularioMascota({ sexos_mascota, tipos_mascota, tallas
                     }
                 </div>
             </div>
-
 
             <input type="submit" value="Enviar" />
         </form>

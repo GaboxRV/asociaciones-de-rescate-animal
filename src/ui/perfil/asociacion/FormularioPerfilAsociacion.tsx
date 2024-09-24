@@ -105,9 +105,19 @@ export default function FormularioPerfilAsociacion({ asociacion, alcaldias }: { 
             <div>
                 <label>
                     Imagen:
-                    <input type="file" name="imagen_asociacion" accept="image/*" />
+                    <input type="file" name="foto_asociacion" accept="image/*" />
                 </label>
                 <img src={`data:image/jpeg;base64,${asociacion.foto_asociacion}`} alt={asociacion.nombre_asociacion} />
+                
+                <div id="error-descripcion_asociacion">
+                    {estado.errores?.foto_asociacion &&
+                        estado.errores.foto_asociacion.map((error: string) => (
+                            <p key={error}>
+                                <small>{error}</small>
+                            </p>
+                        ))
+                    }
+                </div>
             </div>
 
             <button type="submit">Actualizar</button>
