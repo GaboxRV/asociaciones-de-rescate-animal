@@ -4,7 +4,7 @@ import { Alcaldia, Asociacion } from "@/lib/definiciones";
 import { editarAsociacionUsuario } from "@/lib/actions";
 import { useFormState } from 'react-dom';
 
-export default function FormularioPerfilAsociacion({ asociacion, alcaldias }: { asociacion: Asociacion, alcaldias: Alcaldia[] }) {
+export default function FormularioEditarAsociacionUsuario({ asociacion, alcaldias }: { asociacion: Asociacion, alcaldias: Alcaldia[] }) {
 
     const alcaldia_id = parseInt(asociacion.alcaldia_id);
 

@@ -5,7 +5,7 @@ import { crearUsuario } from "@/lib/actions";
 import { useFormState } from "react-dom";
 import { Alcaldia } from "@/lib/definiciones";
 
-export default function FormularioRegistroDeUsuario({alcaldias}: {alcaldias: Alcaldia[]}) {
+export default function FormularioRegistroDeUsuario({ alcaldias }: { alcaldias: Alcaldia[] }) {
 
     const estadoInicial = { mensaje: "", errores: {} }
     const [estado, mandar] = useFormState(crearUsuario, estadoInicial);
@@ -108,14 +108,24 @@ export default function FormularioRegistroDeUsuario({alcaldias}: {alcaldias: Alc
                             ))
                         }
                     </div>
-                
+
                 </section>
                 <section>
-                    <input 
-                        type="file" 
-                        name="imagen_asociacion"
-                        
+                    <input
+                        type="file"
+                        name="foto_asociacion"
+
                     />
+
+                    <div id="error-foto_asociacion">
+                        {estado.errores?.foto_asociacion &&
+                            estado.errores.foto_asociacion.map((error: string) => (
+                                <p key={error}>
+                                    <small>{error}</small>
+                                </p>
+                            ))
+                        }
+                    </div>
                 </section>
 
                 <input type="submit" value="Enviar" />

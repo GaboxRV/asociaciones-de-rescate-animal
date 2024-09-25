@@ -15,18 +15,18 @@ const EsquemaMascota = z.object({
     id: z.string(),
     nombre_mascota: z.string().min(3, "El nombre de la mascota debe tener al menos 3 caracteres"),
     edad_mascota: z.coerce.number().positive({ message: "La edad de la mascota debe ser mayor a 0 meses" }),
-    sexo_mascota:z.enum(["macho", "hembra"], {
+    sexo_mascota: z.enum(["macho", "hembra"], {
         errorMap: () => ({ message: "El sexo de la mascota debe ser macho o hembra" })
-      }),
+    }),
     tipo_mascota: z.enum(["perro", "gato"], {
         errorMap: () => ({ message: "El tipo de la mascota debe ser perro o gato" })
-      }),
+    }),
     talla_mascota: z.enum(["chica", "mediana", "grande"], {
         errorMap: () => ({ message: "La talla de la mascota debe ser chica, mediana o grande" })
-      }),
+    }),
     foto_mascota: z.instanceof(File).refine(file => file.type.startsWith('image/'), {
         message: "El archivo debe ser una imagen"
-      })
+    })
 });
 
 const CrearMascota = EsquemaMascota.omit({ id: true, asociacion_id: true });
@@ -53,7 +53,9 @@ export async function crearMascota(asociacion_id: string, estadoPrevio: prevCrea
         tipo_mascota: formData.get("tipo_mascota"),
         talla_mascota: formData.get("talla_mascota"),
         foto_mascota: formData.get("foto_mascota"),
+
     });
+
 
     if (!camposValidados.success) {
         return {
@@ -62,7 +64,8 @@ export async function crearMascota(asociacion_id: string, estadoPrevio: prevCrea
         };
     }
 
-    const { nombre_mascota, edad_mascota, sexo_mascota, tipo_mascota, talla_mascota, foto_mascota} = camposValidados.data;
+    const { nombre_mascota, edad_mascota, sexo_mascota, tipo_mascota, talla_mascota, foto_mascota } = camposValidados.data;
+
 
     const foto_data = await foto_mascota.arrayBuffer();
     const fotoBuffer = Buffer.from(new Uint8Array(foto_data));
@@ -70,7 +73,7 @@ export async function crearMascota(asociacion_id: string, estadoPrevio: prevCrea
     try {
         const respuesta = await conn.query(
             "INSERT INTO mascotas (nombre_mascota, edad_mascota, sexo_mascota, tipo_mascota, talla_mascota, foto_mascota, asociacion_id) VALUES ($1, $2, $3, $4, $5, $6, $7)",
-            [nombre_mascota, edad_mascota, sexo_mascota, tipo_mascota, talla_mascota ,fotoBuffer, asociacion_id]
+            [nombre_mascota, edad_mascota, sexo_mascota, tipo_mascota, talla_mascota, fotoBuffer, asociacion_id]
         );
     } catch (error) {
         return {
@@ -87,30 +90,44 @@ export async function crearMascota(asociacion_id: string, estadoPrevio: prevCrea
  * Bloque de código para editar una mascota
  */
 
-const EditarMascota = EsquemaMascota.omit({ id: true, asociacion_id: true });
+const EsquemaEditarMascotaInfo = z.object({
+    mascota_id: z.string(),
+    nombre_mascota: z.string().min(3, "El nombre de la mascota debe tener al menos 3 caracteres"),
+    edad_mascota: z.coerce.number().positive({ message: "La edad de la mascota debe ser mayor a 0 meses" }),
+    sexo_mascota: z.enum(["macho", "hembra"], {
+        errorMap: () => ({ message: "El sexo de la mascota debe ser macho o hembra" })
+    }),
+    tipo_mascota: z.enum(["perro", "gato"], {
+        errorMap: () => ({ message: "El tipo de la mascota debe ser perro o gato" })
+    }),
+    talla_mascota: z.enum(["chica", "mediana", "grande"], {
+        errorMap: () => ({ message: "La talla de la mascota debe ser chica, mediana o grande" })
+    })
+});
 
-export type prevEditarMascota = {
+const EditarMascotaInfo = EsquemaEditarMascotaInfo.omit({ mascota_id: true, asociacion_id: true });
+
+
+export type prevEditarMascotaInfo = {
     errores?: {
         nombre_mascota?: string[];
         edad_mascota?: string[];
         sexo_mascota?: string[];
         tipo_mascota?: string[];
         talla_mascota?: string[];
-        foto_mascota?: string[];
         asociacion_id?: string[];
     };
     mensaje?: string | null;
 };
 
-export async function editarMascota(mascota_id: string, asociacion_id: string, estadoPrevio: prevEditarMascota, formData: FormData) {
+export async function editarMascotaInfo(mascota_id: string, asociacion_id: string, estadoPrevio: prevEditarMascotaInfo, formData: FormData) {
 
-    const camposValidados = EditarMascota.safeParse({
-        nombre_mascota: formData.get("nombre"),
-        edad_mascota: formData.get("edad"),
-        sexo_mascota: formData.get("sexo"),
-        tipo_mascota: formData.get("tipo"),
-        talla_mascota: formData.get("talla"),
-        foto_mascota: formData.get("foto"),
+    const camposValidados = EditarMascotaInfo.safeParse({
+        nombre_mascota: formData.get("nombre_mascota"),
+        edad_mascota: formData.get("edad_mascota"),
+        sexo_mascota: formData.get("sexo_mascota"),
+        tipo_mascota: formData.get("tipo_mascota"),
+        talla_mascota: formData.get("talla_mascota"),
     });
 
     if (!camposValidados.success) {
@@ -120,24 +137,13 @@ export async function editarMascota(mascota_id: string, asociacion_id: string, e
         }
     }
 
-    const { nombre_mascota, edad_mascota, sexo_mascota, tipo_mascota, talla_mascota, foto_mascota } = camposValidados.data;
+    const { nombre_mascota, edad_mascota, sexo_mascota, tipo_mascota, talla_mascota } = camposValidados.data;
 
-    const foto_data = await foto_mascota.arrayBuffer();
-    const fotoBuffer = Buffer.from(new Uint8Array(foto_data));
 
     try {
-        console.log("Editando mascota...");
-        if (foto_data.byteLength === 0) {
-            console.log("Sin foto");
-            const respuesta = await conn.query("UPDATE mascotas SET nombre_mascota = $1, edad_mascota = $2, sexo_mascota = $3, tipo_mascota = $4, talla_mascota = $5 WHERE mascota_id = $6",
-                [nombre_mascota, edad_mascota, sexo_mascota, tipo_mascota, talla_mascota, mascota_id]
-            );
-        } else {
-            console.log("Con foto");
-            const respuesta = await conn.query("UPDATE mascotas SET nombre_mascota = $1, edad_mascota = $2, sexo_mascota = $3, tipo_mascota = $4, talla_mascota = $5, foto_mascota = $6 WHERE mascota_id = $7",
-                [nombre_mascota, edad_mascota, sexo_mascota, tipo_mascota, talla_mascota, fotoBuffer, mascota_id]
-            );
-        }
+        const respuesta = await conn.query("UPDATE mascotas SET nombre_mascota = $1, edad_mascota = $2, sexo_mascota = $3, tipo_mascota = $4, talla_mascota = $5 WHERE mascota_id = $6",
+            [nombre_mascota, edad_mascota, sexo_mascota, tipo_mascota, talla_mascota, mascota_id]
+        );
 
     } catch (error) {
         return {
@@ -146,7 +152,56 @@ export async function editarMascota(mascota_id: string, asociacion_id: string, e
     }
 
     revalidatePath(`/perfil/asociacion/${asociacion_id}/mascotas`);
-    redirect(`/perfil/asociacion/${asociacion_id}/mascotas/${mascota_id}/editar`);
+    return { mensaje: "Información editada con exito", errores: {} };
+}
+
+//================================================================================================
+
+const EsquemaEditarMascotaFoto = z.object({
+    mascota_id: z.string(),
+    foto_mascota: z.instanceof(File).refine(file => file.type.startsWith('image/'), {
+        message: "El archivo debe ser una imagen"
+    })
+});
+
+const EditarMascotaFoto = EsquemaEditarMascotaFoto.omit({ mascota_id: true });
+
+export type prevEditarMascotaFoto = {
+    errores?: {
+        foto_mascota?: string[];
+    };
+    mensaje?: string | null;
+};
+
+export async function editarMascotaFoto(mascota_id: string, asociacion_id: string, estadoPrevio: prevEditarMascotaFoto, formData: FormData) {
+
+    const camposValidados = EditarMascotaFoto.safeParse({
+        foto_mascota: formData.get("foto_mascota"),
+    });
+
+    if (!camposValidados.success) {
+        return {
+            errores: camposValidados.error.flatten().fieldErrors,
+            mensaje: "Error en los campos del formulario"
+        }
+    }
+
+    try {
+        const { foto_mascota } = camposValidados.data;
+        const foto_data = await foto_mascota.arrayBuffer();
+        const fotoBuffer = Buffer.from(new Uint8Array(foto_data));
+
+        const respuesta = await conn.query("UPDATE mascotas SET foto_mascota = $1 WHERE mascota_id = $2", [fotoBuffer, mascota_id]);
+
+    } catch (error) {
+        return {
+            mensaje: "Error en la Base de Datos: Error al editar la mascota",
+        }
+    }
+
+    revalidatePath(`/perfil/asociacion/${asociacion_id}/mascotas`);
+    return { mensaje: "Foto editada con exito", errores: {} };
+
 }
 
 /**
@@ -154,7 +209,7 @@ export async function editarMascota(mascota_id: string, asociacion_id: string, e
  * Bloque de código para eliminar una mascota
  */
 
-export async function eliminarMascota(mascota_id: string, asociacion_id: string){
+export async function eliminarMascota(mascota_id: string, asociacion_id: string) {
     try {
         console.log("Eliminando mascota...");
         const respuesta = await conn.query("DELETE FROM mascotas WHERE mascota_id = $1", [mascota_id]);
@@ -176,7 +231,7 @@ export async function eliminarMascota(mascota_id: string, asociacion_id: string)
  */
 
 const EsquemaUsuario = z.object({
-    id: z.string(),
+    usuario_id: z.string(),
     nombre_usuario: z.string().refine((val) => {
         const telefonoRegex = /^55\d{8}$/;
         const correoRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -186,14 +241,19 @@ const EsquemaUsuario = z.object({
     }),
     contrasena_usuario: z.string().min(5, "Ingrese una contraseña valida"),
     nombre_asociacion: z.string().min(5, "Ingrese un nombre de asociacion valido"),
-    alcaldia_asociacion: z.string(),
-    imagen_asociacion: z.instanceof(File).refine(file => file.type.startsWith('image/'), {
+    alcaldia_asociacion: z.string().refine((val) => {
+        const id = parseInt(val, 10);
+        return id >= 1 && id <= 16;
+    }, {
+        message: "Seleccione una alcaldía válida"
+    }),
+    foto_asociacion: z.instanceof(File).refine(file => file.type.startsWith('image/'), {
         message: "El archivo debe ser una imagen"
-      })
+    })
 });
 
 
-const CrearUsuario = EsquemaUsuario.omit({ id: true });
+const CrearUsuario = EsquemaUsuario.omit({ usuario_id: true });
 
 export type prevCrearUsuario = {
     errores?: {
@@ -213,7 +273,7 @@ export async function crearUsuario(estadoPrevio: prevCrearUsuario, formData: For
         contrasena_usuario: formData.get("contrasena"),
         nombre_asociacion: formData.get("nombre_asociacion"),
         alcaldia_asociacion: formData.get("alcaldia_asociacion"),
-        imagen_asociacion: formData.get("imagen_asociacion")
+        foto_asociacion: formData.get("foto_asociacion")
     });
 
     if (!camposValidados.success) {
@@ -223,32 +283,32 @@ export async function crearUsuario(estadoPrevio: prevCrearUsuario, formData: For
         }
     }
 
-    const { nombre_usuario, contrasena_usuario, nombre_asociacion, alcaldia_asociacion, imagen_asociacion } = camposValidados.data;
+    const { nombre_usuario, contrasena_usuario, nombre_asociacion, alcaldia_asociacion, foto_asociacion } = camposValidados.data;
 
-    const foto_data = await imagen_asociacion.arrayBuffer();
+    const foto_data = await foto_asociacion.arrayBuffer();
     const fotoBuffer = Buffer.from(new Uint8Array(foto_data));
 
     try {
         await conn.query('BEGIN');
-      
+
         const respuestaAsociacion = await conn.query(
-          "INSERT INTO asociaciones (nombre_asociacion, foto_asociacion, alcaldia_id) VALUES ($1, $2, $3) RETURNING asociacion_id",
-          [nombre_asociacion, fotoBuffer, alcaldia_asociacion]
+            "INSERT INTO asociaciones (nombre_asociacion, foto_asociacion, alcaldia_id) VALUES ($1, $2, $3) RETURNING asociacion_id",
+            [nombre_asociacion, fotoBuffer, alcaldia_asociacion]
         );
-      
+
         const asociacion_id = respuestaAsociacion.rows[0].asociacion_id;
 
         console.log('intento de id asociacion: ', asociacion_id);
 
-      
+
         const respuestaUsuarios = await conn.query(
-          "INSERT INTO usuarios (nombre_usuario, contrasena_usuario, rol_usuario, asociacion_id) VALUES ($1, $2, $3, $4)",
-          [nombre_usuario, contrasena_usuario, 'usuario no verificado' ,asociacion_id]
+            "INSERT INTO usuarios (nombre_usuario, contrasena_usuario, rol_usuario, asociacion_id) VALUES ($1, $2, $3, $4)",
+            [nombre_usuario, contrasena_usuario, 'usuario no verificado', asociacion_id]
         );
-      
+
         await conn.query('COMMIT');
-        
-      } catch (error) {
+
+    } catch (error) {
         await conn.query('ROLLBACK');
         return {
             mensaje: "Error en la Base de Datos: Error al crear el usuario"
@@ -274,7 +334,7 @@ const EsquemaAsociacion = z.object({
     descripcion_asociacion: z.string(),
     foto_asociacion: z.instanceof(File).refine(file => file.type.startsWith('image/'), {
         message: "El archivo debe ser una imagen"
-      }),
+    }),
     alcaldia_id: z.string(),
     rol_usuario: z.string()
 });
@@ -289,12 +349,12 @@ export type prevEditarAsociacionUsuario = {
         telefono_asociacion?: string[];
         descripcion_asociacion?: string[];
         foto_asociacion?: string[];
-        
+
     };
     mensaje?: string | null;
 };
 
-export async function editarAsociacionUsuario( asociacion_id: string, estadoPrevio: prevEditarAsociacionUsuario, formData: FormData){
+export async function editarAsociacionUsuario(asociacion_id: string, estadoPrevio: prevEditarAsociacionUsuario, formData: FormData) {
 
     const camposValidados = EditarAsociacionUsuario.safeParse({
         nombre_asociacion: formData.get("nombre_asociacion"),
@@ -327,7 +387,7 @@ export async function editarAsociacionUsuario( asociacion_id: string, estadoPrev
                 [nombre_asociacion, direccion_asociacion, telefono_asociacion, descripcion_asociacion, fotoBuffer, alcaldia_id, asociacion_id]
             );
         }
-        
+
     } catch (error) {
         return {
             mensaje: "Error en la Base de Datos: Error al editar la asociacion",
@@ -339,7 +399,7 @@ export async function editarAsociacionUsuario( asociacion_id: string, estadoPrev
 }
 
 
-const EditarAsociacionAdmin = EsquemaAsociacion.omit({ asociacion_id: true});
+const EditarAsociacionAdmin = EsquemaAsociacion.omit({ asociacion_id: true });
 
 export type prevEditarAsociacionAdmin = {
     errores?: {
@@ -355,7 +415,7 @@ export type prevEditarAsociacionAdmin = {
     mensaje?: string | null;
 };
 
-export async function editarAsociacionAdmin( asociacion_id: string, estadoPrevio: prevEditarAsociacionAdmin, formData: FormData){
+export async function editarAsociacionAdmin(asociacion_id: string, estadoPrevio: prevEditarAsociacionAdmin, formData: FormData) {
 
     console.log('editando asociacion: ', asociacion_id);
     const camposValidados = EditarAsociacionAdmin.safeParse({
@@ -389,7 +449,7 @@ export async function editarAsociacionAdmin( asociacion_id: string, estadoPrevio
             );
         } else {
             const respuesta = await conn.query("UPDATE asociaciones SET nombre_asociacion = $1, direccion_asociacion = $2, alcaldia_id = $3,  telefono_asociacion = $4, descripcion_asociacion = $5, puntuacion_asociacion = $6, foto_asociacion = $7 WHERE asociacion_id = $8",
-                [nombre_asociacion, direccion_asociacion, alcaldia_id, telefono_asociacion, descripcion_asociacion, puntuacion_asociacion, fotoBuffer,  asociacion_id]
+                [nombre_asociacion, direccion_asociacion, alcaldia_id, telefono_asociacion, descripcion_asociacion, puntuacion_asociacion, fotoBuffer, asociacion_id]
             );
         }
 

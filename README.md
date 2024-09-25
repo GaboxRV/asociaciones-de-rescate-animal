@@ -97,3 +97,24 @@ $env:PGPASSWORD = "post123e"
 - Ir a "Asociaciones"
 - Usar los filtros para buscar la asociacion deseada.
 - El usuario debe vizualizar correctamente lo solicitado.
+
+
+
+
+
+
+## notas
+
+### Recargar la pagina despues de editar
+
+```js
+useEffect(() => {
+        if (estadoInfo.mensaje === "Información editada con exito" || estadoFoto.mensaje === "Foto editada con exito") {
+            const timer = setTimeout(() => {
+                window.location.reload();
+            }, 500);
+
+            return () => clearTimeout(timer);
+        }   
+    }, [estadoInfo, estadoFoto]);
+```
