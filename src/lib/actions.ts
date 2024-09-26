@@ -1,35 +1,18 @@
 'use server';
 
 import { conn } from "@/lib/conexion";
-import { z } from "zod";
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import { signIn } from "../auth";
 import { AuthError } from 'next-auth';
+import { EsquemaMascota, EsquemaEditarMascotaInfo, EsquemaEditarMascotaFoto, EsquemaUsuario, EsquemaAsociacion} from "@/lib/esquemas";
+
 
 /**
- * ===========================================================================================
- * Bloque de código para crear una mascota
+ * Crear una mascota
  */
-const EsquemaMascota = z.object({
-    id: z.string(),
-    nombre_mascota: z.string().min(3, "El nombre de la mascota debe tener al menos 3 caracteres"),
-    edad_mascota: z.coerce.number().positive({ message: "La edad de la mascota debe ser mayor a 0 meses" }),
-    sexo_mascota: z.enum(["macho", "hembra"], {
-        errorMap: () => ({ message: "El sexo de la mascota debe ser macho o hembra" })
-    }),
-    tipo_mascota: z.enum(["perro", "gato"], {
-        errorMap: () => ({ message: "El tipo de la mascota debe ser perro o gato" })
-    }),
-    talla_mascota: z.enum(["chica", "mediana", "grande"], {
-        errorMap: () => ({ message: "La talla de la mascota debe ser chica, mediana o grande" })
-    }),
-    foto_mascota: z.instanceof(File).refine(file => file.type.startsWith('image/'), {
-        message: "El archivo debe ser una imagen"
-    })
-});
 
-const CrearMascota = EsquemaMascota.omit({ id: true, asociacion_id: true });
+const CrearMascota = EsquemaMascota.omit({ mascota_id: true, asociacion_id: true });
 
 export type prevCrearMascota = {
     errores?: {
@@ -86,24 +69,8 @@ export async function crearMascota(asociacion_id: string, estadoPrevio: prevCrea
 }
 
 /**
- * ===========================================================================================
- * Bloque de código para editar una mascota
+ * Editar la informacion de una mascota desde una asociacion
  */
-
-const EsquemaEditarMascotaInfo = z.object({
-    mascota_id: z.string(),
-    nombre_mascota: z.string().min(3, "El nombre de la mascota debe tener al menos 3 caracteres"),
-    edad_mascota: z.coerce.number().positive({ message: "La edad de la mascota debe ser mayor a 0 meses" }),
-    sexo_mascota: z.enum(["macho", "hembra"], {
-        errorMap: () => ({ message: "El sexo de la mascota debe ser macho o hembra" })
-    }),
-    tipo_mascota: z.enum(["perro", "gato"], {
-        errorMap: () => ({ message: "El tipo de la mascota debe ser perro o gato" })
-    }),
-    talla_mascota: z.enum(["chica", "mediana", "grande"], {
-        errorMap: () => ({ message: "La talla de la mascota debe ser chica, mediana o grande" })
-    })
-});
 
 const EditarMascotaInfo = EsquemaEditarMascotaInfo.omit({ mascota_id: true, asociacion_id: true });
 
@@ -155,14 +122,9 @@ export async function editarMascotaInfo(mascota_id: string, asociacion_id: strin
     return { mensaje: "Información editada con exito", errores: {} };
 }
 
-//================================================================================================
-
-const EsquemaEditarMascotaFoto = z.object({
-    mascota_id: z.string(),
-    foto_mascota: z.instanceof(File).refine(file => file.type.startsWith('image/'), {
-        message: "El archivo debe ser una imagen"
-    })
-});
+/**
+ * Editar la foto de una mascota desde una asociacion
+ */
 
 const EditarMascotaFoto = EsquemaEditarMascotaFoto.omit({ mascota_id: true });
 
@@ -205,13 +167,11 @@ export async function editarMascotaFoto(mascota_id: string, asociacion_id: strin
 }
 
 /**
- * ===========================================================================================
- * Bloque de código para eliminar una mascota
+ * Eliminar una mascota desde una asociacion
  */
 
 export async function eliminarMascota(mascota_id: string, asociacion_id: string) {
     try {
-        console.log("Eliminando mascota...");
         const respuesta = await conn.query("DELETE FROM mascotas WHERE mascota_id = $1", [mascota_id]);
     } catch (error) {
         return {
@@ -221,37 +181,12 @@ export async function eliminarMascota(mascota_id: string, asociacion_id: string)
 
     revalidatePath(`/perfil/asociacion/${asociacion_id}/mascotas`);
     redirect(`/perfil/asociacion/${asociacion_id}/mascotas`);
-
 }
 
 
 /**
- * ===========================================================================================
- * Bloque de código para crear un usuario
+ * Crear un usuario
  */
-
-const EsquemaUsuario = z.object({
-    usuario_id: z.string(),
-    nombre_usuario: z.string().refine((val) => {
-        const telefonoRegex = /^55\d{8}$/;
-        const correoRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-        return telefonoRegex.test(val) || correoRegex.test(val);
-    }, {
-        message: "Ingrese un número de teléfono que inicie con 55 o correo electrónico"
-    }),
-    contrasena_usuario: z.string().min(5, "Ingrese una contraseña valida"),
-    nombre_asociacion: z.string().min(5, "Ingrese un nombre de asociacion valido"),
-    alcaldia_asociacion: z.string().refine((val) => {
-        const id = parseInt(val, 10);
-        return id >= 1 && id <= 16;
-    }, {
-        message: "Seleccione una alcaldía válida"
-    }),
-    foto_asociacion: z.instanceof(File).refine(file => file.type.startsWith('image/'), {
-        message: "El archivo debe ser una imagen"
-    })
-});
-
 
 const CrearUsuario = EsquemaUsuario.omit({ usuario_id: true });
 
@@ -318,30 +253,13 @@ export async function crearUsuario(estadoPrevio: prevCrearUsuario, formData: For
     redirect('/perfil');
 }
 
-
 /**
- * ===========================================================================================
- * Bloque de código para editar una asociación
+ * Editar la información de una asociación desde un usuario
  */
 
+const EditarAsociacionInfoUsuario = EsquemaAsociacion.omit({ asociacion_id: true, puntuacion_asociacion: true, foto_asociacion: true, rol_usuario: true });
 
-const EsquemaAsociacion = z.object({
-    asociacion_id: z.string(),
-    nombre_asociacion: z.string().min(5, "Ingrese un nombre de asociacion valido"),
-    telefono_asociacion: z.string(),
-    direccion_asociacion: z.string(),
-    puntuacion_asociacion: z.coerce.number(),
-    descripcion_asociacion: z.string(),
-    foto_asociacion: z.instanceof(File).refine(file => file.type.startsWith('image/'), {
-        message: "El archivo debe ser una imagen"
-    }),
-    alcaldia_id: z.string(),
-    rol_usuario: z.string()
-});
-
-const EditarAsociacionUsuario = EsquemaAsociacion.omit({ asociacion_id: true, puntuacion_asociacion: true, rol_usuario: true });
-
-export type prevEditarAsociacionUsuario = {
+export type prevEditarAsociacionInfoUsuario = {
     errores?: {
         nombre_asociacion?: string[];
         direccion_asociacion?: string[];
@@ -354,15 +272,14 @@ export type prevEditarAsociacionUsuario = {
     mensaje?: string | null;
 };
 
-export async function editarAsociacionUsuario(asociacion_id: string, estadoPrevio: prevEditarAsociacionUsuario, formData: FormData) {
+export async function editarAsociacionInfoUsuario(asociacion_id: string, estadoPrevio: prevEditarAsociacionInfoUsuario, formData: FormData) {
 
-    const camposValidados = EditarAsociacionUsuario.safeParse({
+    const camposValidados = EditarAsociacionInfoUsuario.safeParse({
         nombre_asociacion: formData.get("nombre_asociacion"),
         direccion_asociacion: formData.get("direccion_asociacion"),
         alcaldia_id: formData.get("alcaldia_asociacion"),
         telefono_asociacion: formData.get("telefono_asociacion"),
         descripcion_asociacion: formData.get("descripcion_asociacion"),
-        foto_asociacion: formData.get("foto_asociacion"),
     });
 
     if (!camposValidados.success) {
@@ -372,21 +289,13 @@ export async function editarAsociacionUsuario(asociacion_id: string, estadoPrevi
         };
     }
 
-    const { nombre_asociacion, alcaldia_id, direccion_asociacion, telefono_asociacion, descripcion_asociacion, foto_asociacion } = camposValidados.data;
+    const { nombre_asociacion, alcaldia_id, direccion_asociacion, telefono_asociacion, descripcion_asociacion } = camposValidados.data;
 
-    const foto_data = await foto_asociacion.arrayBuffer();
-    const fotoBuffer = Buffer.from(new Uint8Array(foto_data));
 
     try {
-        if (foto_data.byteLength === 0) {
-            const respuesta = await conn.query("UPDATE asociaciones SET nombre_asociacion = $1, direccion_asociacion = $2, telefono_asociacion = $3, descripcion_asociacion = $4, alcaldia_id = $5 WHERE asociacion_id = $6",
-                [nombre_asociacion, direccion_asociacion, telefono_asociacion, descripcion_asociacion, alcaldia_id, asociacion_id]
-            );
-        } else {
-            const respuesta = await conn.query("UPDATE asociaciones SET nombre_asociacion = $1, direccion_asociacion = $2, telefono_asociacion = $3, descripcion_asociacion = $4, foto_asociacion = $5, alcaldia_id = $6 WHERE asociacion_id = $7",
-                [nombre_asociacion, direccion_asociacion, telefono_asociacion, descripcion_asociacion, fotoBuffer, alcaldia_id, asociacion_id]
-            );
-        }
+        const respuesta = await conn.query("UPDATE asociaciones SET nombre_asociacion = $1, direccion_asociacion = $2, telefono_asociacion = $3, descripcion_asociacion = $4, alcaldia_id = $5 WHERE asociacion_id = $6",
+            [nombre_asociacion, direccion_asociacion, telefono_asociacion, descripcion_asociacion, alcaldia_id, asociacion_id]
+        );
 
     } catch (error) {
         return {
@@ -395,37 +304,26 @@ export async function editarAsociacionUsuario(asociacion_id: string, estadoPrevi
     }
 
     revalidatePath(`/perfil`);
-    return { mensaje: "", errores: {} };
+    return { mensaje: "Información editada con exito", errores: {} };
 }
 
 
-const EditarAsociacionAdmin = EsquemaAsociacion.omit({ asociacion_id: true });
+/**
+ * Editar la foto de una asociación desde un usuario
+ */
 
-export type prevEditarAsociacionAdmin = {
+const EditarAsociacionFotoUsuario = EsquemaAsociacion.omit({ asociacion_id: true, nombre_asociacion: true, telefono_asociacion: true, direccion_asociacion: true, puntuacion_asociacion: true, descripcion_asociacion: true, alcaldia_id: true, rol_usuario: true });
+
+export type prevEditarAsociacionFotoUsuario = {
     errores?: {
-        nombre_asociacion?: string[];
-        direccion_asociacion?: string[];
-        alcaldia_id?: string[];
-        telefono_asociacion?: string[];
-        descripcion_asociacion?: string[];
-        puntuacion_asociacion?: string[];
-        rol_asociacion?: string[];
         foto_asociacion?: string[];
     };
     mensaje?: string | null;
 };
 
-export async function editarAsociacionAdmin(asociacion_id: string, estadoPrevio: prevEditarAsociacionAdmin, formData: FormData) {
+export async function editarAsociacionFotoUsuario(asociacion_id: string, estadoPrevio: prevEditarAsociacionInfoUsuario, formData: FormData) {
 
-    console.log('editando asociacion: ', asociacion_id);
-    const camposValidados = EditarAsociacionAdmin.safeParse({
-        nombre_asociacion: formData.get("nombre_asociacion"),
-        direccion_asociacion: formData.get("direccion_asociacion"),
-        alcaldia_id: formData.get("alcaldia_asociacion"),
-        telefono_asociacion: formData.get("telefono_asociacion"),
-        descripcion_asociacion: formData.get("descripcion_asociacion"),
-        puntuacion_asociacion: formData.get("puntuacion_asociacion"),
-        rol_usuario: formData.get("rol_usuario"),
+    const camposValidados = EditarAsociacionFotoUsuario.safeParse({
         foto_asociacion: formData.get("foto_asociacion"),
     });
 
@@ -436,24 +334,75 @@ export async function editarAsociacionAdmin(asociacion_id: string, estadoPrevio:
         };
     }
 
-    const { nombre_asociacion, direccion_asociacion, alcaldia_id, telefono_asociacion, descripcion_asociacion, puntuacion_asociacion, rol_usuario, foto_asociacion } = camposValidados.data;
+    const { foto_asociacion } = camposValidados.data;
 
     const foto_data = await foto_asociacion.arrayBuffer();
     const fotoBuffer = Buffer.from(new Uint8Array(foto_data));
 
     try {
-        await conn.query('BEGIN');
-        if (foto_data.byteLength === 0) {
-            const respuesta = await conn.query("UPDATE asociaciones SET nombre_asociacion = $1, direccion_asociacion = $2, alcaldia_id = $3, telefono_asociacion = $4, descripcion_asociacion = $5, puntuacion_asociacion = $6 WHERE asociacion_id = $7",
-                [nombre_asociacion, direccion_asociacion, alcaldia_id, telefono_asociacion, descripcion_asociacion, puntuacion_asociacion, asociacion_id]
-            );
-        } else {
-            const respuesta = await conn.query("UPDATE asociaciones SET nombre_asociacion = $1, direccion_asociacion = $2, alcaldia_id = $3,  telefono_asociacion = $4, descripcion_asociacion = $5, puntuacion_asociacion = $6, foto_asociacion = $7 WHERE asociacion_id = $8",
-                [nombre_asociacion, direccion_asociacion, alcaldia_id, telefono_asociacion, descripcion_asociacion, puntuacion_asociacion, fotoBuffer, asociacion_id]
-            );
-        }
+        const respuesta = await conn.query("UPDATE asociaciones SET foto_asociacion = $1 WHERE asociacion_id = $2",
+            [fotoBuffer, asociacion_id]
+        );
 
-        const respuesta = await conn.query("UPDATE usuarios SET rol_usuario = $1 WHERE asociacion_id = $2", [rol_usuario, asociacion_id]);
+    } catch (error) {
+        return {
+            mensaje: "Error en la Base de Datos: Error al editar la asociacion",
+        }
+    }
+
+    revalidatePath(`/perfil`);
+    return { mensaje: "Foto editada con exito", errores: {} };
+}
+
+
+/**
+ * Editar la información de una asociación desde un administrador
+ */
+
+
+const EditarAsociacionInfoAdmin = EsquemaAsociacion.omit({ asociacion_id: true, foto_asociacion: true });
+
+export type prevEditarAsociacionInfoAdmin = {
+    errores?: {
+        nombre_asociacion?: string[];
+        direccion_asociacion?: string[];
+        alcaldia_id?: string[];
+        telefono_asociacion?: string[];
+        descripcion_asociacion?: string[];
+        puntuacion_asociacion?: string[];
+        rol_asociacion?: string[];
+    };
+    mensaje?: string | null;
+};
+
+export async function editarAsociacionInfoAdmin(asociacion_id: string, estadoPrevio: prevEditarAsociacionInfoAdmin, formData: FormData) {
+
+    const camposValidados = EditarAsociacionInfoAdmin.safeParse({
+        nombre_asociacion: formData.get("nombre_asociacion"),
+        direccion_asociacion: formData.get("direccion_asociacion"),
+        alcaldia_id: formData.get("alcaldia_asociacion"),
+        telefono_asociacion: formData.get("telefono_asociacion"),
+        descripcion_asociacion: formData.get("descripcion_asociacion"),
+        puntuacion_asociacion: formData.get("puntuacion_asociacion"),
+        rol_usuario: formData.get("rol_usuario"),
+    });
+
+    if (!camposValidados.success) {
+        return {
+            errores: camposValidados.error.flatten().fieldErrors,
+            mensaje: "Error en los campos del formulario",
+        };
+    }
+
+    const { nombre_asociacion, direccion_asociacion, alcaldia_id, telefono_asociacion, descripcion_asociacion, puntuacion_asociacion, rol_usuario } = camposValidados.data;
+
+    try {
+        await conn.query('BEGIN');
+        const respuestaAsociacion = await conn.query("UPDATE asociaciones SET nombre_asociacion = $1, direccion_asociacion = $2, alcaldia_id = $3, telefono_asociacion = $4, descripcion_asociacion = $5, puntuacion_asociacion = $6 WHERE asociacion_id = $7",
+            [nombre_asociacion, direccion_asociacion, alcaldia_id, telefono_asociacion, descripcion_asociacion, puntuacion_asociacion, asociacion_id]
+        );
+
+        const respuestaUsuarios = await conn.query("UPDATE usuarios SET rol_usuario = $1 WHERE asociacion_id = $2", [rol_usuario, asociacion_id]);
 
         await conn.query('COMMIT');
     } catch (error) {
@@ -464,12 +413,63 @@ export async function editarAsociacionAdmin(asociacion_id: string, estadoPrevio:
     }
 
     revalidatePath(`/perfil/admin/asociaciones/${asociacion_id}`);
-    return { mensaje: "", errores: {} };
+    return { mensaje: "Información editada con exito", errores: {} };
 }
 
 /**
+ * Editar la foto de una asociación desde un administrador
+ */
+
+const EditarAsociacionFotoAdmin = EsquemaAsociacion.omit({ asociacion_id: true, nombre_asociacion: true, telefono_asociacion: true, direccion_asociacion: true, puntuacion_asociacion: true, descripcion_asociacion: true, alcaldia_id: true, rol_usuario: true });
+
+export type prevEditarAsociacionFotoAdmin = {
+    errores?: {
+        foto_asociacion?: string[];
+    };
+    mensaje?: string | null;
+};
+
+export async function editarAsociacionFotoAdmin(asociacion_id: string, estadoPrevio: prevEditarAsociacionFotoAdmin, formData: FormData) {
+
+    const camposValidados = EditarAsociacionFotoAdmin.safeParse({
+        foto_asociacion: formData.get("foto_asociacion"),
+    });
+
+    if (!camposValidados.success) {
+        return {
+            errores: camposValidados.error.flatten().fieldErrors,
+            mensaje: "Error en los campos del formulario",
+        };
+    }
+
+    const { foto_asociacion } = camposValidados.data;
+
+    const foto_data = await foto_asociacion.arrayBuffer();
+    const fotoBuffer = Buffer.from(new Uint8Array(foto_data));
+
+    try {
+        await conn.query('BEGIN');
+
+        const respuesta = await conn.query("UPDATE asociaciones SET foto_asociacion = $1 WHERE asociacion_id = $2",
+            [fotoBuffer, asociacion_id]
+        );
+
+        await conn.query('COMMIT');
+    } catch (error) {
+        await conn.query('ROLLBACK');
+        return {
+            mensaje: "Error en la Base de Datos: Error al editar la asociacion",
+        }
+    }
+
+    revalidatePath(`/perfil/admin/asociaciones/${asociacion_id}`);
+    return { mensaje: "Foto editada con exito ", errores: {} };
+}
+
+
+/**
  * ===========================================================================================
- * Bloque de código para la autenticación
+ * Autenticación de usuarios
  */
 
 export async function authenticate(prevState: string | undefined, formData: FormData) {
