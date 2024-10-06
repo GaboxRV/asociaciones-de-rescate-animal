@@ -3,16 +3,16 @@
 import { useSearchParams, usePathname, useRouter } from "next/navigation";
 import { getCookie } from "@/ui/ConseguirUbicacion";
 import { useEffect, useState } from "react";
-import { Alcaldia } from "@/lib/definiciones";
-import { TipoMascota } from "@/lib/definiciones";
+import { Alcaldia, NombresAsociacion } from "@/lib/definiciones";
 
-export default function RutaActual({ tiposMascotas, sexosMascotas, tallasMascotas, alcaldias, ubicacionAlcaldia }: 
+export default function RutaActual({ tiposMascotas, sexosMascotas, tallasMascotas, alcaldias, ubicacionAlcaldia, nombres_asociaciones }: 
     { 
-        tiposMascotas: TipoMascota[], 
+        tiposMascotas: string[], 
         sexosMascotas: string[], 
         tallasMascotas: string[],
         alcaldias: Alcaldia[],
-        ubicacionAlcaldia: string
+        ubicacionAlcaldia: string,
+        nombres_asociaciones: NombresAsociacion[]
     }) 
 {
     const ubicacion = getCookie('ubicacion');
@@ -67,6 +67,19 @@ export default function RutaActual({ tiposMascotas, sexosMascotas, tallasMascota
                         }
                     </select>
 
+                </div>
+                <div>
+                    <label>Asociacion:</label>
+                    <select name="asociacion">
+                        <option value="">Selecciona una asociación</option>
+                        {
+                            nombres_asociaciones.map(asociacion => (
+                                <option key={asociacion.asociacion_id} value={asociacion.nombre_asociacion}>
+                                    {asociacion.nombre_asociacion}
+                                </option>
+                            ))
+                        }
+                    </select>
                 </div>
                 <div>
                     <label>Tipo de mascota: </label>

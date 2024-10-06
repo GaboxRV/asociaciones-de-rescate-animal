@@ -1,16 +1,16 @@
 /* 
 Procidimiento para limpiar la tabla de asociaciones, esto borrara también los registros de usuario.
 */
-DO $$
-BEGIN
-   IF (SELECT COUNT(*) FROM asociaciones) > 0 THEN
-      DELETE FROM asociaciones;
-   END IF;
-END $$;
+-- DO $$
+-- BEGIN
+--    IF (SELECT COUNT(*) FROM asociaciones) > 0 THEN
+--       DELETE FROM asociaciones;
+--    END IF;
+-- END $$;
 
-SELECT setval(pg_get_serial_sequence('asociaciones', 'asociacion_id'), 1, false);
-SELECT setval(pg_get_serial_sequence('usuarios', 'usuario_id'), 1, false);
-SELECT setval(pg_get_serial_sequence('mascotas', 'mascota_id'), 1, false);
+-- SELECT setval(pg_get_serial_sequence('asociaciones', 'asociacion_id'), 1, false);
+-- SELECT setval(pg_get_serial_sequence('usuarios', 'usuario_id'), 1, false);
+-- SELECT setval(pg_get_serial_sequence('mascotas', 'mascota_id'), 1, false);
 
 select * from asociaciones;
 select * from usuarios;
@@ -35,3 +35,23 @@ mascotas.foto_mascota, asociaciones.nombre_asociacion FROM mascotas JOIN asociac
 
 SELECT asociaciones.*, usuarios.rol_usuario FROM asociaciones JOIN usuarios ON asociaciones.asociacion_id = usuarios.asociacion_id;
 
+SELECT * FROM asociaciones JOIN usuarios ON asociaciones.asociacion_id = usuarios.asociacion_id WHERE usuarios.rol_usuario = 'usuario verificado';
+
+SELECT 
+	mascotas.*, 
+	asociaciones.nombre_asociacion, 
+	alcaldias.nombre_alcaldia
+FROM mascotas
+JOIN asociaciones ON mascotas.asociacion_id = asociaciones.asociacion_id
+JOIN alcaldias ON asociaciones.alcaldia_id = alcaldias.alcaldia_id
+WHERE
+	alcaldias.nombre_alcaldia ILIKE '%%' AND
+	mascotas.tipo_mascota::text ILIKE '%%' AND
+	mascotas.sexo_mascota::text ILIKE '%%' AND
+	mascotas.talla_mascota::text ILIKE '%%' AND
+	asociaciones.nombre_asociacion ILIKE '%%'
+ORDER BY mascotas.mascota_id ASC
+LIMIT 3 OFFSET 0;
+
+
+SELECT asociaciones.asociacion_id, asociaciones.nombre_asociacion FROM asociaciones JOIN usuarios ON asociaciones.asociacion_id = usuarios.asociacion_id WHERE usuarios.rol_usuario = 'usuario verificado'

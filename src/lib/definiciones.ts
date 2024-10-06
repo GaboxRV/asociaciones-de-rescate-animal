@@ -20,6 +20,11 @@ export type Asociacion = {
     alcaldia_id: string;
 }
 
+export type NombresAsociacion = {
+    asociacion_id: string;
+    nombre_asociacion: string;
+}
+
 export type AsociacionAdmin = {
     asociacion_id: string;
     nombre_asociacion: string;
@@ -50,6 +55,7 @@ export type MascotaGeneral = {
     foto_mascota: string;
     asociacion_id: string;
     nombre_asociacion: string;
+    nombre_alcaldia: string;
 }
 
 export type MascotaAsociacion = { 

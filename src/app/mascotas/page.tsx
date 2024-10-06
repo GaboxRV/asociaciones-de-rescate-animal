@@ -1,8 +1,9 @@
 import styles from "@/ui/mascotas/page.module.css";
 import BarraBusquedaMascota from "@/ui/mascotas/BarraBusquedaMascota";
-import { fetchTiposMascotas, fetchSexosMascotas, fetchTallasMascotas, fetchAlcaldias} from "@/lib/data";
+import { fetchNombresAsociacionesVerificadas, fetchTiposMascotas, fetchSexosMascotas, fetchTallasMascotas, fetchAlcaldias} from "@/lib/data";
 import TablaMascotas from "@/ui/mascotas/TablaMascotas";
 import ConseguirUbicacion from "@/ui/ConseguirUbicacion";
+import { NombresAsociacion } from "@/lib/definiciones";
 
 export default async function Mascotas({
     searchParams,
@@ -16,6 +17,7 @@ export default async function Mascotas({
     };
   }) {
 
+    const nombres_asociaciones: NombresAsociacion[] = await fetchNombresAsociacionesVerificadas();
     const tipos_mascotas: string[] = await fetchTiposMascotas();
     const sexos_mascotas = await fetchSexosMascotas();
     const tallas_mascotas = await fetchTallasMascotas();
@@ -36,6 +38,7 @@ export default async function Mascotas({
                 tallasMascotas={tallas_mascotas}
                 alcaldias={alcaldias}
                 ubicacionAlcaldia={ubicacion}
+                nombres_asociaciones={nombres_asociaciones}
             />
             <section className={styles.seccion_mascotas}>
                 <TablaMascotas 
