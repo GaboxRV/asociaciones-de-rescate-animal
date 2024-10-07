@@ -11,6 +11,7 @@ export default async function Mascotas({
     searchParams?: {
       page?: string;
       ubicacion?: string;
+      asociacion?: string;
       tipo?: string;
       sexo?: string;
       talla?: string;
@@ -23,6 +24,7 @@ export default async function Mascotas({
     const tallas_mascotas = await fetchTallasMascotas();
     const alcaldias = await fetchAlcaldias();
     const ubicacion = searchParams?.ubicacion || '';
+    const asociacion = searchParams?.asociacion || '';
     const tipo = searchParams?.tipo || '';
     const sexo = searchParams?.sexo || '';
     const talla = searchParams?.talla || '';
@@ -43,6 +45,7 @@ export default async function Mascotas({
             <section className={styles.seccion_mascotas}>
                 <TablaMascotas 
                     ubicacion={ubicacion}
+                    asociacion={asociacion}
                     tipo={tipo}
                     sexo={sexo}
                     talla={talla}

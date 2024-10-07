@@ -118,3 +118,5 @@ useEffect(() => {
         }   
     }, [estadoInfo, estadoFoto]);
 ```
+
+replace(`${pathname}?ubicacion=${getCookie('ubicacion') || ''}`); // Para cambiar la url sin recargar la pagina

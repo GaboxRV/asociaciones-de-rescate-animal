@@ -36,7 +36,7 @@ export async function fetchMascotas() {
  */
 
 const OBJETOS_POR_PAGINA = 3;
-export async function fetchMascotasFiltradas(ubicacion: string, tipo: string, sexo: string, talla: string, pagina: number) {
+export async function fetchMascotasFiltradas(ubicacion: string, asociacion: string, tipo: string, sexo: string, talla: string, pagina: number) {
     noStore();
 
     const offset = (pagina - 1) * OBJETOS_POR_PAGINA;
@@ -55,7 +55,7 @@ export async function fetchMascotasFiltradas(ubicacion: string, tipo: string, se
                 mascotas.tipo_mascota::text ILIKE '%${tipo}%' AND
                 mascotas.sexo_mascota::text ILIKE '%${sexo}%' AND
                 mascotas.talla_mascota::text ILIKE '%${talla}%' AND
-                asociaciones.nombre_asociacion ILIKE '%%'
+                asociaciones.nombre_asociacion ILIKE '%${asociacion}%'
             ORDER BY mascotas.mascota_id ASC
             LIMIT ${OBJETOS_POR_PAGINA} OFFSET ${offset};`
         );

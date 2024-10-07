@@ -15,7 +15,6 @@ export default function RutaActual({ tiposMascotas, sexosMascotas, tallasMascota
         nombres_asociaciones: NombresAsociacion[]
     }) 
 {
-    const ubicacion = getCookie('ubicacion');
     const searchParams = useSearchParams();
     const pathname = usePathname();
     const { replace } = useRouter();
@@ -25,12 +24,15 @@ export default function RutaActual({ tiposMascotas, sexosMascotas, tallasMascota
         e.preventDefault();
 
         const params = new URLSearchParams(searchParams);
+
+        const asociacion = (e.target as any).asociacion.value;
         const tipo = (e.target as any).tipo.value;
         const sexo = (e.target as any).sexo.value;
         const talla = (e.target as any).talla.value;
 
         params.set('page', '1');
         params.set('ubicacion', selectedAlcaldia);
+        params.set('asociacion', asociacion);
         params.set('tipo', tipo);
         params.set('sexo', sexo);
         params.set('talla', talla);
@@ -45,6 +47,7 @@ export default function RutaActual({ tiposMascotas, sexosMascotas, tallasMascota
 
     useEffect(() => {
         setSelectedAlcaldia(getCookie('ubicacion') || '');
+        
     }, []);
 
     return (

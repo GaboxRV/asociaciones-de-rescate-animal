@@ -3,20 +3,22 @@ import { fetchMascotasFiltradas } from "@/lib/data";
 import CartillaAnimal from "@/ui/mascotas/CartillaAnimal";
 
 export default async function TablaMascotas({
-    ubicacion = "",
-    tipo = "",
-    sexo = "",
-    talla = "",
+    ubicacion,
+    asociacion,
+    tipo,
+    sexo ,
+    talla,
     paginaActual = 1}
     : {
         ubicacion: string,
+        asociacion: string,
         tipo: string,
         sexo: string,
         talla: string,
         paginaActual: number
         
     }) {
-    const mascotas: MascotaGeneral[] = await fetchMascotasFiltradas( ubicacion, tipo, sexo, talla, paginaActual);
+    const mascotas: MascotaGeneral[] = await fetchMascotasFiltradas( ubicacion, asociacion, tipo, sexo, talla, paginaActual);
 
     return (
         <>
