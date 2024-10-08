@@ -2,7 +2,7 @@ import { fetchMascota, fetchSexosMascotas, fetchTiposMascotas, fetchTallasMascot
 import { MascotaEditar } from "@/lib/definiciones";
 import FormularioEditarMascota from "@/ui/perfil/FormularioEditarMascota";
 
-export default async function EditarMascota({ params }: { params: { idMascota: number, idAsociacion: string } }) {
+export default async function EditarMascota({ params }: { params: { idMascota: string, idAsociacion: string } }) {
     const { idMascota,  idAsociacion } = params;
 
     const sexos_mascota = await fetchSexosMascotas();

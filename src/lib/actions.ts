@@ -467,6 +467,57 @@ export async function editarAsociacionFotoAdmin(asociacion_id: string, estadoPre
 }
 
 
+export async function crearEvento(asociacion_id: string, formData: FormData) {
+
+
+    const camposValidados = CrearUsuario.safeParse({
+        nombre_usuario: formData.get("nombre_usuario"),
+    });
+
+    if (!camposValidados.success) {
+        return {
+            errores: camposValidados.error.flatten().fieldErrors,
+            mensaje: "Error en los campos del formulario"
+        }
+    }
+
+    const { nombre_usuario, contrasena_usuario, nombre_asociacion, alcaldia_asociacion, foto_asociacion } = camposValidados.data;
+
+    const foto_data = await foto_asociacion.arrayBuffer();
+    const fotoBuffer = Buffer.from(new Uint8Array(foto_data));
+
+    try {
+        await conn.query('BEGIN');
+
+        const respuestaAsociacion = await conn.query(
+            "INSERT INTO asociaciones (nombre_asociacion, foto_asociacion, alcaldia_id) VALUES ($1, $2, $3) RETURNING asociacion_id",
+            [nombre_asociacion, fotoBuffer, alcaldia_asociacion]
+        );
+
+        const asociacion_id = respuestaAsociacion.rows[0].asociacion_id;
+
+        console.log('intento de id asociacion: ', asociacion_id);
+
+
+        const respuestaUsuarios = await conn.query(
+            "INSERT INTO usuarios (nombre_usuario, contrasena_usuario, rol_usuario, asociacion_id) VALUES ($1, $2, $3, $4)",
+            [nombre_usuario, contrasena_usuario, 'usuario no verificado', asociacion_id]
+        );
+
+        await conn.query('COMMIT');
+
+    } catch (error) {
+        await conn.query('ROLLBACK');
+        return {
+            mensaje: "Error en la Base de Datos: Error al crear el usuario"
+        }
+    }
+
+    redirect('/perfil');
+
+}
+
+
 /**
  * ===========================================================================================
  * Autenticación de usuarios

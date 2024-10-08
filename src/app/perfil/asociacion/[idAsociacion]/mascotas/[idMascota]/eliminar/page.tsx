@@ -7,7 +7,7 @@ export default async function EliminarMascota({ params }: { params: { idMascota:
 
     const eliminarMascotaConId = eliminarMascota.bind(null, idMascota, idAsociacion);
 
-    const mascota: MascotaEditar = await fetchMascota(parseInt(idMascota, 10));
+    const mascota: MascotaEditar = await fetchMascota(idMascota);
 
     return (
 

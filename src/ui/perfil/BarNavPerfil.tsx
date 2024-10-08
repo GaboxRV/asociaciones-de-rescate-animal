@@ -55,6 +55,11 @@ function NavegacionUsuarioVerificado({ asociacion_id }: { asociacion_id: string 
                         Registrar mascota
                     </Link>
                 </li>
+                <li>
+                    <Link href={`/perfil/asociacion/${asociacion_id}/eventos`}>
+                        Eventos
+                    </Link>
+                </li>
             </ul>
 
         </nav>

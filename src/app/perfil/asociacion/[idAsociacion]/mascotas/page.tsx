@@ -3,7 +3,7 @@ import { MascotaAsociacion } from "@/lib/definiciones";
 import CartillaMascotaAsociacion from "@/ui/perfil/asociacion/mascotas/CartillaMascotaAsociacion";
 import styles from "@/ui/perfil/asociacion/mascotas/page.module.css";
 
-export default async function MascotasAsociacion({ params } : { params: { idAsociacion: number} }){
+export default async function MascotasAsociacion({ params } : { params: { idAsociacion: string} }){
     const asociacion_id = params.idAsociacion;
 
     const mascotas : MascotaAsociacion[] = await fetchMascotasPorAsociacion(asociacion_id);

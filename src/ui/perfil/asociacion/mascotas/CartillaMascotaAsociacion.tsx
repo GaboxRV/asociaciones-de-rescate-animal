@@ -2,7 +2,7 @@ import BotonEditarMascota from "../../botones/BotonEditarMascota";
 import BotonEliminarMascota from "../../botones/BotonEliminarMascota";
 import styles from "@/ui/perfil/asociacion/mascotas/CartillaMascotaAsociacion.module.css"
 
-export default async function CartillaMascotaAsociacion({ nombre_mascota, foto_mascota, edad_mascota, sexo_mascota, tipo_mascota, asociacion_id, mascota_id }: { nombre_mascota: string, foto_mascota: string, edad_mascota: number, sexo_mascota: string, tipo_mascota: string, asociacion_id: number, mascota_id: string }) {
+export default async function CartillaMascotaAsociacion({ nombre_mascota, foto_mascota, edad_mascota, sexo_mascota, tipo_mascota, asociacion_id, mascota_id }: { nombre_mascota: string, foto_mascota: string, edad_mascota: number, sexo_mascota: string, tipo_mascota: string, asociacion_id: string, mascota_id: string }) {
 
     return (
         <article className={styles.cartilla}>

@@ -81,7 +81,7 @@ export async function fetchMascotasFiltradas(ubicacion: string, asociacion: stri
 /**
  * Recuperar las mascotas de una asociación en específico.
  */
-export async function fetchMascotasPorAsociacion(id: number) {
+export async function fetchMascotasPorAsociacion(id: string) {
     noStore();
     try {
         const respuesta = await conn.query("SELECT * FROM mascotas where asociacion_id = $1", [id]);
@@ -107,7 +107,7 @@ export async function fetchMascotasPorAsociacion(id: number) {
  * Recuperar una mascota en específico.
  */
 
-export async function fetchMascota(id: number) {
+export async function fetchMascota(id: string) {
     noStore();
     try {
         const respuesta = await conn.query("SELECT * FROM mascotas WHERE mascota_id = $1", [id]);
