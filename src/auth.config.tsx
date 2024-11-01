@@ -15,6 +15,7 @@ export const authConfig = {
         const estaEnPerfil = nextUrl.pathname.startsWith('/perfil');
         const estaEnAdmin = nextUrl.pathname.startsWith('/perfil/admin');
         const estaEnAsociacion = nextUrl.pathname.startsWith('/perfil/asociacion');
+        const estaEnSuAsociacion = nextUrl.pathname.startsWith(`/perfil/asociacion/${auth?.user?.email}`);
 
         const esAdmin = auth?.user?.name?.includes('admin');
         const estaVerificado = auth?.user?.name?.includes('usuario verificado');
@@ -27,7 +28,9 @@ export const authConfig = {
               return Response.redirect(new URL('/perfil', nextUrl).toString());
             } 
             else if(estaEnAsociacion && !estaVerificado){
-              console.log('No esta verificado');
+              return Response.redirect(new URL('/perfil', nextUrl).toString());
+            }
+            else if(estaEnAsociacion && !estaEnSuAsociacion){
               return Response.redirect(new URL('/perfil', nextUrl).toString());
             }
 

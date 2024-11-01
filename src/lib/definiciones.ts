@@ -80,6 +80,16 @@ export type MascotaEditar = {
     asociacion_id: string;
 }
 
+export type Evento = {
+    evento_id: string;
+    nombre_evento: string;
+    direccion_evento: string;
+    descripcion_evento: string;
+    foto_evento: string;
+    asociacion_id: string;
+    alcaldia_id: string;
+}
+
 export type DatosSesion = {
     usuario_id: string;
     rol: string;

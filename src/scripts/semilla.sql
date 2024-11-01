@@ -55,3 +55,5 @@ LIMIT 3 OFFSET 0;
 
 
 SELECT asociaciones.asociacion_id, asociaciones.nombre_asociacion FROM asociaciones JOIN usuarios ON asociaciones.asociacion_id = usuarios.asociacion_id WHERE usuarios.rol_usuario = 'usuario verificado'
+
+SELECT * FROM eventos;

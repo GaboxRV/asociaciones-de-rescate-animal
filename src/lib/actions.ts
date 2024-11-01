@@ -5,7 +5,7 @@ import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import { signIn } from "../auth";
 import { AuthError } from 'next-auth';
-import { EsquemaMascota, EsquemaEditarMascotaInfo, EsquemaEditarMascotaFoto, EsquemaUsuario, EsquemaAsociacion} from "@/lib/esquemas";
+import { EsquemaMascota, EsquemaEditarMascotaInfo, EsquemaEditarMascotaFoto, EsquemaUsuario, EsquemaAsociacion, EsquemaEvento} from "@/lib/esquemas";
 
 
 /**
@@ -370,7 +370,7 @@ export type prevEditarAsociacionInfoAdmin = {
         telefono_asociacion?: string[];
         descripcion_asociacion?: string[];
         puntuacion_asociacion?: string[];
-        rol_asociacion?: string[];
+        rol_usuario?: string[];
     };
     mensaje?: string | null;
 };
@@ -467,11 +467,31 @@ export async function editarAsociacionFotoAdmin(asociacion_id: string, estadoPre
 }
 
 
-export async function crearEvento(asociacion_id: string, formData: FormData) {
+/**
+ * Crear un evento
+ */
 
+const CrearEvento = EsquemaEvento.omit({ evento_id: true, asociacion_id: true });
 
-    const camposValidados = CrearUsuario.safeParse({
-        nombre_usuario: formData.get("nombre_usuario"),
+export type prevCrearEvento = {
+    errores?: {
+        nombre_evento?: string[] ;
+        direccion_evento?: string[];
+        descripcion_evento?: string[];
+        foto_evento?: string[];
+        alcaldia_id?: string[];
+    };
+    mensaje?: string | null;
+};
+
+export async function crearEvento(asociacion_id: string,  estadoPrevio: prevCrearEvento, formData: FormData) {
+
+    const camposValidados = CrearEvento.safeParse({
+        nombre_evento: formData.get("nombre_evento"),
+        direccion_evento: formData.get("direccion_evento"),
+        descripcion_evento: formData.get("descripcion_evento"),
+        alcaldia_id: formData.get("alcaldia_evento"),
+        foto_evento: formData.get("foto_evento")
     });
 
     if (!camposValidados.success) {
@@ -481,42 +501,126 @@ export async function crearEvento(asociacion_id: string, formData: FormData) {
         }
     }
 
-    const { nombre_usuario, contrasena_usuario, nombre_asociacion, alcaldia_asociacion, foto_asociacion } = camposValidados.data;
+    const { nombre_evento, direccion_evento, descripcion_evento, alcaldia_id, foto_evento} = camposValidados.data;
 
-    const foto_data = await foto_asociacion.arrayBuffer();
+    const foto_data = await foto_evento.arrayBuffer();
     const fotoBuffer = Buffer.from(new Uint8Array(foto_data));
 
     try {
-        await conn.query('BEGIN');
-
-        const respuestaAsociacion = await conn.query(
-            "INSERT INTO asociaciones (nombre_asociacion, foto_asociacion, alcaldia_id) VALUES ($1, $2, $3) RETURNING asociacion_id",
-            [nombre_asociacion, fotoBuffer, alcaldia_asociacion]
+        const respuesta = await conn.query(
+            "INSERT INTO eventos (nombre_evento, direccion_evento, descripcion_evento, foto_evento, asociacion_id , alcaldia_id) VALUES ($1, $2, $3, $4, $5, $6)",
+            [nombre_evento, direccion_evento, descripcion_evento, fotoBuffer, asociacion_id, alcaldia_id]
         );
-
-        const asociacion_id = respuestaAsociacion.rows[0].asociacion_id;
-
-        console.log('intento de id asociacion: ', asociacion_id);
-
-
-        const respuestaUsuarios = await conn.query(
-            "INSERT INTO usuarios (nombre_usuario, contrasena_usuario, rol_usuario, asociacion_id) VALUES ($1, $2, $3, $4)",
-            [nombre_usuario, contrasena_usuario, 'usuario no verificado', asociacion_id]
-        );
-
-        await conn.query('COMMIT');
 
     } catch (error) {
-        await conn.query('ROLLBACK');
         return {
-            mensaje: "Error en la Base de Datos: Error al crear el usuario"
+            mensaje: "Error en la Base de Datos: Error al crear el evento"
         }
     }
 
-    redirect('/perfil');
+    revalidatePath(`/perfil/asociacion/${asociacion_id}/eventos`);
+    redirect(`/perfil/asociacion/${asociacion_id}/eventos`);
 
 }
 
+
+/**
+ * Editar la información de un evento
+ */
+
+const EditarEventoInfo = EsquemaEvento.omit({ evento_id: true, asociacion_id: true, foto_evento: true });
+
+export type prevEditarEventoInfo = {
+    errores?: {
+        nombre_evento?: string[] ;
+        direccion_evento?: string[];
+        descripcion_evento?: string[];
+        alcaldia_id?: string[];
+    };
+    mensaje?: string | null;
+};
+
+export async function editarEventoInfo(evento_id: string, asociacion_id: string,  estadoPrevio: prevEditarEventoInfo, formData: FormData) {
+
+    const camposValidados = EditarEventoInfo.safeParse({
+        nombre_evento: formData.get("nombre_evento"),
+        direccion_evento: formData.get("direccion_evento"),
+        descripcion_evento: formData.get("descripcion_evento"),
+        alcaldia_id: formData.get("alcaldia_evento"),
+    });
+
+    if (!camposValidados.success) {
+        return {
+            errores: camposValidados.error.flatten().fieldErrors,
+            mensaje: "Error en los campos del formulario"
+        }
+    }
+
+    const { nombre_evento, direccion_evento, descripcion_evento, alcaldia_id} = camposValidados.data;
+
+    try {
+        const respuesta = await conn.query(
+            "UPDATE eventos SET nombre_evento = $1, direccion_evento = $2, descripcion_evento = $3, alcaldia_id = $4 WHERE evento_id = $5",
+            [nombre_evento, direccion_evento, descripcion_evento, alcaldia_id, evento_id]
+        );
+
+    } catch (error) {
+        return {
+            mensaje: "Error en la Base de Datos: Error al editar el evento"
+        }
+    }
+
+    revalidatePath(`/perfil/asociacion/${asociacion_id}/eventos/${evento_id}/editar`);
+    return { mensaje: "Información editada con exito", errores: {} };
+
+}
+
+/**
+ * Editar la foto de un evento
+ */
+
+const EditarEventoFoto = EsquemaEvento.omit({ evento_id: true, asociacion_id: true, nombre_evento: true, direccion_evento: true, descripcion_evento: true, alcaldia_id: true });
+
+export type prevEditarEventoFoto= {
+    errores?: {
+        foto_evento?: string[] ;
+    };
+    mensaje?: string | null;
+};
+
+export async function editarEventoFoto(evento_id: string, asociacion_id: string,  estadoPrevio: prevEditarEventoFoto, formData: FormData) {
+
+    const camposValidados = EditarEventoFoto.safeParse({
+        foto_evento: formData.get('foto_evento')
+    });
+
+    if (!camposValidados.success) {
+        return {
+            errores: camposValidados.error.flatten().fieldErrors,
+            mensaje: "Error en los campos del formulario"
+        }
+    }
+
+    const { foto_evento } = camposValidados.data;
+
+    const foto_data = await foto_evento.arrayBuffer();
+    const fotoBuffer = Buffer.from(new Uint8Array(foto_data));
+    try {
+        const respuesta = await conn.query(
+            "UPDATE eventos SET foto_evento = $1 WHERE evento_id = $2",
+            [fotoBuffer, evento_id]
+        );
+
+    } catch (error) {
+        return {
+            mensaje: "Error en la Base de Datos: Error al editar el evento"
+        }
+    }
+
+    revalidatePath(`/perfil/asociacion/${asociacion_id}/eventos/${evento_id}/editar`);
+    return { mensaje: "Foto editada con exito", errores: {} };
+
+}
 
 /**
  * ===========================================================================================

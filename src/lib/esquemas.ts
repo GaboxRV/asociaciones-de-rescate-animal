@@ -76,3 +76,15 @@ export const EsquemaAsociacion = z.object({
     alcaldia_id: z.string(),
     rol_usuario: z.string()
 });
+
+export const EsquemaEvento = z.object({
+    evento_id: z.string(),
+    nombre_evento: z.string(),
+    direccion_evento: z.string(),
+    descripcion_evento: z.string(),
+    foto_evento: z.instanceof(File).refine(file => file.type.startsWith('image/'), {
+        message: "El archivo debe ser una imagen"
+    }),
+    asociacion_id: z.string(),
+    alcaldia_id: z.string()
+});

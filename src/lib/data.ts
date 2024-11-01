@@ -1,6 +1,6 @@
 import { unstable_noStore as noStore } from "next/cache";
 import { conn } from "./conexion";
-import { MascotaGeneral, MascotaAsociacion, MascotaEditar, Asociacion, NombresAsociacion, AsociacionConRol, AsociacionAdmin, Alcaldia} from "./definiciones";
+import { MascotaGeneral, MascotaAsociacion, MascotaEditar, Asociacion, NombresAsociacion, AsociacionConRol, AsociacionAdmin, Alcaldia, Evento} from "./definiciones";
 
 
 /**
@@ -308,5 +308,55 @@ export async function fetchUsuario(usuario: string) {
     } catch (error) {
         console.error("Error al obtener el usuario: ", error);
         throw new Error("Error al obtener el usuario");
+    }
+}
+
+export async function fetchEventos() {
+    noStore();
+    try {
+        const respuesta = await conn.query("SELECT * FROM eventos");
+        return respuesta.rows;
+    } catch (error) {
+        console.error("Error al obtener los eventos: ", error);
+        throw new Error("Error al obtener los eventos");
+    }
+}
+
+export async function fetchEventosPorAsociacion(asociacion_id: string) {
+    noStore();
+    try {
+        const respuesta = await conn.query("SELECT * FROM eventos WHERE asociacion_id = $1", [asociacion_id]);
+
+        const datos = respuesta.rows
+
+        for (let index = 0; index < respuesta.rowCount; index++) {
+            const foto_data = datos[index].foto_evento;
+            if (foto_data != null) {
+                const foto = Buffer.from(foto_data).toString("base64");
+                datos[index].foto_evento = foto;
+            }
+        }
+        return datos;
+    } catch (error) {
+        console.error("Error al obtener los eventos: ", error);
+        throw new Error("Error al obtener los eventos");
+    }
+}
+
+export async function fetchEventoPorID(evento_id: string) {
+    noStore();
+    try {
+        const respuesta = await conn.query("SELECT * FROM eventos WHERE evento_id = $1", [evento_id]);
+
+        const datos: Evento = respuesta.rows[0];
+        const foto_data = datos.foto_evento;
+
+        const foto = Buffer.from(foto_data).toString("base64");
+        datos.foto_evento = foto;
+
+        return datos;
+    } catch (error) {
+        console.error("Error al obtener el eventos: ", error);
+        throw new Error("Error al obtener el eventos");
     }
 }

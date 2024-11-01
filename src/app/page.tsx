@@ -2,18 +2,17 @@
 import Image from "next/image";
 import styles from "./page.module.css";
 import {conn} from "../lib/conexion";
+import { fetchEventos } from "@/lib/data";
 
 export default async function Home() {
 
-  const res = await conn.query('SELECT NOW()');
+  const eventos = await fetchEventos();
 
-  console.log(res.rows[0].now);
 
-  const prueba = "" + res.rows[0].now;
+  console.log(eventos);
   
   return (
     <main>
-      <p>{prueba}</p>
     </main>
 
   );
