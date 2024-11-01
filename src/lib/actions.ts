@@ -623,6 +623,23 @@ export async function editarEventoFoto(evento_id: string, asociacion_id: string,
 }
 
 /**
+ * Eliminar un evento
+ */
+
+export async function eliminarEvento(evento_id: string, asociacion_id: string) {
+    try {
+        const respuesta = await conn.query("DELETE FROM eventos WHERE evento_id = $1", [evento_id]);
+    } catch (error) {
+        return {
+            mensaje: "Error en la Base de Datos: Error al eliminar el evento",
+        }
+    }
+
+    revalidatePath(`/perfil/asociacion/${asociacion_id}/eventos`);
+    redirect(`/perfil/asociacion/${asociacion_id}/eventos`);
+}
+
+/**
  * ===========================================================================================
  * Autenticación de usuarios
  */

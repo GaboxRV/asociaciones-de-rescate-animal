@@ -60,6 +60,11 @@ function NavegacionUsuarioVerificado({ asociacion_id }: { asociacion_id: string 
                         Eventos
                     </Link>
                 </li>
+                <li>
+                    <Link href={`/perfil/asociacion/${asociacion_id}/eventos/registrar`}>
+                        Registrar evento
+                    </Link>
+                </li>
             </ul>
 
         </nav>

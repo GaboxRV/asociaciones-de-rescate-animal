@@ -1,4 +1,3 @@
-import BotonCrearEvento from "@/ui/perfil/botones/BotonCrearEvento";
 import FichaEventoAsociacion from "@/ui/perfil/asociacion/eventos/FichaEventoAsociacion";
 import { fetchEventosPorAsociacion } from "@/lib/data";
 import { Evento } from "@/lib/definiciones";
@@ -11,8 +10,6 @@ export default async function Eventos({ params } : { params: { idAsociacion: str
     return (
         <div>
             <h1>Eventos</h1>
-            <BotonCrearEvento asociacion_id={params.idAsociacion} />
-
             {
                 eventos.map((evento) => (
                     <FichaEventoAsociacion 
