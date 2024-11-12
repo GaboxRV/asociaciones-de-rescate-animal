@@ -1,5 +1,14 @@
 # Base de datos
 
+administrador: gabriel@sistema.com
+
+contraseña: gatitos1234
+
+usuario: gabriel@gmail.com
+
+contraseña: asd123
+
+
 - Instalar PostgreSQL, dejar el puerto por defecto(_5432_), usuario por defecto(_postgres_) y la contraseña se recomienda dejar (_post123e_). Esto con el fin de facilitar la configuración inicial, si modifica estos valores tendrás que cambiar los comandos a continuación.
 
 Ejemplo Completo en PowerShell
@@ -120,3 +129,4 @@ useEffect(() => {
 ```
 
 replace(`${pathname}?ubicacion=${getCookie('ubicacion') || ''}`); // Para cambiar la url sin recargar la pagina
+

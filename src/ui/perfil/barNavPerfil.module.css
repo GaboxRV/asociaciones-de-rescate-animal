@@ -1,0 +1,32 @@
+
+.nav{
+    padding: 1rem;
+    background-color: aquamarine;
+}
+
+.nav__lista{
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+
+    display: flex;
+    flex-flow: row wrap;
+    justify-content: center;
+    align-items: center;
+    gap: 2rem;
+
+}
+
+.nav__li{
+    border: 1px black solid;
+    border-radius: 1rem;
+}
+
+.nav__link{
+    text-decoration: none;
+    min-width: 120px;
+    text-align: center;
+    display: block;
+    padding: 0.5rem;
+    color:var(--color-home);
+}

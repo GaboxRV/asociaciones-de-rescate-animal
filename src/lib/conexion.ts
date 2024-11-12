@@ -7,7 +7,7 @@ if (!conn) {
     user: 'postgres',
     host: 'localhost',
     database: 'asociaciones_de_rescate',
-    password: 'post123e',
+    password: 'deepblue123',
     port: 5432
   });
 

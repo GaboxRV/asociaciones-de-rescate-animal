@@ -299,7 +299,7 @@ export async function editarAsociacionInfoUsuario(asociacion_id: string, estadoP
 
     } catch (error) {
         return {
-            mensaje: "Error en la Base de Datos: Error al editar la asociacion",
+            mensaje: "Error al editar la asociacion",
         }
     }
 

@@ -1,29 +1,45 @@
 'use client';
+import style from "@/ui/perfil/login/formularioLogin.module.css"
 
 import { useFormState, useFormStatus } from 'react-dom';
 import { authenticate } from '@/lib/actions';
 
 export default function FormularioLogin() {
-    const [mensaje, mandar] = useFormState(authenticate, undefined);
+  const [mensaje, mandar] = useFormState(authenticate, undefined);
 
-    return (
-        <form action={mandar}>
-            <label>Usuario</label>
-            <input type="text" name="nombre_usuario" placeholder='correo o telefono'/>
+  return (
+    <form action={mandar} className={style.formulario}>
+      <div className={style.bloque}>
+        <label>Usuario:</label>
+        <input 
+          type="text" 
+          name="nombre_usuario" 
+          placeholder='Correo o Teléfono' 
+          className={style.campo}
+        />
+      </div>
 
-            <label>Contraseña</label>
-            <input type="text" name="contrasena" placeholder='ingresa contraseña'/>
-            <button>Enviar</button>
-        </form>
-    );
+      <div className={style.bloque}>
+        <label>Contraseña:</label>
+        <input 
+          type="text" 
+          name="contrasena" 
+          placeholder='Ingresa tu contraseña'
+          className={style.campo} 
+        />
+      </div>
+
+      <button>Enviar</button>
+    </form>
+  );
 }
 
 function LoginButton() {
-    const { pending } = useFormStatus();
-  
-    return (
-      <button>
-        Log in 
-      </button>
-    );
-  }
+  const { pending } = useFormStatus();
+
+  return (
+    <button>
+      Log in
+    </button>
+  );
+}

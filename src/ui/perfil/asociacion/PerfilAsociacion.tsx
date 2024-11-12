@@ -1,6 +1,7 @@
 import FormularioEditarAsociacionUsuario from "@/ui/perfil/asociacion/FormularioEditarAsociacionUsuario";
 import { fetchAsociacionPorId, fetchAlcaldias} from "@/lib/data";
 import { Alcaldia, Asociacion } from "@/lib/definiciones";
+import style from "@/ui/perfil/asociacion/perfilAsociacion.module.css"
 
 export default async function PerfilAsociacion({ asociacion_id }: { asociacion_id : string }){
 
@@ -8,12 +9,12 @@ export default async function PerfilAsociacion({ asociacion_id }: { asociacion_i
     const alcaldias: Alcaldia[] = await fetchAlcaldias();
 
     return (
-        <>
-            <h2>{`Perfil de la asociación ${asociacion.nombre_asociacion}`}</h2>
+        <div className={style.contenedor}>
+            <h2>{asociacion.nombre_asociacion}</h2>
             <FormularioEditarAsociacionUsuario
                     asociacion={asociacion} 
                     alcaldias={alcaldias}
                 />
-        </>
+        </div>
     );
 }

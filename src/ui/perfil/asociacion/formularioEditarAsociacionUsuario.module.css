@@ -1,0 +1,39 @@
+
+.ficha{
+    display: flex;
+    align-items: center;
+    background-color: aquamarine;
+    padding: 2rem;
+}
+
+.bloque_info{
+    margin: 1rem;
+}
+
+.bloque_info_div{
+    display: flex;
+    flex-direction: column;
+}
+
+.bloque_info_div input{
+    width: 300px;
+    height: 30px;
+}
+
+.bloque_info_div textarea{
+    width: 300px;
+    height: 60px;
+}
+
+
+
+.bloque_img{
+    width: 500px;
+}
+
+.ficha_img{
+    width: 100%;
+    object-fit: cover;
+    height: 300px;
+    border-radius: 20px;
+}

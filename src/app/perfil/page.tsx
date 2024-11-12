@@ -7,9 +7,7 @@ import { redirect } from "next/navigation";
 export default async function Perfil() {
 
     const sesion = await auth();
-
     const asociacion_id = sesion?.user?.email ?? "";
-
     const objetoDatos: DatosSesion = JSON.parse(sesion?.user?.name || "");
 
     return (
