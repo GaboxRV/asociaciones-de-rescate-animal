@@ -10,13 +10,13 @@ export default async function CartillaMascotaAsociacion({ nombre_mascota, foto_m
                 <img src={`data:image/jpeg;base64,${foto_mascota}`} alt={nombre_mascota} />
             </div>
             <div>
-                <h4>{nombre_mascota}</h4>
+                <h4 className={styles.nombre}>{nombre_mascota}</h4>
                 <p>Edad: {edad_mascota} meses</p>
                 <p>Sexo: {sexo_mascota}</p>
-                <p>Tipo de animal: {tipo_mascota}</p>
+                <p>Tipo: {tipo_mascota}</p>
             </div>
 
-            <div>
+            <div className={styles.contenedor_botones}>
                 <BotonEditarMascota
                     asociacion_id={asociacion_id}
                     mascota_id={mascota_id}
@@ -26,7 +26,6 @@ export default async function CartillaMascotaAsociacion({ nombre_mascota, foto_m
                     asociacion_id={asociacion_id}
                     mascota_id={mascota_id}
                 />
-
             </div>
         </article>
     );

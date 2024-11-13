@@ -1,6 +1,6 @@
 
 .cartilla{
-    background-color: var(--color-mascota);
+    background-color: #e1d6c2;
     padding: 1rem;
     border-radius: 20px;
     width: 300px;
@@ -17,4 +17,15 @@
     height: 300px;
 
     border-radius: 20px;
+}
+
+.nombre{
+    display: flex;
+    justify-content: center;
+}
+
+.contenedor_botones{
+    display: flex;
+    justify-content: space-evenly;
+    gap: 1rem;
 }

@@ -3,7 +3,7 @@
 import { Alcaldia, Asociacion } from "@/lib/definiciones";
 import { editarAsociacionInfoUsuario, editarAsociacionFotoUsuario } from "@/lib/actions";
 import { useFormState } from 'react-dom';
-import style from "@/ui/perfil/asociacion/formularioEditarAsociacionUsuario.module.css"
+import styles from "@/ui/perfil/asociacion/formularioEditarAsociacionUsuario.module.css"
 
 export default function FormularioEditarAsociacionUsuario({ asociacion, alcaldias }: { asociacion: Asociacion, alcaldias: Alcaldia[] }) {
 
@@ -18,10 +18,10 @@ export default function FormularioEditarAsociacionUsuario({ asociacion, alcaldia
     const [estadoFoto, mandarFoto] = useFormState(editarMascotaFotoConAsociacionId, estadoInicialFoto);
 
     return (
-        <section className={style.ficha}>
-            <div className={style.bloque_info}>
+        <section className={styles.ficha}>
+            <div className={styles.bloque_info}>
                 <form action={mandarInfo}>
-                    <div className={style.bloque_info_div}>
+                    <div className={styles.bloque_info_div}>
                         <label>Nombre:</label>
                         <input type="text" name="nombre_asociacion" defaultValue={asociacion.nombre_asociacion} />
 
@@ -37,7 +37,7 @@ export default function FormularioEditarAsociacionUsuario({ asociacion, alcaldia
                     </div>
 
 
-                    <div className={style.bloque_info_div}>
+                    <div className={styles.bloque_info_div}>
                         <label>Alcaldía:</label>
                         <select
                             name="alcaldia_asociacion"
@@ -55,7 +55,7 @@ export default function FormularioEditarAsociacionUsuario({ asociacion, alcaldia
 
                     </div>
 
-                    <div className={style.bloque_info_div}>
+                    <div className={styles.bloque_info_div}>
                         <label>Dirección:</label>
                         <input type="text" name="direccion_asociacion" defaultValue={asociacion.direccion_asociacion} />
                         <div id="error-direccion_asociacion">
@@ -69,7 +69,7 @@ export default function FormularioEditarAsociacionUsuario({ asociacion, alcaldia
                         </div>
                     </div>
 
-                    <div className={style.bloque_info_div}>
+                    <div className={styles.bloque_info_div}>
                         <label>Teléfono:</label>
                         <input type="text" name="telefono_asociacion" defaultValue={asociacion.telefono_asociacion} />
                         <div id="error-telefono_asociacion">
@@ -83,7 +83,7 @@ export default function FormularioEditarAsociacionUsuario({ asociacion, alcaldia
                         </div>
                     </div>
 
-                    <div className={style.bloque_info_div}>
+                    <div className={styles.bloque_info_div}>
                         <label>Descripción:</label>
                         <textarea name="descripcion_asociacion" defaultValue={asociacion.descripcion_asociacion} />
                         <div id="error-descripcion_asociacion">
@@ -103,13 +103,13 @@ export default function FormularioEditarAsociacionUsuario({ asociacion, alcaldia
 
             </div>
 
-            <div className={style.bloque_img}>
+            <div className={styles.bloque_img}>
                 <form action={mandarFoto}>
                     <div>
                         <img
                             src={`data:image/jpeg;base64,${asociacion.foto_asociacion}`}
                             alt={asociacion.nombre_asociacion}
-                            className={style.ficha_img}
+                            className={styles.ficha_img}
                         />
 
                         <label>
