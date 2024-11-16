@@ -1,11 +1,11 @@
 'use client';
 
-import styles from "@/ui/perfil/formularioMascota.module.css";
+import styles from "@/ui/perfil/asociacion/mascotas/registrar/formularioRegistroMascota.module.css";
 import { useFormState } from 'react-dom';
 import { crearMascota } from "@/lib/actions";
 
 
-export default function FormularioMascota({ sexos_mascota, tipos_mascota, tallas_mascota, asociacion_id }: { sexos_mascota: string[], tipos_mascota: string[], tallas_mascota: string[], asociacion_id: string }) {
+export default function FormularioRegistroMascota({ sexos_mascota, tipos_mascota, tallas_mascota, asociacion_id }: { sexos_mascota: string[], tipos_mascota: string[], tallas_mascota: string[], asociacion_id: string }) {
 
     const estadoInicial = { mensaje: "", errores: {} }
     const crearMascotaConAsociacionId = crearMascota.bind(null, asociacion_id);
@@ -13,12 +13,11 @@ export default function FormularioMascota({ sexos_mascota, tipos_mascota, tallas
 
     return (
         <form action={mandar} className={styles.formulario}>
-
-            <div>
+            <div className={styles.bloque_info_div}>
                 <label>
                     Nombre:
-                    <input type="text" name="nombre_mascota" />
                 </label>
+                <input type="text" name="nombre_mascota" />
 
                 <div id="error-nombre_asociacion">
                     {estado.errores?.nombre_mascota &&
@@ -31,11 +30,12 @@ export default function FormularioMascota({ sexos_mascota, tipos_mascota, tallas
                 </div>
             </div>
 
-            <div>
+            <div className={styles.bloque_info_div}>
                 <label>
                     Edad en meses:
-                    <input type="number" name="edad_mascota" />
                 </label>
+                <input type="number" name="edad_mascota" />
+
                 <div id="error-nombre_asociacion">
                     {estado.errores?.edad_mascota &&
                         estado.errores.edad_mascota.map((error: string) => (
@@ -48,7 +48,10 @@ export default function FormularioMascota({ sexos_mascota, tipos_mascota, tallas
             </div>
 
 
-            <div>
+            <div className={styles.bloque_info_div}>
+                <label>
+                    Sexo:
+                </label>
                 <select
                     name="sexo_mascota"
                     defaultValue=""
@@ -78,7 +81,10 @@ export default function FormularioMascota({ sexos_mascota, tipos_mascota, tallas
             </div>
 
 
-            <div>
+            <div className={styles.bloque_info_div}>
+                <label>
+                    Tipo:
+                </label>
                 <select
                     name="tipo_mascota"
                     defaultValue=""
@@ -106,7 +112,10 @@ export default function FormularioMascota({ sexos_mascota, tipos_mascota, tallas
                 </div>
             </div>
 
-            <div>
+            <div className={styles.bloque_info_div}>
+                <label>
+                    Talla:
+                </label>
                 <select
                     name="talla_mascota"
                     defaultValue=""
@@ -134,7 +143,10 @@ export default function FormularioMascota({ sexos_mascota, tipos_mascota, tallas
                 </div>
             </div>
 
-            <div>
+            <div className={styles.bloque_info_div}>
+                <label>
+                    Foto:
+                </label>
                 <input type="file" name="foto_mascota" />
 
                 <div id="error-nombre_asociacion">
@@ -148,7 +160,11 @@ export default function FormularioMascota({ sexos_mascota, tipos_mascota, tallas
                 </div>
             </div>
 
-            <input type="submit" value="Enviar" />
+            <input 
+                type="submit" 
+                value="Registrar"
+                className={styles.boton} 
+            />
         </form>
     );
 }

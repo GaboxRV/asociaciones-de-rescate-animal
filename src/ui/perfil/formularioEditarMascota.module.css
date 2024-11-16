@@ -1,0 +1,52 @@
+
+.ficha{
+    display: flex;
+    align-items: center;
+    background-color: aquamarine;
+    gap: 1rem;
+    padding: 2rem;
+}
+
+.bloque_info{
+    margin: 1rem;
+}
+
+.bloque_info_div{
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.bloque_info_div input{
+    width: 300px;
+    height: 30px;
+    border-radius: 5px;
+}
+
+.bloque_info_div textarea{
+    width: 300px;
+    height: 60px;
+}
+
+.bloque_info_div select{
+    width: 300px;
+    height: 30px;
+}
+
+.boton{
+    width: 200px;
+    height: 30px;
+    border-radius: 5px;
+}
+
+
+.bloque_img{
+    width: 500px;
+}
+
+.ficha_img{
+    width: 100%;
+    object-fit: cover;
+    height: 300px;
+    border-radius: 20px;
+}

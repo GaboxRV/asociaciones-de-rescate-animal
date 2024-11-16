@@ -1,6 +1,7 @@
 import { fetchMascota, fetchSexosMascotas, fetchTiposMascotas, fetchTallasMascotas } from "@/lib/data";
 import { MascotaEditar } from "@/lib/definiciones";
 import FormularioEditarMascota from "@/ui/perfil/FormularioEditarMascota";
+import styles from "@/ui/perfil/asociacion/mascotas/editar/page.module.css"
 
 export default async function EditarMascota({ params }: { params: { idMascota: string, idAsociacion: string } }) {
     const { idMascota,  idAsociacion } = params;
@@ -11,7 +12,7 @@ export default async function EditarMascota({ params }: { params: { idMascota: s
     const mascota : MascotaEditar = await fetchMascota(idMascota);
 
     return (
-        <div>
+        <div className={styles.pagina}>
             <h2>Editar mascota</h2>
             <FormularioEditarMascota
                 mascota_id={mascota.mascota_id}

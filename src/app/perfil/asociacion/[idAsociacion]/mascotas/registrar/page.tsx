@@ -1,5 +1,6 @@
 import { fetchSexosMascotas, fetchTiposMascotas, fetchTallasMascotas } from "@/lib/data";
-import FormularioMascota from "@/ui/perfil/FormularioMascota";
+import FormularioMascota from "@/ui/perfil/asociacion/mascotas/registrar/FormularioRegistroMascota";
+import styles from "@/ui/perfil/asociacion/mascotas/registrar/page.module.css"
 
 export default async function RegistrarMascota({ params } : { params: { idAsociacion: string} }){
     const asociacion_id = params.idAsociacion;
@@ -9,9 +10,8 @@ export default async function RegistrarMascota({ params } : { params: { idAsocia
     const tallas = await fetchTallasMascotas();
 
     return(
-        <main>
-            <h3>Formulario de mascota</h3>
-            <p>Este es el formulario para ingresar una nueva mascota</p>
+        <main className={styles.pagina}>
+            <h3>Registra una nueva mascota</h3>
             <FormularioMascota
                 sexos_mascota={sexos}
                 tipos_mascota={tipos}
