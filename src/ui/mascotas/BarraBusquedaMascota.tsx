@@ -4,6 +4,7 @@ import { useSearchParams, usePathname, useRouter } from "next/navigation";
 import { getCookie } from "@/ui/ConseguirUbicacion";
 import { useEffect, useState } from "react";
 import { Alcaldia, NombresAsociacion } from "@/lib/definiciones";
+import styles from "./page.module.css"
 
 export default function RutaActual({ tiposMascotas, sexosMascotas, tallasMascotas, alcaldias, ubicacionAlcaldia, nombres_asociaciones }: 
     { 
@@ -52,13 +53,14 @@ export default function RutaActual({ tiposMascotas, sexosMascotas, tallasMascota
 
     return (
         <div>
-            <form onSubmit={handleSearch}>
-                <div>
+            <form onSubmit={handleSearch} className={styles.form_busqueda}>
+                <div className={styles.contenedor_filtro}>
                     <label>Ubicación: </label>
                     <select 
                         name="ubicacion"
                         value={selectedAlcaldia} 
                         onChange={handleAlcaldiaChange}
+                        className={styles.select_filtro}
                     >
                         <option value="">Selecciona una alcaldía</option>
                         {
@@ -71,9 +73,12 @@ export default function RutaActual({ tiposMascotas, sexosMascotas, tallasMascota
                     </select>
 
                 </div>
-                <div>
-                    <label>Asociacion:</label>
-                    <select name="asociacion">
+                <div className={styles.contenedor_filtro}>
+                    <label>Asociacion: </label>
+                    <select 
+                        name="asociacion"
+                        className={styles.select_filtro}
+                    >
                         <option value="">Selecciona una asociación</option>
                         {
                             nombres_asociaciones.map(asociacion => (
@@ -84,9 +89,12 @@ export default function RutaActual({ tiposMascotas, sexosMascotas, tallasMascota
                         }
                     </select>
                 </div>
-                <div>
+                <div className={styles.contenedor_filtro}>
                     <label>Tipo de mascota: </label>
-                    <select name="tipo">
+                    <select 
+                        name="tipo"
+                        className={styles.select_filtro}
+                    >
                         <option value="">Selecciona un tipo de mascota</option>
                         {
                             tiposMascotas.map(tipo => (
@@ -95,9 +103,12 @@ export default function RutaActual({ tiposMascotas, sexosMascotas, tallasMascota
                         }
                     </select>
                 </div>
-                <div>
+                <div className={styles.contenedor_filtro}>
                     <label>Sexo de la mascota: </label>
-                    <select name="sexo">
+                    <select 
+                        name="sexo"
+                        className={styles.select_filtro}
+                    >
                         <option value="">Selecciona un sexo</option>
                         {
                             sexosMascotas.map(sexo => (
@@ -106,9 +117,12 @@ export default function RutaActual({ tiposMascotas, sexosMascotas, tallasMascota
                         }
                     </select>
                 </div>
-                <div>
+                <div className={styles.contenedor_filtro}>
                     <label>Talla de la mascota: </label>
-                    <select name="talla">
+                    <select 
+                        name="talla"
+                        className={styles.select_filtro}
+                    >
                         <option value="">Selecciona una talla</option>
                         {
                             tallasMascotas.map(talla => (
@@ -117,7 +131,12 @@ export default function RutaActual({ tiposMascotas, sexosMascotas, tallasMascota
                         }
                     </select>
                 </div>
-                <button type="submit">Buscar</button>
+                <div className={styles.contenedor_filtro}>
+                    <button 
+                    type="submit"
+                    className={styles.boton_buscar}
+                    >Buscar</button>
+                </div>
             </form>
         </div>
     );

@@ -1,9 +1,9 @@
 /* Variables globales */
 :root {
-  --background-color-home:ghostwhite  ;
-  --color-home: #171321;
+  --background-color-home: ghostwhite;
+  --color-home: rgb(12,28,181);
   --color-mascota: #DFE9F0;
-  --color-asociacion: #E1F8E4 ;
+  --color-asociacion: #E1F8E4;
   --font-size: 1.2rem;
   --mono: "Oxygen mono", monospace;
   --sans: Oxygen, sans-serif;
@@ -14,12 +14,18 @@
 
 html {
   box-sizing: border-box;
+  background: rgb(245,198,119);
+  background: -moz-linear-gradient(180deg, rgba(245,198,119,1) 60%, rgba(255,223,168,1) 100%);
+  background: -webkit-linear-gradient(180deg, rgba(245,198,119,1) 60%, rgba(255,223,168,1) 100%);
+  background: linear-gradient(180deg, rgba(245,198,119,1) 60%, rgba(255,223,168,1) 100%);
+  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr="#f5c677",endColorstr="#ffdfa8",GradientType=1); 
 }
 
 *,
 *::before,
 *::after {
   box-sizing: inherit;
+
 }
 
 body {
@@ -28,11 +34,14 @@ body {
   max-width: 1200px;
   font-size: var(--font-size);
   color: var(--color-home);
+  background-color: #fffff3;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
 }
 
 h1,
 h2,
 h3 {
-    margin: 0;
+  margin: 0;
 }
-

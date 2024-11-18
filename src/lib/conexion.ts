@@ -8,7 +8,7 @@ if (!conn) {
     host: 'localhost',
     database: 'asociaciones_de_rescate',
     password: 'deepblue123',
-    port: 5432
+    port: 5433
   });
 
 }

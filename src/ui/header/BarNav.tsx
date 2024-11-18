@@ -4,7 +4,7 @@ import { useState } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import styles from './barnav.module.css';
-import { Oxygen_Mono } from "next/font/google";
+
 
 
 const links = [
@@ -14,13 +14,13 @@ const links = [
     { nombre: 'Perfil', href: '/perfil' },
 ]
 
-const mono = Oxygen_Mono({ weight: '400', subsets: ["latin"] });
+
 
 
 export default function BarNav() {
 
     return (
-        <header className={mono.className}>
+        <header className={styles.header}>
             <nav className={styles.nav}>
                 <ul className={styles.nav__lista}>
                     <li>
