@@ -18,7 +18,7 @@ export default async function BarNavPerfil() {
 
             {objetoDatos.rol === 'administrador' && <NavegacionAdministrador />}
 
-            {objetoDatos.rol === 'usuario no verificado' && "Rellenar los campos y esperar a que un administrador verifique la información."}
+            {objetoDatos.rol === 'usuario no verificado' && <NavegacionUsuarioNoVerificado />}
 
         </nav>
     );
@@ -83,6 +83,18 @@ function NavegacionAdministrador() {
                         Asociaciones
                     </Link>
                 </li>
+                <li>
+                    <CerrarSesion />
+                </li>
+            </ul>
+        </nav>
+    );
+}
+
+function NavegacionUsuarioNoVerificado() {
+    return (
+        <nav className={styles.nav}>
+            <ul className={styles.nav__lista}>
                 <li>
                     <CerrarSesion />
                 </li>
