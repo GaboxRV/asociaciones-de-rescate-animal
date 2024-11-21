@@ -57,3 +57,24 @@ LIMIT 3 OFFSET 0;
 SELECT asociaciones.asociacion_id, asociaciones.nombre_asociacion FROM asociaciones JOIN usuarios ON asociaciones.asociacion_id = usuarios.asociacion_id WHERE usuarios.rol_usuario = 'usuario verificado'
 
 SELECT * FROM eventos;
+
+            SELECT 
+                asociaciones.* 
+            FROM asociaciones 
+            JOIN usuarios ON asociaciones.asociacion_id = usuarios.asociacion_id
+            JOIN alcaldias ON asociaciones.alcaldia_id = alcaldias.alcaldia_id 
+            WHERE 
+                usuarios.rol_usuario = 'usuario verificado' AND
+                alcaldias.nombre_alcaldia ILIKE '%%' AND
+                asociaciones.nombre_asociacion ILIKE '%%'
+            ORDER BY asociaciones.asociacion_id ASC
+			LIMIT 3 OFFSET 1;
+
+
+SELECT COUNT(*)
+            FROM asociaciones
+            JOIN alcaldias ON asociaciones.alcaldia_id = alcaldias.alcaldia_id
+            WHERE
+                usuarios.rol_usuario = 'usuario verificado' AND
+                alcaldias.nombre_alcaldia ILIKE '%%' AND
+                asociaciones.nombre_asociacion ILIKE '%%'

@@ -19,8 +19,10 @@ export default function FormularioEditarAsociacionUsuario({ asociacion, alcaldia
 
     return (
         <section className={styles.ficha}>
+
             <div className={styles.bloque_info}>
                 <form action={mandarInfo}>
+
                     <div className={styles.bloque_info_div}>
                         <label>Nombre:</label>
                         <input type="text" name="nombre_asociacion" defaultValue={asociacion.nombre_asociacion} />
@@ -36,14 +38,13 @@ export default function FormularioEditarAsociacionUsuario({ asociacion, alcaldia
                         </div>
                     </div>
 
-
                     <div className={styles.bloque_info_div}>
                         <label>Alcaldía:</label>
                         <select
                             name="alcaldia_asociacion"
                             defaultValue={alcaldia_id}
                         >
-                            <option value="">Selecciona una alcaldía</option>
+                            <option value="" disabled>Selecciona una alcaldía</option>
                             {
                                 alcaldias.map((alcaldia: Alcaldia) => (
                                     <option key={alcaldia.alcaldia_id} value={alcaldia.alcaldia_id}>
@@ -53,11 +54,21 @@ export default function FormularioEditarAsociacionUsuario({ asociacion, alcaldia
                             }
                         </select>
 
+                        <div id="error-alcaldia_asociacion">
+                            {estadoInfo.errores?.alcaldia_id &&
+                                estadoInfo.errores.alcaldia_id.map((error: string) => (
+                                    <p key={error}>
+                                        <small>{error}</small>
+                                    </p>
+                                ))
+                            }
+                        </div>
                     </div>
 
                     <div className={styles.bloque_info_div}>
                         <label>Dirección:</label>
                         <input type="text" name="direccion_asociacion" defaultValue={asociacion.direccion_asociacion} />
+
                         <div id="error-direccion_asociacion">
                             {estadoInfo.errores?.direccion_asociacion &&
                                 estadoInfo.errores.direccion_asociacion.map((error: string) => (
@@ -72,6 +83,7 @@ export default function FormularioEditarAsociacionUsuario({ asociacion, alcaldia
                     <div className={styles.bloque_info_div}>
                         <label>Teléfono:</label>
                         <input type="text" name="telefono_asociacion" defaultValue={asociacion.telefono_asociacion} />
+
                         <div id="error-telefono_asociacion">
                             {estadoInfo.errores?.telefono_asociacion &&
                                 estadoInfo.errores.telefono_asociacion.map((error: string) => (
@@ -86,6 +98,7 @@ export default function FormularioEditarAsociacionUsuario({ asociacion, alcaldia
                     <div className={styles.bloque_info_div}>
                         <label>Descripción:</label>
                         <textarea name="descripcion_asociacion" defaultValue={asociacion.descripcion_asociacion} />
+
                         <div id="error-descripcion_asociacion">
                             {estadoInfo.errores?.descripcion_asociacion &&
                                 estadoInfo.errores.descripcion_asociacion.map((error: string) => (
@@ -100,7 +113,6 @@ export default function FormularioEditarAsociacionUsuario({ asociacion, alcaldia
                     <button type="submit">Cambiar información</button>
 
                 </form>
-
             </div>
 
             <div className={styles.bloque_img}>
@@ -129,9 +141,7 @@ export default function FormularioEditarAsociacionUsuario({ asociacion, alcaldia
                             }
                         </div>
                     </div>
-
                 </form>
-
             </div>
         </section>
     );

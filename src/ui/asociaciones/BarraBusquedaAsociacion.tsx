@@ -6,11 +6,8 @@ import { useEffect, useState } from "react";
 import { Alcaldia, NombresAsociacion } from "@/lib/definiciones";
 import styles from "@/ui/mascotas/barraBusquedaMascota.module.css"
 
-export default function BarraBusquedaMascota({ tiposMascotas, sexosMascotas, tallasMascotas, alcaldias, ubicacionAlcaldia, nombres_asociaciones }: 
+export default function BarraBusquedaAsociacion({ alcaldias, ubicacionAlcaldia, nombres_asociaciones }: 
     { 
-        tiposMascotas: string[], 
-        sexosMascotas: string[], 
-        tallasMascotas: string[],
         alcaldias: Alcaldia[],
         ubicacionAlcaldia: string,
         nombres_asociaciones: NombresAsociacion[]
@@ -27,16 +24,10 @@ export default function BarraBusquedaMascota({ tiposMascotas, sexosMascotas, tal
         const params = new URLSearchParams(searchParams);
 
         const asociacion = (e.target as any).asociacion.value;
-        const tipo = (e.target as any).tipo.value;
-        const sexo = (e.target as any).sexo.value;
-        const talla = (e.target as any).talla.value;
 
         params.set('pagina', '1');
         params.set('ubicacion', selectedAlcaldia);
         params.set('asociacion', asociacion);
-        params.set('tipo', tipo);
-        params.set('sexo', sexo);
-        params.set('talla', talla);
 
         replace(`${pathname}?${params.toString()}`);
 
@@ -85,51 +76,6 @@ export default function BarraBusquedaMascota({ tiposMascotas, sexosMascotas, tal
                                 <option key={asociacion.asociacion_id} value={asociacion.nombre_asociacion}>
                                     {asociacion.nombre_asociacion}
                                 </option>
-                            ))
-                        }
-                    </select>
-                </div>
-
-                <div className={styles.contenedor_filtro}>
-                    <label>Tipo de mascota: </label>
-                    <select 
-                        name="tipo"
-                        className={styles.select_filtro}
-                    >
-                        <option value="">Selecciona un tipo de mascota</option>
-                        {
-                            tiposMascotas.map(tipo => (
-                                <option key={tipo} value={tipo}>{tipo}</option>
-                            ))
-                        }
-                    </select>
-                </div>
-
-                <div className={styles.contenedor_filtro}>
-                    <label>Sexo de la mascota: </label>
-                    <select 
-                        name="sexo"
-                        className={styles.select_filtro}
-                    >
-                        <option value="">Selecciona un sexo</option>
-                        {
-                            sexosMascotas.map(sexo => (
-                                <option key={sexo} value={sexo}>{sexo}</option>
-                            ))
-                        }
-                    </select>
-                </div>
-
-                <div className={styles.contenedor_filtro}>
-                    <label>Talla de la mascota: </label>
-                    <select 
-                        name="talla"
-                        className={styles.select_filtro}
-                    >
-                        <option value="">Selecciona una talla</option>
-                        {
-                            tallasMascotas.map(talla => (
-                                <option key={talla} value={talla}>{talla}</option>
                             ))
                         }
                     </select>

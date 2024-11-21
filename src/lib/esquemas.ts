@@ -66,14 +66,24 @@ export const EsquemaUsuario = z.object({
 export const EsquemaAsociacion = z.object({
     asociacion_id: z.string(),
     nombre_asociacion: z.string().min(5, "Ingrese un nombre de asociacion valido"),
-    telefono_asociacion: z.string(),
-    direccion_asociacion: z.string(),
+    telefono_asociacion: z.string().refine((val) => {
+        const telefonoRegex = /^55\d{8}$/;
+        return telefonoRegex.test(val);
+    },{
+        message: "Ingrese un número valido que inicie con 55"
+    }),
+    direccion_asociacion: z.string().min(5, "Ingrese una dirección valida"),
     puntuacion_asociacion: z.coerce.number(),
-    descripcion_asociacion: z.string(),
+    descripcion_asociacion: z.string().min(5, "Ingrese una descripción valida"),
     foto_asociacion: z.instanceof(File).refine(file => file.type.startsWith('image/'), {
         message: "El archivo debe ser una imagen"
     }),
-    alcaldia_id: z.string(),
+    alcaldia_id:  z.string().refine((val) => {
+        const id = parseInt(val, 10);
+        return id >= 1 && id <= 16;
+    }, {
+        message: "Seleccione una alcaldía válida"
+    }),
     rol_usuario: z.string()
 });
 

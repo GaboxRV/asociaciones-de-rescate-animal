@@ -267,7 +267,6 @@ export type prevEditarAsociacionInfoUsuario = {
         telefono_asociacion?: string[];
         descripcion_asociacion?: string[];
         foto_asociacion?: string[];
-
     };
     mensaje?: string | null;
 };

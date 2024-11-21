@@ -7,7 +7,7 @@ export default async function CartillaAsociacion(
 { id: string, nombre: string, puntuacion: number, foto: string})
 {
     return(
-        <article className={styles.asociacion}>
+        <article className={styles.cartilla}>
             <h3>{nombre}</h3>
             <p>Puntuación: {puntuacion}</p>
             <img src={`data:image/jpeg;base64,${foto}`} alt={`Foto de ${nombre}`} />

@@ -1,9 +1,14 @@
 .main{
     background-color: var(--background-color-home);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
 }
 
 .seccion_asociaciones{
     display: flex;
+    justify-content: space-around;
     flex-wrap: wrap;
     gap: 2rem;
 

@@ -1,15 +1,16 @@
 import styles from "@/ui/mascotas/page.module.css";
 import BarraBusquedaMascota from "@/ui/mascotas/BarraBusquedaMascota";
-import { fetchNombresAsociacionesVerificadas, fetchTiposMascotas, fetchSexosMascotas, fetchTallasMascotas, fetchAlcaldias} from "@/lib/data";
+import { fetchNombresAsociacionesVerificadas, fetchTiposMascotas, fetchSexosMascotas, fetchTallasMascotas, fetchAlcaldias, fetchPaginasMascotas} from "@/lib/data";
 import TablaMascotas from "@/ui/mascotas/TablaMascotas";
 import ConseguirUbicacion from "@/ui/ConseguirUbicacion";
 import { NombresAsociacion } from "@/lib/definiciones";
+import Paginacion from "@/ui/mascotas/Paginacion";
 
 export default async function Mascotas({
     searchParams,
   }: {
     searchParams?: {
-      page?: string;
+      pagina?: string;
       ubicacion?: string;
       asociacion?: string;
       tipo?: string;
@@ -28,12 +29,15 @@ export default async function Mascotas({
     const tipo = searchParams?.tipo || '';
     const sexo = searchParams?.sexo || '';
     const talla = searchParams?.talla || '';
-    const paginaActual = Number(searchParams?.page) || 1;
+    const paginaActual = Number(searchParams?.pagina) || 1;
+    const totalPaginas = await fetchPaginasMascotas(ubicacion, asociacion, tipo, sexo, talla, paginaActual);
 
     return (
         <main className={styles.main}>
             <ConseguirUbicacion />
+            
             <h2>Página de mascotas</h2>
+            
             <BarraBusquedaMascota 
                 tiposMascotas={tipos_mascotas}
                 sexosMascotas={sexos_mascotas}
@@ -42,6 +46,7 @@ export default async function Mascotas({
                 ubicacionAlcaldia={ubicacion}
                 nombres_asociaciones={nombres_asociaciones}
             />
+            
             <section className={styles.seccion_mascotas}>
                 <TablaMascotas 
                     ubicacion={ubicacion}
@@ -52,6 +57,10 @@ export default async function Mascotas({
                     paginaActual={paginaActual}
                 />
             </section>
+
+            <div>
+              <Paginacion totalPaginas={totalPaginas} />
+            </div>
         </main>
     );
 }

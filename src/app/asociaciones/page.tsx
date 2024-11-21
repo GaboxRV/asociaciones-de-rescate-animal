@@ -1,30 +1,49 @@
 
-import { fetchAsociacionesVerificadas } from "@/lib/data";
-import { Asociacion } from "@/lib/definiciones";
+import { fetchNombresAsociacionesVerificadas, fetchAlcaldias, fetchPaginasAsociaciones } from "@/lib/data";
+import { NombresAsociacion } from "@/lib/definiciones";
 import styles from "@/ui/asociaciones/page.module.css";
-import CartillaAsociacion from "@/ui/asociaciones/CartillaAsociacion";
+import BarraBusquedaAsociacion from "@/ui/asociaciones/BarraBusquedaAsociacion";
+import Paginacion from "@/ui/mascotas/Paginacion";
+import TablaAsociaciones from "@/ui/asociaciones/TablaAsociaciones";
 
-export default async function Asociaciones(){
+export default async function Asociaciones({
+    searchParams,
+}: {
+    searchParams?: {
+        pagina?: string;
+        ubicacion?: string;
+        asociacion?: string;
+    };
+}) {
 
-    const respuesta: Asociacion[] = await fetchAsociacionesVerificadas();
+    
+    const nombres_asociaciones: NombresAsociacion[] = await fetchNombresAsociacionesVerificadas();
+    const alcaldias = await fetchAlcaldias();
+    const ubicacion = searchParams?.ubicacion || '';
+    const asociacion = searchParams?.asociacion || '';
+    const paginaActual = Number(searchParams?.pagina) || 1;
+    const totalPaginas = await fetchPaginasAsociaciones(ubicacion, asociacion, paginaActual);
 
     return (
         <main className={styles.main}>
             <h2>Página de asociaciones</h2>
+            <BarraBusquedaAsociacion
+                alcaldias={alcaldias}
+                ubicacionAlcaldia={ubicacion}
+                nombres_asociaciones={nombres_asociaciones}
+            />
+
             <section className={styles.seccion_asociaciones}>
-                {
-                    respuesta.map((asociacion: Asociacion) => (
-                        
-                        <CartillaAsociacion
-                            key={asociacion.asociacion_id}
-                            id={asociacion.asociacion_id}
-                            nombre={asociacion.nombre_asociacion}
-                            puntuacion={asociacion.puntuacion_asociacion}
-                            foto={asociacion.foto_asociacion}
-                        />
-                    ))
-                }
+                <TablaAsociaciones
+                    ubicacion={ubicacion}
+                    asociacion={asociacion} 
+                    paginaActual={paginaActual}
+                />
             </section>
+
+            <div>
+                <Paginacion totalPaginas={totalPaginas} />
+            </div>
         </main>
     );
 }

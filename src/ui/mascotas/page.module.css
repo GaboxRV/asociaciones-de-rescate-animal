@@ -1,6 +1,9 @@
 
 .main{
     background-color:var(--background-color-home);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
 }
 
 .seccion_mascotas{
@@ -9,56 +12,3 @@
     gap: 2rem;
     padding: 2rem;
 }
-
-.form_busqueda{
-    width: 100%;
-    max-width: 100vw;
-    border-top: 0.1rem solid rgba(85, 112, 153, 0.5);
-    border-bottom: 0.1rem solid rgba(85, 112, 153, 0.5);
-    background-color: rgba(223, 223, 231, 0.3);
-    padding: 0.5rem 1rem 0.5rem 1rem;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    flex-wrap: wrap;
-    font-size: 1rem;
-}
-
-.contenedor_filtro{
-    margin: 0;
-    padding: 0.5rem;
-    flex: 1 1 30%;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    text-wrap: nowrap;
-}
-
-.select_filtro{
-    font-family: inherit;
-    font-size: 0.7rem;
-    height: 1.7rem;
-    padding: 0.2rem 1vw;
-    text-align: center;
-    margin: 0.2rem;
-    border: none;
-    border-radius: 0.1rem;
-    color: darkslateblue;
-    background-color: rgba(200, 200, 255, 0.6);
-
-    
-}
-
-.select_filtro option{
-    font-family: inherit;
-    font-size: 1rem;
-    color: darkslateblue;
-    background-color: rgba(200, 200, 255, 0.6);
-}
-
-.boton_buscar{
-    font-family: inherit;
-    font-size: 1rem;
-}
-

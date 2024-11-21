@@ -1,6 +1,18 @@
 
-.asociacion {
+.cartilla{
     background-color: var(--color-asociacion);
     padding: 1rem;
+    border-radius: 20px;
+    width: 300px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    gap: 1rem;
+}
+
+.cartilla img{
+    width: 100%;
+    object-fit: cover;
+    height: 300px;
     border-radius: 20px;
 }

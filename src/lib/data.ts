@@ -79,6 +79,36 @@ export async function fetchMascotasFiltradas(ubicacion: string, asociacion: stri
 }
 
 /**
+ * Contar cuantas paginas hay de resultados en mascotas
+ */
+
+export async function fetchPaginasMascotas(ubicacion: string, asociacion: string, tipo: string, sexo: string, talla: string, pagina: number) {
+    noStore();
+
+    try {
+        const count = await conn.query(
+            `SELECT COUNT(*)
+            FROM mascotas
+            JOIN asociaciones ON mascotas.asociacion_id = asociaciones.asociacion_id
+            JOIN alcaldias ON asociaciones.alcaldia_id = alcaldias.alcaldia_id
+            WHERE
+                alcaldias.nombre_alcaldia ILIKE '%${ubicacion}%' AND
+                mascotas.tipo_mascota::text ILIKE '%${tipo}%' AND
+                mascotas.sexo_mascota::text ILIKE '%${sexo}%' AND
+                mascotas.talla_mascota::text ILIKE '%${talla}%' AND
+                asociaciones.nombre_asociacion ILIKE '%${asociacion}%';`
+        );
+
+        const paginasTotales = Math.ceil(Number(count.rows[0].count) / OBJETOS_POR_PAGINA);
+        return paginasTotales;
+
+    } catch (error) {
+        console.error("Error al obtener el numero de paginas: ", error);
+        throw new Error('Error al obtener el numero de paginas');
+    }
+}
+
+/**
  * Recuperar las mascotas de una asociación en específico.
  */
 export async function fetchMascotasPorAsociacion(id: string) {
@@ -162,10 +192,25 @@ export async function fetchNombresAsociacionesVerificadas() {
     }
 }
 
-export async function fetchAsociacionesVerificadas() {
+export async function fetchAsociacionesFiltradas(ubicacion: string, asociacion: string, pagina: number) {
     noStore();
+
+    const offset = (pagina - 1) * OBJETOS_POR_PAGINA;
+    
     try {
-        const respuesta = await conn.query("SELECT * FROM asociaciones JOIN usuarios ON asociaciones.asociacion_id = usuarios.asociacion_id WHERE usuarios.rol_usuario = 'usuario verificado'");
+        const respuesta = await conn.query(`
+            SELECT 
+                asociaciones.* 
+            FROM asociaciones 
+            JOIN usuarios ON asociaciones.asociacion_id = usuarios.asociacion_id
+            JOIN alcaldias ON asociaciones.alcaldia_id = alcaldias.alcaldia_id 
+            WHERE 
+                usuarios.rol_usuario = 'usuario verificado' AND
+                alcaldias.nombre_alcaldia ILIKE '%${ubicacion}%' AND
+                asociaciones.nombre_asociacion ILIKE '%${asociacion}%'
+            ORDER BY asociaciones.asociacion_id ASC
+            LIMIT ${OBJETOS_POR_PAGINA} OFFSET ${offset};`
+        );
 
         const datos: Asociacion[] = respuesta.rows;
 
@@ -176,13 +221,43 @@ export async function fetchAsociacionesVerificadas() {
                 datos[index].foto_asociacion = foto;
             }
         }
-
+        
         return datos;
     } catch (error) {
         console.error("Error al obtener las asociaciones: ", error);
         throw new Error("Error al obtener las asociaciones");
     }
 }
+
+
+/**
+ * Contar cuantas paginas hay de resultados en asociaciones
+ */
+
+export async function fetchPaginasAsociaciones(ubicacion: string, asociacion: string, pagina: number) {
+    noStore();
+
+    try {
+        const count = await conn.query(
+            `SELECT COUNT(*)
+            FROM asociaciones
+            JOIN alcaldias ON asociaciones.alcaldia_id = alcaldias.alcaldia_id
+            JOIN usuarios ON asociaciones.asociacion_id = usuarios.asociacion_id
+            WHERE
+                usuarios.rol_usuario = 'usuario verificado' AND
+                alcaldias.nombre_alcaldia ILIKE '%${ubicacion}%' AND
+                asociaciones.nombre_asociacion ILIKE '%${asociacion}%'`
+        );
+
+        const paginasTotales = Math.ceil(Number(count.rows[0].count) / OBJETOS_POR_PAGINA);
+        return paginasTotales;
+
+    } catch (error) {
+        console.error("Error al obtener el numero de paginas: ", error);
+        throw new Error('Error al obtener el numero de paginas');
+    }
+}
+
 
 export async function fetchAsociacionPorId(id: string) {
     noStore();
