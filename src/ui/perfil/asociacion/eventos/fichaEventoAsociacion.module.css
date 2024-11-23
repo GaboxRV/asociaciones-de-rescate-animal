@@ -1,0 +1,73 @@
+.ficha {
+    display: flex;
+    align-items: center;
+    background-color: aquamarine;
+    width: 950px;
+    padding: 2rem;
+}
+
+.bloque_info {
+    margin: 1rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    width: 450px;
+    word-break: break-all;
+}
+
+.bloque_botones{
+    display: flex;
+    justify-content: space-around;
+    width: 300px;
+}
+
+.bloque_img {
+    width: 500px;
+}
+
+.ficha_img {
+    width: 100%;
+    object-fit: cover;
+    height: 300px;
+    border-radius: 20px;
+}
+
+@media screen and (max-width: 1024px) {
+    .bloque_img{
+        width: 400px;
+    }
+
+}
+
+@media screen and (max-width: 600px) {
+    .ficha {
+        flex-direction: column;
+        width: 400px;
+    }
+
+    .formulario_img {
+        display: flex;
+        flex-direction: column;
+    }
+
+    .bloque_img{
+        width: 300px;
+    }
+
+    .ficha_img {
+        width: 100%;
+        object-fit: cover;
+        height: 300px;
+        border-radius: 20px;
+    }
+
+    .bloque_info{
+        width: 350px;
+    }
+
+    .informacion{
+        width: 250px;
+    }
+
+}

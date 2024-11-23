@@ -1,0 +1,33 @@
+
+.pagina{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    word-break: break-all;
+    margin: 1rem;
+    gap: 1rem;
+}
+
+.bloque_img {
+    width: 500px;
+}
+
+.ficha_img {
+    width: 100%;
+    object-fit: cover;
+    height: 300px;
+    border-radius: 20px;
+}
+
+.boton{
+    width: 150px;
+    height: 30px;
+    font-size: 1rem;
+}
+
+@media screen and (max-width: 600px) {
+    .bloque_img{
+        width: 300px;
+    }
+}

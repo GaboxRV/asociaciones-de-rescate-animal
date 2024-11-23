@@ -1,5 +1,5 @@
 import Link from "next/link";
-import styles from "./CartillaAnimal.module.css"
+import styles from "./cartillaAnimal.module.css"
 
 export default async function CartillaAnimal(
     { mascota_id, nombre, edad, sexo, tipo, talla, asociacion_id, nombre_asociacion, foto }:
@@ -10,9 +10,10 @@ export default async function CartillaAnimal(
             <div className={styles.contenedor_imagen}>
                 <img src={`data:image/jpeg;base64,${foto}`} alt={nombre} />
             </div>
+
             <div className={styles.contenedor_informacion}>
-                <h4>{nombre}</h4>
-                <p>Edad: {edad} meses</p>
+                <h4 className={styles.nombre}>{nombre}</h4>
+                <label>Edad: {edad} meses</label>
                 <p>Sexo: {sexo}</p>
                 <p>Tipo de animal: {tipo}</p>
                 <p>Talla: {talla}</p>
@@ -22,9 +23,7 @@ export default async function CartillaAnimal(
                         {nombre_asociacion}
                     </Link>
                 </label>
-
             </div>
-
         </article>
     );
 }

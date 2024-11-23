@@ -47,7 +47,6 @@ export default function FormularioRegistroMascota({ sexos_mascota, tipos_mascota
                 </div>
             </div>
 
-
             <div className={styles.bloque_info_div}>
                 <label>
                     Sexo:
@@ -79,7 +78,6 @@ export default function FormularioRegistroMascota({ sexos_mascota, tipos_mascota
                     }
                 </div>
             </div>
-
 
             <div className={styles.bloque_info_div}>
                 <label>

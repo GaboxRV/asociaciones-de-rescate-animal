@@ -1,10 +1,9 @@
 'use client';
 
-import styles from "@/ui/perfil/formularioMascota.module.css";
+import styles from "@/ui/perfil/asociacion/eventos/registrar/formularioRegistroEvento.module.css";
 import { useFormState } from 'react-dom';
 import { crearEvento } from "@/lib/actions";
 import { Alcaldia } from "@/lib/definiciones";
-
 
 export default function FormularioRegistroDeEvento({ asociacion_id, alcaldias }: { asociacion_id: string, alcaldias: Alcaldia[] }) {
 
@@ -14,12 +13,9 @@ export default function FormularioRegistroDeEvento({ asociacion_id, alcaldias }:
 
     return (
         <form action={mandar} className={styles.formulario}>
-
-            <div>
-                <label>
-                    Nombre:
-                    <input type="text" name="nombre_evento" />
-                </label>
+            <div className={styles.div_formulario}>
+                <label>Nombre:</label>
+                <input type="text" name="nombre_evento" />
 
                 <div id="error-nombre_evento">
                     {estado.errores?.nombre_evento &&
@@ -32,11 +28,9 @@ export default function FormularioRegistroDeEvento({ asociacion_id, alcaldias }:
                 </div>
             </div>
 
-            <div>
-                <label>
-                    Dirección:
-                    <input type="text" name="direccion_evento" />
-                </label>
+            <div className={styles.div_formulario}>
+                <label>Dirección:</label>
+                <input type="text" name="direccion_evento" />
 
                 <div id="error-direccion_evento">
                     {estado.errores?.direccion_evento &&
@@ -49,11 +43,9 @@ export default function FormularioRegistroDeEvento({ asociacion_id, alcaldias }:
                 </div>
             </div>
 
-            <div>
-                <label>
-                    Descripción:
-                    <textarea name="descripcion_evento" />
-                </label>
+            <div className={styles.div_formulario}>
+                <label>Descripción:</label>
+                <textarea name="descripcion_evento" />
 
                 <div id="error-descripcion_evento">
                     {estado.errores?.descripcion_evento &&
@@ -66,10 +58,8 @@ export default function FormularioRegistroDeEvento({ asociacion_id, alcaldias }:
                 </div>
             </div>
 
-            <div>
-                <label>
-                    Alcaldía:
-                </label>
+            <div className={styles.div_formulario}>
+                <label>Alcaldía:</label>
                 <select
                     name="alcaldia_evento"
                 >
@@ -85,7 +75,7 @@ export default function FormularioRegistroDeEvento({ asociacion_id, alcaldias }:
 
             </div>
 
-            <div>
+            <div className={styles.div_formulario}>
                 <input type="file" name="foto_evento" />
 
                 <div id="error-foto_evento">
@@ -99,8 +89,11 @@ export default function FormularioRegistroDeEvento({ asociacion_id, alcaldias }:
                 </div>
             </div>
 
-
-            <input type="submit" value="Enviar" />
+            <input 
+                type="submit" 
+                value="Registrar"
+                className={styles.boton} 
+            />
         </form>
     );
 }

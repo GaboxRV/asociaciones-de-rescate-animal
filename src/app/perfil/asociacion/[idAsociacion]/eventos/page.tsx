@@ -1,6 +1,7 @@
 import FichaEventoAsociacion from "@/ui/perfil/asociacion/eventos/FichaEventoAsociacion";
 import { fetchEventosPorAsociacion } from "@/lib/data";
 import { Evento } from "@/lib/definiciones";
+import styles from "@/ui/perfil/asociacion/eventos/page.module.css"
 
 export default async function Eventos({ params } : { params: { idAsociacion: string}}) {
     const { idAsociacion } = params;
@@ -8,7 +9,7 @@ export default async function Eventos({ params } : { params: { idAsociacion: str
     const eventos: Evento[] = await fetchEventosPorAsociacion(idAsociacion);
 
     return (
-        <div>
+        <main className={styles.contenedor}>
             <h1>Eventos</h1>
             {
                 eventos.map((evento) => (
@@ -26,6 +27,6 @@ export default async function Eventos({ params } : { params: { idAsociacion: str
             }
 
             
-        </div>
+        </main>
     );
 }
