@@ -1,6 +1,6 @@
 import { fetchMascota, fetchSexosMascotas, fetchTiposMascotas, fetchTallasMascotas } from "@/lib/data";
 import { MascotaEditar } from "@/lib/definiciones";
-import FormularioEditarMascota from "@/ui/perfil/FormularioEditarMascota";
+import FormularioEditarMascota from "@/ui/perfil/asociacion/mascotas/editar/FormularioEditarMascota";
 import styles from "@/ui/perfil/asociacion/mascotas/editar/page.module.css"
 
 export default async function EditarMascota({ params }: { params: { idMascota: string, idAsociacion: string } }) {

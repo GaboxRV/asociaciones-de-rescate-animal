@@ -11,22 +11,26 @@ export default function FormularioLogin() {
     <form action={mandar} className={style.formulario}>
       <div className={style.bloque}>
         <label>Usuario:</label>
-        <input 
-          type="text" 
-          name="nombre_usuario" 
-          placeholder='Correo o Teléfono' 
+        <input
+          type="text"
+          name="nombre_usuario"
+          placeholder='Correo o Teléfono'
           className={style.campo}
         />
       </div>
 
       <div className={style.bloque}>
         <label>Contraseña:</label>
-        <input 
-          type="text" 
-          name="contrasena" 
+        <input
+          type="password"
+          name="contrasena"
           placeholder='Ingresa tu contraseña'
-          className={style.campo} 
+          className={style.campo}
         />
+      </div>
+
+      <div>
+        <small>{mensaje}</small>
       </div>
 
       <button>Enviar</button>

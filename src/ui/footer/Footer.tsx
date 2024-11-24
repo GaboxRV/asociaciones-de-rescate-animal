@@ -1,26 +1,27 @@
 import styles from './footer.module.css';
-import Link from 'next/link';
 
 export default function Footer(){
     return(
         <footer className={styles.footer}>
-            <h2 className={styles.footer__nombre}>Desarrollador &middot; Gabriel Ramirez</h2>
+            <h2 className={styles.footer__nombre}>Desarrollador &middot; Carlos Gabriel Ramirez Victoria</h2>
             <ul className={styles.footer__lista}>
                 <li>
-                    <Link 
+                    <a 
                         className={styles.footer__link}
+                        target='_blank'
                         href="https://www.linkedin.com/in/gabriel-rv/" 
                     >
                         Linkedin
-                    </Link>
+                    </a>
                 </li>
                 <li>
-                    <Link 
+                    <a 
                         className={styles.footer__link}
+                        target='_blank'
                         href="https://github.com/GaboxRV"
                     >
                         Github
-                    </Link>
+                    </a>
                 </li>
             </ul>
             <p className={styles.footer__derechos}>

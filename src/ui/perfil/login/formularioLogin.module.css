@@ -6,6 +6,10 @@
     gap: 2rem;
 }
 
+.formulario small{
+    color: red;
+}
+
 .bloque{
     display: flex;
     flex-direction: column;

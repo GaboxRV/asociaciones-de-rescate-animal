@@ -11,9 +11,8 @@ export default async function Login() {
             </section>
 
             <section className={style.link}>
-                
                 <Link href={'/registro'}>
-                <small>¿No tienes una cuenta? Registrate</small>
+                    <small>¿No tienes una cuenta? Registrate</small>
                 </Link>
             </section>
         </main>

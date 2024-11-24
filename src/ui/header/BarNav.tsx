@@ -14,9 +14,6 @@ const links = [
     { nombre: 'Perfil', href: '/perfil' },
 ]
 
-
-
-
 export default function BarNav() {
 
     return (
@@ -24,7 +21,7 @@ export default function BarNav() {
             <nav className={styles.nav}>
                 <ul className={styles.nav__lista}>
                     <li>
-                        <h1 className={styles.header__titulo}>Asociaciones de rescate</h1>
+                        <h1 className={styles.header__titulo}>Asociaciones de rescate animal</h1>
                     </li>
                     {
                         links.map((link) => (

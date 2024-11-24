@@ -2,7 +2,7 @@
 
 import { editarMascotaInfo, editarMascotaFoto } from "@/lib/actions";
 import { useFormState } from 'react-dom';
-import styles from "@/ui/perfil/formularioEditarMascota.module.css"
+import styles from "@/ui/perfil/asociacion/mascotas/editar/formularioEditarMascota.module.css"
 
 export default function FormularioEditarMascota(
     { mascota_id, asociacion_id, nombre, edad, sexo, tipo, talla, foto, sexos_mascota, tipos_mascota, tallas_mascota }:

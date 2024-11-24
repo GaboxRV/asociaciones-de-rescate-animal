@@ -109,12 +109,27 @@ export async function fetchPaginasMascotas(ubicacion: string, asociacion: string
 }
 
 /**
- * Recuperar las mascotas de una asociación en específico.
+ * Recuperar las mascotas de una asociación en específico con filtro.
  */
-export async function fetchMascotasPorAsociacion(id: string) {
+export async function fetchMascotasAsociacionFiltradas(asociacion_id: string, tipo: string, sexo: string, talla: string, pagina: number) {
     noStore();
+    
+    const offset = (pagina - 1) * OBJETOS_POR_PAGINA;
+
     try {
-        const respuesta = await conn.query("SELECT * FROM mascotas where asociacion_id = $1", [id]);
+        const respuesta = await conn.query(
+            `SELECT 
+                mascotas.*
+            FROM mascotas
+            JOIN asociaciones ON mascotas.asociacion_id = asociaciones.asociacion_id
+            WHERE
+                mascotas.tipo_mascota::text ILIKE '%${tipo}%' AND
+                mascotas.sexo_mascota::text ILIKE '%${sexo}%' AND
+                mascotas.talla_mascota::text ILIKE '%${talla}%' AND
+                mascotas.asociacion_id::text ILIKE '%${asociacion_id}%'
+            ORDER BY mascotas.mascota_id ASC
+            LIMIT ${OBJETOS_POR_PAGINA} OFFSET ${offset};`
+        )
 
         const datos: MascotaAsociacion[] = respuesta.rows;
 
@@ -128,8 +143,36 @@ export async function fetchMascotasPorAsociacion(id: string) {
         return datos;
 
     } catch (error) {
-        console.error("Error al obtener las mascotas: ", error);
-        throw new Error('Error al obtener las mascotas');
+        console.error("Error al obtener las mascotas dentro de la asociacion: ", error);
+        throw new Error('Error al obtener las mascotas dentro de la asociacion');
+    }
+}
+
+/**
+ * Contar las mascotas de una asociación en específico con filtro.
+ */
+export async function fetchPaginasMascotasAsociacion(asociacion_id: string, tipo: string, sexo: string, talla: string, pagina: number) {
+    noStore();
+    
+    try {
+        const count = await conn.query(
+            `SELECT COUNT(*)
+            FROM mascotas
+            JOIN asociaciones ON mascotas.asociacion_id = asociaciones.asociacion_id
+            WHERE
+                mascotas.tipo_mascota::text ILIKE '%${tipo}%' AND
+                mascotas.sexo_mascota::text ILIKE '%${sexo}%' AND
+                mascotas.talla_mascota::text ILIKE '%${talla}%' AND
+                mascotas.asociacion_id::text ILIKE '%${asociacion_id}%';`
+        )
+
+        const paginasTotales = Math.ceil(Number(count.rows[0].count) / OBJETOS_POR_PAGINA);
+
+        return paginasTotales;
+
+    } catch (error) {
+        console.error("Error al obtener el numero de paginas en mascotas dentro de la asociacion: ", error);
+        throw new Error('Error al obtener el numero de paginas en mascotas dentro de la asociacion');
     }
 }
 
@@ -228,7 +271,6 @@ export async function fetchAsociacionesFiltradas(ubicacion: string, asociacion: 
         throw new Error("Error al obtener las asociaciones");
     }
 }
-
 
 /**
  * Contar cuantas paginas hay de resultados en asociaciones
@@ -397,10 +439,20 @@ export async function fetchEventos() {
     }
 }
 
-export async function fetchEventosPorAsociacion(asociacion_id: string) {
+export async function fetchEventosPorAsociacionFiltrados(asociacion_id: string, pagina: number) {
     noStore();
+
+    const offset = (pagina - 1) * OBJETOS_POR_PAGINA;
+
     try {
-        const respuesta = await conn.query("SELECT * FROM eventos WHERE asociacion_id = $1", [asociacion_id]);
+        const respuesta = await conn.query(
+            `SELECT * 
+            FROM eventos 
+            WHERE 
+                eventos.asociacion_id::text ILIKE '%${asociacion_id}%'
+            ORDER BY eventos.evento_id ASC
+            LIMIT ${OBJETOS_POR_PAGINA} OFFSET ${offset};`
+        );
 
         const datos = respuesta.rows
 
@@ -411,12 +463,28 @@ export async function fetchEventosPorAsociacion(asociacion_id: string) {
                 datos[index].foto_evento = foto;
             }
         }
+
         return datos;
     } catch (error) {
         console.error("Error al obtener los eventos: ", error);
         throw new Error("Error al obtener los eventos");
     }
 }
+
+export async function fetchPaginasEventosPorAsociacion(asociacion_id: string) {
+    noStore();
+    try {
+        const count = await conn.query("SELECT COUNT(*) FROM eventos WHERE asociacion_id = $1", [asociacion_id]);
+
+        const paginasTotales = Math.ceil(Number(count.rows[0].count) / OBJETOS_POR_PAGINA);
+        return paginasTotales;
+      
+    } catch (error) {
+        console.error("Error al obtener el numero de paginas para eventos: ", error);
+        throw new Error("Error al obtener el numero de paginas para eventos");
+    }
+}
+
 
 export async function fetchEventoPorID(evento_id: string) {
     noStore();

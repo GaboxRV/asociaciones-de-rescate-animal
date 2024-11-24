@@ -654,7 +654,7 @@ export async function authenticate(prevState: string | undefined, formData: Form
 
             switch (error.type) {
                 case 'CredentialsSignin':
-                    return 'Credenciales invalidas';
+                    return 'Usuario Y/O Contraseña incorrectas';
                 default:
                     return 'Algo salio mal..';
             }

@@ -19,7 +19,6 @@ export default function FormularioEditarAsociacionUsuario({ asociacion, alcaldia
 
     return (
         <section className={styles.ficha}>
-
             <div className={styles.bloque_info}>
                 <form action={mandarInfo}>
 

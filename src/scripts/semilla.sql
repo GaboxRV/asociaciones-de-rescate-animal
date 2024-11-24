@@ -78,3 +78,20 @@ SELECT COUNT(*)
                 usuarios.rol_usuario = 'usuario verificado' AND
                 alcaldias.nombre_alcaldia ILIKE '%%' AND
                 asociaciones.nombre_asociacion ILIKE '%%'
+
+SELECT 
+                mascotas.*
+            FROM mascotas
+            JOIN asociaciones ON mascotas.asociacion_id = asociaciones.asociacion_id
+            WHERE
+                mascotas.tipo_mascota::text ILIKE '%%' AND
+                mascotas.sexo_mascota::text ILIKE '%%' AND
+                mascotas.talla_mascota::text ILIKE '%%' AND
+                mascotas.asociacion_id::text ILIKE '%2%'
+            ORDER BY mascotas.mascota_id ASC;
+
+
+SELECT * 
+             FROM eventos 
+             WHERE 
+                eventos.asociacion_id::text ILIKE '%1%';

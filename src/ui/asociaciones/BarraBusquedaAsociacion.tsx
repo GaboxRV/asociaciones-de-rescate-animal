@@ -4,7 +4,7 @@ import { useSearchParams, usePathname, useRouter } from "next/navigation";
 import { getCookie } from "@/ui/ConseguirUbicacion";
 import { useEffect, useState } from "react";
 import { Alcaldia, NombresAsociacion } from "@/lib/definiciones";
-import styles from "@/ui/mascotas/barraBusquedaMascota.module.css"
+import styles from "@/ui/barraBusqueda.module.css"
 
 export default function BarraBusquedaAsociacion({ alcaldias, ubicacionAlcaldia, nombres_asociaciones }: 
     { 

@@ -1,9 +1,9 @@
 'use client';
 
-import styles from "./formularioUsuario.module.css";
 import { crearUsuario } from "@/lib/actions";
 import { useFormState } from "react-dom";
 import { Alcaldia } from "@/lib/definiciones";
+import styles from "@/ui/perfil/registrar/formularioRegistroDeUsuario.module.css"
 
 export default function FormularioRegistroDeUsuario({ alcaldias }: { alcaldias: Alcaldia[] }) {
 
@@ -14,8 +14,8 @@ export default function FormularioRegistroDeUsuario({ alcaldias }: { alcaldias: 
         <>
             <form action={mandar} className={styles.formulario}>
 
-                <section>
-                    <div>
+                <div>
+                    <div className={styles.div_campo}>
                         <label> Nombre de usuario: </label>
                         <input
                             type="text"
@@ -35,10 +35,10 @@ export default function FormularioRegistroDeUsuario({ alcaldias }: { alcaldias: 
                             ))
                         }
                     </div>
-                </section>
+                </div>
 
-                <section>
-                    <div>
+                <div >
+                    <div className={styles.div_campo}>
                         <label> Contraseña: </label>
                         <input
                             type="text"
@@ -60,9 +60,9 @@ export default function FormularioRegistroDeUsuario({ alcaldias }: { alcaldias: 
                         }
                     </div>
 
-                </section>
-                <section>
-                    <div>
+                </div>
+                <div>
+                    <div className={styles.div_campo}>
                         <label> Nombre de la asociacion: </label>
                         <input
                             type="text"
@@ -80,10 +80,10 @@ export default function FormularioRegistroDeUsuario({ alcaldias }: { alcaldias: 
                             ))
                         }
                     </div>
-                </section>
+                </div>
 
-                <section>
-                    <div>
+                <div>
+                    <div className={styles.div_campo}>
                         <label> Alcaldía: </label>
                         <select
                             name="alcaldia_asociacion"
@@ -109,12 +109,11 @@ export default function FormularioRegistroDeUsuario({ alcaldias }: { alcaldias: 
                         }
                     </div>
 
-                </section>
-                <section>
+                </div>
+                <div>
                     <input
                         type="file"
                         name="foto_asociacion"
-
                     />
 
                     <div id="error-foto_asociacion">
@@ -126,9 +125,13 @@ export default function FormularioRegistroDeUsuario({ alcaldias }: { alcaldias: 
                             ))
                         }
                     </div>
-                </section>
+                </div>
 
-                <input type="submit" value="Enviar" />
+                <input 
+                    type="submit" 
+                    value="Enviar" 
+                    className={styles.boton}
+                />
             </form>
 
             <div>

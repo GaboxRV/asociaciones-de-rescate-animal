@@ -43,7 +43,7 @@ CREATE TABLE IF NOT EXISTS asociaciones(
 
 CREATE TABLE IF NOT EXISTS eventos (
     evento_id SERIAL PRIMARY KEY,
-    nombre_evento CHARACTER VARYING(255) UNIQUE NOT NULL,
+    nombre_evento CHARACTER VARYING(255) NOT NULL,
 	direccion_evento CHARACTER VARYING(255) NOT NULL,
 	descripcion_evento CHARACTER VARYING(255) NOT NULL,
 	foto_evento BYTEA NOT NULL

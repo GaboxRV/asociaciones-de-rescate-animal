@@ -1,32 +1,50 @@
-import { fetchMascotasPorAsociacion } from "@/lib/data";
-import { MascotaAsociacion } from "@/lib/definiciones";
-import CartillaMascotaAsociacion from "@/ui/perfil/asociacion/mascotas/CartillaMascotaAsociacion";
 import styles from "@/ui/perfil/asociacion/mascotas/page.module.css";
+import TablaMascotasPerfil from "@/ui/perfil/asociacion/mascotas/TablaMascotasPerfil";
+import BarraBusquedaMascotaAsociacion from "@/ui/perfil/asociacion/mascotas/BarraBusquedaMascotaAsociacion";
+import { fetchTiposMascotas, fetchSexosMascotas, fetchTallasMascotas, fetchPaginasMascotasAsociacion } from "@/lib/data";
+import Paginacion from "@/ui/mascotas/Paginacion";
 
-export default async function MascotasAsociacion({ params } : { params: { idAsociacion: string} }){
+export default async function MascotasAsociacion({ params, searchParams } 
+    : { params: { idAsociacion: string}, searchParams?: {
+    pagina?: string;
+    tipo?: string;
+    sexo?: string;
+    talla?: string;
+  }; }){
+
     const asociacion_id = params.idAsociacion;
+    const tipo = searchParams?.tipo || '';
+    const sexo = searchParams?.sexo || '';
+    const talla = searchParams?.talla || '';
+    const paginaActual = Number(searchParams?.pagina) || 1;
 
-    const mascotas : MascotaAsociacion[] = await fetchMascotasPorAsociacion(asociacion_id);
+    const tipos_mascotas: string[] = await fetchTiposMascotas();
+    const sexos_mascotas = await fetchSexosMascotas();
+    const tallas_mascotas = await fetchTallasMascotas();
+    const totalPaginas = await fetchPaginasMascotasAsociacion(asociacion_id, tipo, sexo, talla, paginaActual);
 
     return(
         <main className={styles.main}>
             <h1>Mis mascotas</h1>
-            <section className={styles.lista_mascotas}>
-                {
-                    mascotas.map((mascota: MascotaAsociacion) => (
-                        <CartillaMascotaAsociacion
-                            key={mascota.mascota_id + mascota.nombre_mascota}
-                            nombre_mascota={mascota.nombre_mascota}
-                            foto_mascota={mascota.foto_mascota}
-                            edad_mascota={mascota.edad_mascota}
-                            sexo_mascota={mascota.sexo_mascota}
-                            tipo_mascota={mascota.tipo_mascota}
-                            asociacion_id={asociacion_id}
-                            mascota_id={mascota.mascota_id}
-                        />
-                    ))
-                }
-            </section>
+
+            <BarraBusquedaMascotaAsociacion 
+                tiposMascotas={tipos_mascotas}
+                sexosMascotas={sexos_mascotas}
+                tallasMascotas={tallas_mascotas}
+            />
+
+            <TablaMascotasPerfil 
+                asociacion_id={asociacion_id}
+                tipo={tipo}
+                sexo={sexo}
+                talla={talla}
+                paginaActual={paginaActual}
+            />
+
+            <Paginacion 
+                totalPaginas={totalPaginas}
+            />
+
         </main>
     );
 }

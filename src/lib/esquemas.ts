@@ -50,7 +50,12 @@ export const EsquemaUsuario = z.object({
     }, {
         message: "Ingrese un número de teléfono que inicie con 55 o correo electrónico"
     }),
-    contrasena_usuario: z.string().min(5, "Ingrese una contraseña valida"),
+    contrasena_usuario: z.string().refine((val) => {
+        const longitud = val.length;
+        return longitud >= 5;
+    }, {
+        message: "La contraseña debe tener mínimo 5 caracteres"
+    }),
     nombre_asociacion: z.string().min(5, "Ingrese un nombre de asociacion valido"),
     alcaldia_asociacion: z.string().refine((val) => {
         const id = parseInt(val, 10);
@@ -89,8 +94,8 @@ export const EsquemaAsociacion = z.object({
 
 export const EsquemaEvento = z.object({
     evento_id: z.string(),
-    nombre_evento: z.string(),
-    direccion_evento: z.string(),
+    nombre_evento: z.string().min(5, "Ingrese un nombre valido"),
+    direccion_evento: z.string().min(5, "Ingrese una dirección valida"),
     descripcion_evento: z.string(),
     foto_evento: z.instanceof(File).refine(file => file.type.startsWith('image/'), {
         message: "El archivo debe ser una imagen"

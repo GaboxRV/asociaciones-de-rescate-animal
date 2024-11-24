@@ -11,6 +11,8 @@ export default function FormularioRegistroDeEvento({ asociacion_id, alcaldias }:
     const crearEventoConAsociacionId = crearEvento.bind(null, asociacion_id);
     const [estado, mandar] = useFormState(crearEventoConAsociacionId, estadoInicial);
 
+    console.log(estado)
+
     return (
         <form action={mandar} className={styles.formulario}>
             <div className={styles.div_formulario}>
@@ -63,7 +65,7 @@ export default function FormularioRegistroDeEvento({ asociacion_id, alcaldias }:
                 <select
                     name="alcaldia_evento"
                 >
-                    <option value="">Selecciona una alcaldía</option>
+                    <option value="" disabled>Selecciona una alcaldía</option>
                     {
                         alcaldias.map((alcaldia: Alcaldia) => (
                             <option key={alcaldia.alcaldia_id} value={alcaldia.alcaldia_id}>
