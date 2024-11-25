@@ -1,7 +1,7 @@
 
 .nav{
     padding: 1rem;
-    background-color: aquamarine;
+    background-color: var(--color-bar-background-perfil);
 }
 
 .nav__lista{
@@ -17,16 +17,22 @@
 
 }
 
-.nav__li{
-    border: 1px black solid;
-    border-radius: 1rem;
-}
-
 .nav__link{
     text-decoration: none;
     min-width: 120px;
     text-align: center;
     display: block;
     padding: 0.5rem;
-    color:var(--color-home);
+    color: var(--color-bar-color-perfil);
+}
+
+.nav__link:hover{
+    background-color: #fffae4;
+    color:  var(--color-bar-background-perfil);
+}
+
+.boton__sesion{
+    padding: 0.5rem;
+    color: rgb(255, 215, 104);
+    background-color: var(--color-bar-background-perfil);
 }

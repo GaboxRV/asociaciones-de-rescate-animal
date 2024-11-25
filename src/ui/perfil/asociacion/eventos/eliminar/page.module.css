@@ -9,6 +9,21 @@
     gap: 1rem;
 }
 
+.pagina small{
+    color: red;
+}
+
+.nombre{
+    font-style: italic;
+}
+
+.boton{
+    height: 30px;
+    border-radius: 5px;
+    background-color: rgb(173, 4, 4);
+    color: whitesmoke;
+}
+
 .bloque_img {
     width: 500px;
 }
@@ -28,6 +43,6 @@
 
 @media screen and (max-width: 600px) {
     .bloque_img{
-        width: 300px;
+        width: 400px;
     }
 }

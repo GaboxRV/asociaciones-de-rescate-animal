@@ -5,7 +5,7 @@ export default async function BotonEditarMascota({ asociacion_id, mascota_id } :
     return (
         <Link 
             href={`/perfil/asociacion/${asociacion_id}/mascotas/${mascota_id}/editar`}
-            className={styles.botones}
+            className={styles.boton_editar}
         >
             Editar
         </Link>

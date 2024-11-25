@@ -4,7 +4,7 @@ import { fetchNombresAsociacionesVerificadas, fetchTiposMascotas, fetchSexosMasc
 import TablaMascotas from "@/ui/mascotas/TablaMascotas";
 import ConseguirUbicacion from "@/ui/ConseguirUbicacion";
 import { NombresAsociacion } from "@/lib/definiciones";
-import Paginacion from "@/ui/mascotas/Paginacion";
+import Paginacion from "@/ui/Paginacion";
 
 export default async function Mascotas({
     searchParams,

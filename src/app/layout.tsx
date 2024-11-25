@@ -4,8 +4,6 @@ import "./globals.css";
 import BarNav from "@/ui/header/BarNav";
 import Footer from "@/ui/footer/Footer";
 
-
-
 const mono = Oxygen_Mono({ weight: '400', subsets: ["latin"] });
 
 export const metadata: Metadata = {
@@ -17,7 +15,7 @@ export default function RootLayout({ children, }: Readonly<{ children: React.Rea
 
   return (
     <html lang="es">
-      <body className={mono.className}>
+      <body>
           <BarNav />
           {children}
           <Footer />

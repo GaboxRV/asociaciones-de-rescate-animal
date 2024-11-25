@@ -2,7 +2,6 @@ import Link from "next/link";
 import { auth, signOut } from "@/auth";
 import { DatosSesion } from "@/lib/definiciones";
 import styles from "@/ui/perfil/barNavPerfil.module.css"
-import { link } from "fs";
 
 export default async function BarNavPerfil() {
 
@@ -31,7 +30,7 @@ function CerrarSesion() {
             'use server';
             await signOut();
         }}>
-            <button>Cerrar sesión</button>
+            <button className={styles.boton__sesion}>Cerrar sesión</button>
         </form>
     );
 }
@@ -46,7 +45,6 @@ function NavegacionUsuarioVerificado({ asociacion_id }: { asociacion_id: string 
         { nombre: 'Eventos', href: `/perfil/asociacion/${asociacion_id}/eventos` },
         { nombre: 'Registrar evento', href: `/perfil/asociacion/${asociacion_id}/eventos/registrar` }
     ]
-
 
     return (
         <nav className={styles.nav}>
@@ -75,14 +73,29 @@ function NavegacionUsuarioVerificado({ asociacion_id }: { asociacion_id: string 
 }
 
 function NavegacionAdministrador() {
+    const links = [
+        { nombre: 'Inicio', href: '/perfil/admin' },
+        { nombre: 'Asociaciones', href: `/perfil/admin/asociaciones` }
+    ]
+
     return (
         <nav className={styles.nav}>
             <ul className={styles.nav__lista}>
-                <li className={styles.nav__li}>
-                    <Link href={'/perfil/admin/asociaciones'}>
-                        Asociaciones
-                    </Link>
-                </li>
+                {
+                    links.map((link) => (
+                        <li 
+                            className={styles.nav__li}
+                            key={link.href}
+                        >
+                            <Link 
+                                href={link.href} 
+                                className={styles.nav__link}
+                            >
+                                {link.nombre}
+                            </Link>
+                        </li>
+                    ))
+                }
                 <li>
                     <CerrarSesion />
                 </li>

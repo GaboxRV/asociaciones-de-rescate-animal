@@ -5,7 +5,7 @@ export default async function BotonEliminarMascota({ asociacion_id, mascota_id }
     return (
         <Link 
             href={`/perfil/asociacion/${asociacion_id}/mascotas/${mascota_id}/eliminar`}
-            className={styles.botones}
+            className={styles.boton_eliminar}
         >
             Eliminar
         </Link>

@@ -2,8 +2,13 @@
 :root {
   --background-color-home: ghostwhite;
   --color-home: rgb(12,28,181);
-  --color-mascota: #DFE9F0;
+  --color-mascota: #e6b68b;
   --color-asociacion: #E1F8E4;
+  --color-bar-background-perfil: rgba(95,104,195, 0.9);
+  --color-bar-color-perfil: rgb(255, 255, 255);
+  --color-letra-amarillo: rgb(255, 215, 104);
+  --color-fondo-azul: rgba(95,104,195, 0.9);
+  --color-fondo-rojo: rgba(194, 36, 36, 0.573);
   --font-size: 1.2rem;
   --mono: "Oxygen mono", monospace;
   --sans: Oxygen, sans-serif;

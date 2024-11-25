@@ -32,3 +32,10 @@
     height: 300px;
     border-radius: 20px;
 }
+
+
+@media screen and (max-width: 600px) {
+    .bloque_img{
+        width: 400px;
+    }
+}

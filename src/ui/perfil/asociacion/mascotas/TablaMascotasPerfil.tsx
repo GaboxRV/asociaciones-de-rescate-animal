@@ -30,6 +30,7 @@ export default async function TablaMascotasPerfil({
                         edad_mascota={mascota.edad_mascota}
                         sexo_mascota={mascota.sexo_mascota}
                         tipo_mascota={mascota.tipo_mascota}
+                        talla_mascota={mascota.talla_mascota}
                         asociacion_id={mascota.asociacion_id}
                         mascota_id={mascota.mascota_id}
                     />

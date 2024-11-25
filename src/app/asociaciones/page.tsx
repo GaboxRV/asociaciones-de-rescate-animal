@@ -3,7 +3,7 @@ import { fetchNombresAsociacionesVerificadas, fetchAlcaldias, fetchPaginasAsocia
 import { NombresAsociacion } from "@/lib/definiciones";
 import styles from "@/ui/asociaciones/page.module.css";
 import BarraBusquedaAsociacion from "@/ui/asociaciones/BarraBusquedaAsociacion";
-import Paginacion from "@/ui/mascotas/Paginacion";
+import Paginacion from "@/ui/Paginacion";
 import TablaAsociaciones from "@/ui/asociaciones/TablaAsociaciones";
 
 export default async function Asociaciones({

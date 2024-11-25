@@ -1,6 +1,6 @@
 import { fetchPaginasEventosPorAsociacion } from "@/lib/data";
 import styles from "@/ui/perfil/asociacion/eventos/page.module.css"
-import Paginacion from "@/ui/mascotas/Paginacion";
+import Paginacion from "@/ui/Paginacion";
 import TablaEventosPerfil from "@/ui/perfil/asociacion/eventos/TablaEventosPerfil";
 
 export default async function Eventos({ params, searchParams } : { params: { idAsociacion: string},  searchParams?: {

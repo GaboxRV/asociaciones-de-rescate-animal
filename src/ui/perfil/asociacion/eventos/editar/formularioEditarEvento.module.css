@@ -43,6 +43,8 @@
 
 .bloque_img {
     width: 500px;
+    display: flex;
+    flex-direction: column;
 }
 
 .ficha_img {
@@ -52,7 +54,22 @@
     border-radius: 20px;
 }
 
-.botones{
+.bloque_info form{
+    display: flex;
+    flex-direction: column;
+}
+
+.bloque_info button{
+    margin-top: 1.2rem;
+}
+
+.ficha button{
+    text-decoration: none;
+    padding: 0.5rem;
+    border-radius: 10px;
+    color: white;
+    background-color: var(--color-fondo-azul);
+
     border-radius: 5px;
     width: 200px;
     height: 30px;

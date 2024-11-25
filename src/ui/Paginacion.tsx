@@ -2,6 +2,7 @@
 
 import Link from 'next/link';
 import { usePathname, useSearchParams } from 'next/navigation';
+import styles from "@/ui/paginacion.module.css"
 
 
 export default function Paginacion({totalPaginas} : { totalPaginas: number }) {
@@ -17,7 +18,7 @@ export default function Paginacion({totalPaginas} : { totalPaginas: number }) {
     };
 
     return (
-        <>
+        <div className={styles.contenedor}>
             <FlechaNavegacion
                 href={crearURL(paginaActual - 1)}
                 direccion={'izquierda'}
@@ -31,7 +32,7 @@ export default function Paginacion({totalPaginas} : { totalPaginas: number }) {
                 direccion={'derecha'}
                 deshabilitado={paginaActual >= totalPaginas} 
             />
-        </>
+        </div>
     );
 }
 
@@ -43,9 +44,9 @@ function FlechaNavegacion({ href, direccion, deshabilitado }: {
 
     const icon =
     direccion === 'izquierda' ? (
-        '<--'
+        'Anterior'
     ) : (
-        '-->'
+        'Siguiente'
     );
 
     return deshabilitado ? (

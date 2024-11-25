@@ -113,11 +113,9 @@ export default function FormularioEditarEvento({ evento, alcaldias }: { evento: 
 
                     <button 
                         type="submit"
-                        className={styles.botones}
                     >
                         Cambiar información
                     </button>
-
 
                 </form>
 

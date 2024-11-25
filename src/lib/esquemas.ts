@@ -94,8 +94,8 @@ export const EsquemaAsociacion = z.object({
 
 export const EsquemaEvento = z.object({
     evento_id: z.string(),
-    nombre_evento: z.string().min(5, "Ingrese un nombre valido"),
-    direccion_evento: z.string().min(5, "Ingrese una dirección valida"),
+    nombre_evento: z.string().min(5, "Ingrese un nombre válido de al menos 5 caracteres"),
+    direccion_evento: z.string().min(5, "Ingrese una dirección válida de al menos 5 caracteres"),
     descripcion_evento: z.string(),
     foto_evento: z.instanceof(File).refine(file => file.type.startsWith('image/'), {
         message: "El archivo debe ser una imagen"

@@ -51,3 +51,8 @@
     width: 100%;
 }
 
+.form_busqueda button{
+    color: white;
+    background-color: var(--color-fondo-azul);
+    margin-top: 1rem;
+}

@@ -1,8 +1,8 @@
-import styles from "@/ui/perfil/asociacion/mascotas/page.module.css";
 import TablaMascotasPerfil from "@/ui/perfil/asociacion/mascotas/TablaMascotasPerfil";
 import BarraBusquedaMascotaAsociacion from "@/ui/perfil/asociacion/mascotas/BarraBusquedaMascotaAsociacion";
 import { fetchTiposMascotas, fetchSexosMascotas, fetchTallasMascotas, fetchPaginasMascotasAsociacion } from "@/lib/data";
-import Paginacion from "@/ui/mascotas/Paginacion";
+import Paginacion from "@/ui/Paginacion";
+import styles from "@/ui/perfil/asociacion/mascotas/page.module.css";
 
 export default async function MascotasAsociacion({ params, searchParams } 
     : { params: { idAsociacion: string}, searchParams?: {

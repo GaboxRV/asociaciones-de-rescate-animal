@@ -20,9 +20,12 @@ export default async function FichaEventoAsociacion({ evento_id, nombre_evento, 
 
             <div className={styles.bloque_info}>
                 <h3>{nombre_evento}</h3>
-                <p>{direccion_evento}</p>
-                <p>{alcaldia.nombre_alcaldia}</p>
-                <p>{descripcion_evento}</p>
+
+                <div className={styles.bloque_texto}>
+                    <p>{direccion_evento}</p>
+                    <p>{alcaldia.nombre_alcaldia}</p>
+                    <p>{descripcion_evento}</p>
+                </div>
 
                 <div className={styles.bloque_botones}>
                     <BotonEditarEvento
@@ -37,10 +40,6 @@ export default async function FichaEventoAsociacion({ evento_id, nombre_evento, 
                 </div>
 
             </div>
-
-
-
-
 
         </div>
     );

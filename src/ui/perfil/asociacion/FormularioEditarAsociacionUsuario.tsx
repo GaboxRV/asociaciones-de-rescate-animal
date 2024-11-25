@@ -21,7 +21,6 @@ export default function FormularioEditarAsociacionUsuario({ asociacion, alcaldia
         <section className={styles.ficha}>
             <div className={styles.bloque_info}>
                 <form action={mandarInfo}>
-
                     <div className={styles.bloque_info_div}>
                         <label>Nombre:</label>
                         <input type="text" name="nombre_asociacion" defaultValue={asociacion.nombre_asociacion} />
@@ -116,7 +115,7 @@ export default function FormularioEditarAsociacionUsuario({ asociacion, alcaldia
 
             <div className={styles.bloque_img}>
                 <form action={mandarFoto}>
-                    <div>
+                    <div className={styles.bloque_img_div}>
                         <img
                             src={`data:image/jpeg;base64,${asociacion.foto_asociacion}`}
                             alt={asociacion.nombre_asociacion}
