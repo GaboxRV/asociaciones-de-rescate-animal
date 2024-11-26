@@ -198,11 +198,29 @@ export async function fetchMascota(id: string) {
     }
 }
 
-export async function fetchAsociacionesConRol() {
+export async function fetchAsociacionesAdminConRol(ubicacion: string, asociacion: string, pagina: number) {
     noStore();
-    try {
-        const respuesta = await conn.query("SELECT asociaciones.asociacion_id, asociaciones.nombre_asociacion, asociaciones.puntuacion_asociacion, asociaciones.foto_asociacion, usuarios.rol_usuario FROM asociaciones JOIN usuarios ON asociaciones.asociacion_id = usuarios.asociacion_id");
 
+    const offset = (pagina - 1) * OBJETOS_POR_PAGINA;
+
+    try {
+        const respuesta = await conn.query(
+            `SELECT 
+                asociaciones.asociacion_id, 
+                asociaciones.nombre_asociacion, 
+                asociaciones.puntuacion_asociacion, 
+                asociaciones.foto_asociacion, 
+                asociaciones.alcaldia_id,
+                usuarios.rol_usuario 
+            FROM asociaciones 
+            JOIN usuarios ON asociaciones.asociacion_id = usuarios.asociacion_id
+            JOIN alcaldias ON asociaciones.alcaldia_id = alcaldias.alcaldia_id 
+            WHERE
+                alcaldias.nombre_alcaldia ILIKE '%${ubicacion}%' AND
+                asociaciones.nombre_asociacion::text ILIKE '%${asociacion}%'
+            ORDER BY asociaciones.asociacion_id ASC
+            LIMIT ${OBJETOS_POR_PAGINA} OFFSET ${offset};`
+        );
 
         const datos: AsociacionConRol[] = respuesta.rows;
 
@@ -215,6 +233,30 @@ export async function fetchAsociacionesConRol() {
         }
 
         return datos;
+    } catch (error) {
+        console.error("Error al obtener las asociaciones: ", error);
+        throw new Error("Error al obtener las asociaciones");
+    }
+}
+
+export async function fetchPaginasAsociacionesAdmin(ubicacion: string, asociacion: string, pagina: number) {
+    noStore();
+
+    const offset = (pagina - 1) * OBJETOS_POR_PAGINA;
+
+    try {
+        const count = await conn.query(
+            `SELECT COUNT(*)
+            FROM asociaciones 
+            JOIN usuarios ON asociaciones.asociacion_id = usuarios.asociacion_id
+            WHERE
+                asociaciones.alcaldia_id::text ILIKE '%${ubicacion}%' AND
+                asociaciones.nombre_asociacion::text ILIKE '%${asociacion}%';`
+        );
+
+        const paginasTotales = Math.ceil(Number(count.rows[0].count) / OBJETOS_POR_PAGINA);
+
+        return paginasTotales;
     } catch (error) {
         console.error("Error al obtener las asociaciones: ", error);
         throw new Error("Error al obtener las asociaciones");

@@ -1,27 +1,42 @@
-import { fetchAsociacionesConRol } from "@/lib/data";
-import FichaAsociaciones from "@/ui/perfil/admin/FichaAsociaciones";
-import { AsociacionConRol } from "@/lib/definiciones";
+import styles from "@/ui/perfil/admin/page.module.css"
+import TablaAsociacionesAdmin from "@/ui/perfil/admin/asociaciones/TablaAsociacionesAdmin";
+import { fetchAlcaldias, fetchPaginasAsociacionesAdmin } from "@/lib/data";
+import BarraBusquedaAsociacionAdmin from "@/ui/perfil/admin/asociaciones/BarraBusquedaAsociacionAdmin";
+import Paginacion from "@/ui/Paginacion";
 
-export default async function Asociaciones() {
+export default async function Asociaciones({
+    searchParams,
+}: {
+    searchParams?: {
+        pagina?: string;
+        ubicacion?: string;
+        asociacion?: string;
+    };
+}) {
 
-    const asociaciones: AsociacionConRol[] = await fetchAsociacionesConRol();
+    const alcaldias = await fetchAlcaldias();
+    const asociacion = searchParams?.asociacion || '';
+    const paginaActual = Number(searchParams?.pagina) || 1;
+    const ubicacion = searchParams?.ubicacion || '';
+    const totalPaginas = await fetchPaginasAsociacionesAdmin(ubicacion, asociacion, paginaActual);
 
     return (
-        <main>
+        <main className={styles.pagina}>
+            <h2>Asociaciones</h2>
 
-            <h2>Asociaciones dentro de administrador</h2>
+            <BarraBusquedaAsociacionAdmin 
+                alcaldias={alcaldias}
+            />
 
+            <TablaAsociacionesAdmin 
+                asociacionNombre={asociacion}
+                ubicacion={ubicacion}
+                paginaActual={paginaActual}
+            />
 
-            {asociaciones.map( (asociacion : AsociacionConRol) => (
-                <FichaAsociaciones 
-                    key={asociacion.asociacion_id}
-                    asociacion_id={asociacion.asociacion_id}
-                    nombre_asociacion={asociacion.nombre_asociacion}
-                    rol_usuario={asociacion.rol_usuario}
-                    foto_asociacion={asociacion.foto_asociacion}
-                />
-            ))}
-
+            <Paginacion 
+                totalPaginas={totalPaginas}
+            />
             
         </main>
     );

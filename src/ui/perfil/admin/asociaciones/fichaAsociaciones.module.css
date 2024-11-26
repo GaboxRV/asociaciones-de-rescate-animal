@@ -1,5 +1,5 @@
 
-.cartilla{
+.ficha{
     background-color: var(--color-asociacion);
     padding: 1rem;
     border-radius: 20px;
@@ -7,19 +7,26 @@
     display: flex;
     flex-direction: column;
     align-items: center;
+    justify-content: space-around;
     word-break: break-all;
     gap: 1rem;
 }
 
-.cartilla div{
+.info{
     display: flex;
     flex-direction: column;
+    justify-content: center;
     align-items: center;
 }
 
-.cartilla img{
+.ficha img{
     width: 100%;
     object-fit: cover;
     height: 250px;
     border-radius: 20px;
+}
+
+.botones{
+    display: flex;
+    gap: 1rem;
 }

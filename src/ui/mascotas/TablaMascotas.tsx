@@ -35,6 +35,7 @@ export default async function TablaMascotas({
                         foto={mascota.foto_mascota}
                         asociacion_id={mascota.asociacion_id}
                         nombre_asociacion={mascota.nombre_asociacion}
+                        nombre_alcaldia={mascota.nombre_alcaldia}
 
                     />
                 ))

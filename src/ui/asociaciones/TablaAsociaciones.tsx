@@ -21,9 +21,10 @@ export default async function TablaAsociaciones({
                 asociaciones.map((asociacion: Asociacion) => (
                     <CartillaAsociacion
                         key={asociacion.asociacion_id}
-                        id={asociacion.asociacion_id}
                         nombre={asociacion.nombre_asociacion}
                         puntuacion={asociacion.puntuacion_asociacion}
+                        asociacion_id={asociacion.asociacion_id}
+                        alcaldia_id={asociacion.alcaldia_id}
                         foto={asociacion.foto_asociacion}
                     />
                 ))

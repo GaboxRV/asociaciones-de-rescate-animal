@@ -1,0 +1,41 @@
+
+.pagina{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.5rem;
+    margin: 1rem;
+}
+
+.pagina small{
+    color: red;
+}
+
+.nombre{
+    font-style: italic;
+}
+
+.boton{
+    height: 30px;
+    border-radius: 5px;
+    background-color: rgb(173, 4, 4);
+    color: whitesmoke;
+}
+
+.bloque_img{
+    width: 500px;
+}
+
+.ficha_img{
+    width: 100%;
+    object-fit: cover;
+    height: 300px;
+    border-radius: 20px;
+}
+
+
+@media screen and (max-width: 600px) {
+    .bloque_img{
+        width: 400px;
+    }
+}

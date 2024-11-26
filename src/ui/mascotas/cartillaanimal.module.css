@@ -1,28 +1,28 @@
 
 .cartilla{
-    background-color: #e1d6c2;
+    background-color: var(--color-mascota);
     padding: 1rem;
     border-radius: 20px;
     width: 300px;
+    word-break: break-all;
 
     display: flex;
     flex-direction: column;
+    align-items: center;
     justify-content: space-between;
-    gap: 1rem;
 }
 
 .cartilla img{
     width: 100%;
     object-fit: cover;
     height: 300px;
-
     border-radius: 20px;
 }
+
 
 .nombre{
     display: flex;
     justify-content: center;
-    color: black;
 }
 
 .contenedor_botones{

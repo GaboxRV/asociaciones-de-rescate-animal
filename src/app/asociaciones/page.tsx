@@ -15,7 +15,6 @@ export default async function Asociaciones({
         asociacion?: string;
     };
 }) {
-
     
     const nombres_asociaciones: NombresAsociacion[] = await fetchNombresAsociacionesVerificadas();
     const alcaldias = await fetchAlcaldias();

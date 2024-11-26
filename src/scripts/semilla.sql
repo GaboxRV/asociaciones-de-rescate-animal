@@ -95,3 +95,8 @@ SELECT *
              FROM eventos 
              WHERE 
                 eventos.asociacion_id::text ILIKE '%1%';
+
+
+
+				
+SELECT * FROM alcaldias;

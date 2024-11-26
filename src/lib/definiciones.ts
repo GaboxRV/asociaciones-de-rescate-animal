@@ -43,6 +43,7 @@ export type AsociacionConRol = {
     puntuacion_asociacion: number;
     foto_asociacion: string;
     rol_usuario: string;
+    alcaldia_id: string;
 }
 
 export type MascotaGeneral = { 

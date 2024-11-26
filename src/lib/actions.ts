@@ -253,6 +253,25 @@ export async function crearUsuario(estadoPrevio: prevCrearUsuario, formData: For
     redirect('/perfil');
 }
 
+
+export async function eliminarAsociacion(asociacion_id: string){
+    try {
+        await conn.query('BEGIN');
+        const respuestaAsociaciones = await conn.query("DELETE FROM asociaciones WHERE asociaciones.asociacion_id = $1", [asociacion_id]);
+
+        const respuestaUsuarios = await conn.query("DELETE FROM usuarios WHERE usuarios.asociacion_id = $1",[asociacion_id]);
+        await conn.query('COMMIT');
+    } catch (error) {
+        await conn.query('ROLLBACK');
+        return {
+            mensaje: "Error en la Base de Datos: Error al eliminar la asociacion",
+        }
+    }
+
+    revalidatePath(`/perfil/admin/asociaciones`);
+    redirect(`/perfil/admin/asociaciones`);
+}
+
 /**
  * Editar la información de una asociación desde un usuario
  */
