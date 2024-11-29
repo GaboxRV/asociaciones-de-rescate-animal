@@ -59,7 +59,10 @@ export default async function Mascotas({
             </section>
 
             <div>
-              <Paginacion totalPaginas={totalPaginas} />
+              {
+                totalPaginas > 0 ? <Paginacion totalPaginas={totalPaginas} /> 
+                : "Sin resultados para mostrar"
+              }
             </div>
         </main>
     );

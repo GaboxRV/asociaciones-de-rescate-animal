@@ -372,6 +372,51 @@ export async function editarAsociacionFotoUsuario(asociacion_id: string, estadoP
     return { mensaje: "Foto editada con exito", errores: {} };
 }
 
+/**
+ * Calificar asociacion
+ */
+
+const EditarPuntuacionPublico = EsquemaAsociacion.omit({ asociacion_id: true, nombre_asociacion: true, telefono_asociacion: true, direccion_asociacion: true, foto_asociacion: true, descripcion_asociacion: true, alcaldia_id: true, rol_usuario: true });
+
+export type prevEditarPuntuacionPublico = {
+    errores?: {
+        puntuacion_asociacion?: string[];
+    };
+    mensaje?: string | null;
+};
+
+export async function editarPuntuacionPublico(asociacion_id: string, estadoPrevio: prevEditarPuntuacionPublico, formData: FormData) {
+
+    const camposValidados = EditarPuntuacionPublico.safeParse({
+        puntuacion_asociacion: formData.get("foto_asociacion"),
+    });
+
+    if (!camposValidados.success) {
+        return {
+            errores: camposValidados.error.flatten().fieldErrors,
+            mensaje: "Error en los campos del formulario",
+        };
+    }
+
+    const { puntuacion_asociacion } = camposValidados.data;
+
+
+    try {
+
+        const respuesta = await conn.query("UPDATE asociaciones",
+        );
+
+    } catch (error) {
+        return {
+            mensaje: "Error en la Base de Datos: Error al editar la asociacion",
+        }
+    }
+
+    revalidatePath(`/asociaciones/${asociacion_id}`);
+    return { mensaje: "Puntuacion registrada con exito ", errores: {} };
+}
+
+
 
 /**
  * Editar la información de una asociación desde un administrador

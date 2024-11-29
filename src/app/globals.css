@@ -1,13 +1,13 @@
 /* Variables globales */
 :root {
   --background-color-home: ghostwhite;
-  --color-home: rgb(12,28,181);
+  --color-home: rgb(12, 28, 181);
   --color-mascota: #e6b68b;
   --color-asociacion: #E1F8E4;
-  --color-bar-background-perfil: rgba(95,104,195, 0.9);
+  --color-bar-background-perfil: rgba(95, 104, 195, 0.9);
   --color-bar-color-perfil: rgb(255, 255, 255);
   --color-letra-amarillo: rgb(255, 215, 104);
-  --color-fondo-azul: rgba(95,104,195, 0.9);
+  --color-fondo-azul: rgba(95, 104, 195, 0.9);
   --color-fondo-rojo: rgba(194, 36, 36, 0.573);
   --font-size: 1.2rem;
   --mono: "Oxygen mono", monospace;
@@ -19,11 +19,16 @@
 
 html {
   box-sizing: border-box;
-  background: rgb(245,198,119);
-  background: -moz-linear-gradient(180deg, rgba(245,198,119,1) 60%, rgba(255,223,168,1) 100%);
-  background: -webkit-linear-gradient(180deg, rgba(245,198,119,1) 60%, rgba(255,223,168,1) 100%);
-  background: linear-gradient(180deg, rgba(245,198,119,1) 60%, rgba(255,223,168,1) 100%);
-  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr="#f5c677",endColorstr="#ffdfa8",GradientType=1); 
+  /* background: rgb(245, 198, 119);
+  background: -moz-linear-gradient(180deg, rgba(245, 198, 119, 1) 60%, rgba(255, 223, 168, 1) 100%);
+  background: -webkit-linear-gradient(180deg, rgba(245, 198, 119, 1) 60%, rgba(255, 223, 168, 1) 100%);
+  background: linear-gradient(180deg, rgba(245, 198, 119, 1) 60%, rgba(255, 223, 168, 1) 100%);
+  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr="#f5c677", endColorstr="#ffdfa8", GradientType=1); */
+
+  background-image: url('../../public/fondo.jpg');
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
 }
 
 *,
@@ -38,10 +43,12 @@ body {
   margin: 0 auto;
   max-width: 1200px;
   font-size: var(--font-size);
-  background-color: #fffff3;
+  background-color: rgba(255, 255, 255, 0.85); 
   min-height: 100vh;
   display: flex;
   flex-direction: column;
+
+  
 }
 
 h1,

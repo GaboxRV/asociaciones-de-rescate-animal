@@ -1,4 +1,4 @@
-import styles from "@/ui/perfil/admin/page.module.css"
+import styles from "@/ui/perfil/admin/asociaciones/page.module.css"
 import TablaAsociacionesAdmin from "@/ui/perfil/admin/asociaciones/TablaAsociacionesAdmin";
 import { fetchAlcaldias, fetchPaginasAsociacionesAdmin } from "@/lib/data";
 import BarraBusquedaAsociacionAdmin from "@/ui/perfil/admin/asociaciones/BarraBusquedaAsociacionAdmin";

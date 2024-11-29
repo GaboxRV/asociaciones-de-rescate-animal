@@ -11,7 +11,7 @@ export default function FormularioRegistroDeUsuario({ alcaldias }: { alcaldias: 
     const [estado, mandar] = useFormState(crearUsuario, estadoInicial);
 
     return (
-        <>
+        <div>
             <form action={mandar} className={styles.formulario}>
 
                 <div>
@@ -137,6 +137,6 @@ export default function FormularioRegistroDeUsuario({ alcaldias }: { alcaldias: 
             <div>
                 {estado.mensaje && <p>{estado.mensaje}</p>}
             </div>
-        </>
+        </div>
     );
 }

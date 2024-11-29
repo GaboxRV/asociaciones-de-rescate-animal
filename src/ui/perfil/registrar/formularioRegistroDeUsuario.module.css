@@ -3,14 +3,14 @@
     display: flex;
     flex-direction: column;
     justify-content: center;
-    align-items: center;
-    width: 350px;
+    width: 300px;
     gap: 1rem;
+    word-break: break-all;
 }
 
-
-.div_form{
-    padding: 2rem;
+.formulario div{
+    display: flex;
+    flex-direction: column;
 }
 
 .div_campo{

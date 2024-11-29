@@ -2,8 +2,19 @@
 .pagina{
     display: flex;
     flex-direction: column;
-    justify-content: center;
     align-items: center;
+    justify-content: center;
     margin: 1rem;
-    gap: 1rem;
+}
+
+.cartel{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    margin: 1rem;
+    padding: 1rem;
+    border: 1px solid black;
+    border-radius: 10px;
+    background-color: #f0f0f0;
 }
