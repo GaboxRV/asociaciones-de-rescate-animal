@@ -17,6 +17,8 @@ select * from usuarios;
 select * from mascotas;
 select * from alcaldias;
 
+
+
 SELECT enum_range(NULL::sexos_de_mascotas);
 SELECT enum_range(NULL::tipos_de_mascotas);
 

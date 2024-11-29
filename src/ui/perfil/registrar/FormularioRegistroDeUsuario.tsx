@@ -16,7 +16,7 @@ export default function FormularioRegistroDeUsuario({ alcaldias }: { alcaldias: 
 
                 <div>
                     <div className={styles.div_campo}>
-                        <label> Nombre de usuario: </label>
+                        <label>Usuario(correo o número):</label>
                         <input
                             type="text"
                             name="nombre_usuario"
