@@ -16,6 +16,7 @@ export type Asociacion = {
     direccion_asociacion: string;
     puntuacion_asociacion: number;
     descripcion_asociacion: string;
+    cantidad_puntuaciones_asociacion: string;
     foto_asociacion: string;
     alcaldia_id: string;
 }

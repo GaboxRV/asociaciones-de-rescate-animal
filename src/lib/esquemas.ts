@@ -79,10 +79,11 @@ export const EsquemaAsociacion = z.object({
     }),
     direccion_asociacion: z.string().min(5, "Ingrese una dirección valida"),
     puntuacion_asociacion: z.coerce.number().refine((val) => {
-        return val >= 1 && val <= 10;
+        return val >= 0 && val <= 10;
     }, {
         message: "Ingrese una puntuación valida"
-    }), 
+    }),
+    cantidad_puntuaciones_asociacion: z.coerce.number(),
     descripcion_asociacion: z.string().min(5, "Ingrese una descripción valida"),
     foto_asociacion: z.instanceof(File).refine(file => file.type.startsWith('image/'), {
         message: "El archivo debe ser una imagen"

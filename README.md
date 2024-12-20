@@ -68,3 +68,9 @@ port: PUERTO
 Por ejemplo:
 http://localhost:3000
 ```
+
+```sql
+usuario: leonardo@sistema.com
+contraseña: perros1234
+rol: administrador
+```

@@ -1,6 +1,7 @@
 import { fetchAsociacionPorId } from "@/lib/data";
 import { Asociacion } from "@/lib/definiciones";
 import styles from "@/ui/asociaciones/asociacion/page.module.css"
+import FormularioPuntuacionAsociacion from "@/ui/asociaciones/asociacion/FormularioPuntuacionAsociacion";
 
 export default async function PerfilAsociacion({ params }: { params: { idAsociacion: string } }) {
 
@@ -15,9 +16,10 @@ export default async function PerfilAsociacion({ params }: { params: { idAsociac
                 <div className={styles.bloque_info}>
                     <h3>Teléfono: {asociacion.telefono_asociacion}</h3>
                     <h3>Dirección: {asociacion.direccion_asociacion}</h3>
-                    <h3>Puntuación: {asociacion.puntuacion_asociacion}</h3>
+                    <h3>Puntuación: {asociacion.puntuacion_asociacion}/10 - <small>{asociacion.cantidad_puntuaciones_asociacion}</small> </h3>
                     <h3>Descripción: {asociacion.descripcion_asociacion}</h3>
                 </div>
+                <FormularioPuntuacionAsociacion asociacion={asociacion} />
 
                 <div className={styles.bloque_img}>
                     <img 

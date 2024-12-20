@@ -5,7 +5,7 @@ import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import { signIn } from "../auth";
 import { AuthError } from 'next-auth';
-import { EsquemaMascota, EsquemaEditarMascotaInfo, EsquemaEditarMascotaFoto, EsquemaUsuario, EsquemaAsociacion, EsquemaEvento} from "@/lib/esquemas";
+import { EsquemaMascota, EsquemaEditarMascotaInfo, EsquemaEditarMascotaFoto, EsquemaUsuario, EsquemaAsociacion, EsquemaEvento } from "@/lib/esquemas";
 
 
 /**
@@ -254,12 +254,12 @@ export async function crearUsuario(estadoPrevio: prevCrearUsuario, formData: For
 }
 
 
-export async function eliminarAsociacion(asociacion_id: string){
+export async function eliminarAsociacion(asociacion_id: string) {
     try {
         await conn.query('BEGIN');
         const respuestaAsociaciones = await conn.query("DELETE FROM asociaciones WHERE asociaciones.asociacion_id = $1", [asociacion_id]);
 
-        const respuestaUsuarios = await conn.query("DELETE FROM usuarios WHERE usuarios.asociacion_id = $1",[asociacion_id]);
+        const respuestaUsuarios = await conn.query("DELETE FROM usuarios WHERE usuarios.asociacion_id = $1", [asociacion_id]);
         await conn.query('COMMIT');
     } catch (error) {
         await conn.query('ROLLBACK');
@@ -276,7 +276,7 @@ export async function eliminarAsociacion(asociacion_id: string){
  * Editar la información de una asociación desde un usuario
  */
 
-const EditarAsociacionInfoUsuario = EsquemaAsociacion.omit({ asociacion_id: true, puntuacion_asociacion: true, foto_asociacion: true, rol_usuario: true });
+const EditarAsociacionInfoUsuario = EsquemaAsociacion.omit({ asociacion_id: true, puntuacion_asociacion: true, cantidad_puntuaciones_asociacion: true, foto_asociacion: true, rol_usuario: true });
 
 export type prevEditarAsociacionInfoUsuario = {
     errores?: {
@@ -330,7 +330,7 @@ export async function editarAsociacionInfoUsuario(asociacion_id: string, estadoP
  * Editar la foto de una asociación desde un usuario
  */
 
-const EditarAsociacionFotoUsuario = EsquemaAsociacion.omit({ asociacion_id: true, nombre_asociacion: true, telefono_asociacion: true, direccion_asociacion: true, puntuacion_asociacion: true, descripcion_asociacion: true, alcaldia_id: true, rol_usuario: true });
+const EditarAsociacionFotoUsuario = EsquemaAsociacion.omit({ asociacion_id: true, nombre_asociacion: true, telefono_asociacion: true, direccion_asociacion: true, puntuacion_asociacion: true, cantidad_puntuaciones_asociacion: true, descripcion_asociacion: true, alcaldia_id: true, rol_usuario: true });
 
 export type prevEditarAsociacionFotoUsuario = {
     errores?: {
@@ -376,7 +376,7 @@ export async function editarAsociacionFotoUsuario(asociacion_id: string, estadoP
  * Calificar asociacion
  */
 
-const EditarPuntuacionPublico = EsquemaAsociacion.omit({ asociacion_id: true, nombre_asociacion: true, telefono_asociacion: true, direccion_asociacion: true, foto_asociacion: true, descripcion_asociacion: true, alcaldia_id: true, rol_usuario: true });
+const EditarPuntuacionPublico = EsquemaAsociacion.omit({ asociacion_id: true, nombre_asociacion: true, telefono_asociacion: true, direccion_asociacion: true, cantidad_puntuaciones_asociacion: true, foto_asociacion: true, descripcion_asociacion: true, alcaldia_id: true, rol_usuario: true });
 
 export type prevEditarPuntuacionPublico = {
     errores?: {
@@ -387,8 +387,9 @@ export type prevEditarPuntuacionPublico = {
 
 export async function editarPuntuacionPublico(asociacion_id: string, estadoPrevio: prevEditarPuntuacionPublico, formData: FormData) {
 
+
     const camposValidados = EditarPuntuacionPublico.safeParse({
-        puntuacion_asociacion: formData.get("foto_asociacion"),
+        puntuacion_asociacion: formData.get("puntuacion_asociacion"),
     });
 
     if (!camposValidados.success) {
@@ -398,15 +399,26 @@ export async function editarPuntuacionPublico(asociacion_id: string, estadoPrevi
         };
     }
 
-    const { puntuacion_asociacion } = camposValidados.data;
-
+    const nuevoValor = camposValidados.data["puntuacion_asociacion"];
 
     try {
-
-        const respuesta = await conn.query("UPDATE asociaciones",
+        await conn.query('BEGIN');
+        const respuestaAsociacion = await conn.query("SELECT asociaciones.puntuacion_asociacion, asociaciones.cantidad_puntuaciones_asociacion FROM asociaciones WHERE asociacion_id = $1 FOR UPDATE",
+            [asociacion_id]
         );
 
+        const { puntuacion_asociacion, cantidad_puntuaciones_asociacion } = respuestaAsociacion.rows[0];
+
+        const nuevaCantidad = cantidad_puntuaciones_asociacion + 1;
+        const nuevaPuntuacion = ((puntuacion_asociacion * cantidad_puntuaciones_asociacion) + nuevoValor) / nuevaCantidad;
+
+        await conn.query("UPDATE asociaciones SET puntuacion_asociacion = ROUND($1::numeric, 2), cantidad_puntuaciones_asociacion = $2 WHERE asociacion_id = $3",
+            [nuevaPuntuacion, nuevaCantidad, asociacion_id]
+        );
+
+        await conn.query('COMMIT');
     } catch (error) {
+        await conn.query('ROLLBACK');
         return {
             mensaje: "Error en la Base de Datos: Error al editar la asociacion",
         }
@@ -416,14 +428,12 @@ export async function editarPuntuacionPublico(asociacion_id: string, estadoPrevi
     return { mensaje: "Puntuacion registrada con exito ", errores: {} };
 }
 
-
-
 /**
  * Editar la información de una asociación desde un administrador
  */
 
 
-const EditarAsociacionInfoAdmin = EsquemaAsociacion.omit({ asociacion_id: true, foto_asociacion: true });
+const EditarAsociacionInfoAdmin = EsquemaAsociacion.omit({ asociacion_id: true, cantidad_puntuaciones_asociacion: true, foto_asociacion: true });
 
 export type prevEditarAsociacionInfoAdmin = {
     errores?: {
@@ -483,7 +493,7 @@ export async function editarAsociacionInfoAdmin(asociacion_id: string, estadoPre
  * Editar la foto de una asociación desde un administrador
  */
 
-const EditarAsociacionFotoAdmin = EsquemaAsociacion.omit({ asociacion_id: true, nombre_asociacion: true, telefono_asociacion: true, direccion_asociacion: true, puntuacion_asociacion: true, descripcion_asociacion: true, alcaldia_id: true, rol_usuario: true });
+const EditarAsociacionFotoAdmin = EsquemaAsociacion.omit({ asociacion_id: true, nombre_asociacion: true, telefono_asociacion: true, direccion_asociacion: true, puntuacion_asociacion: true, cantidad_puntuaciones_asociacion: true, descripcion_asociacion: true, alcaldia_id: true, rol_usuario: true });
 
 export type prevEditarAsociacionFotoAdmin = {
     errores?: {
@@ -538,7 +548,7 @@ const CrearEvento = EsquemaEvento.omit({ evento_id: true, asociacion_id: true })
 
 export type prevCrearEvento = {
     errores?: {
-        nombre_evento?: string[] ;
+        nombre_evento?: string[];
         direccion_evento?: string[];
         descripcion_evento?: string[];
         foto_evento?: string[];
@@ -547,7 +557,7 @@ export type prevCrearEvento = {
     mensaje?: string | null;
 };
 
-export async function crearEvento(asociacion_id: string,  estadoPrevio: prevCrearEvento, formData: FormData) {
+export async function crearEvento(asociacion_id: string, estadoPrevio: prevCrearEvento, formData: FormData) {
 
     const camposValidados = CrearEvento.safeParse({
         nombre_evento: formData.get("nombre_evento"),
@@ -564,7 +574,7 @@ export async function crearEvento(asociacion_id: string,  estadoPrevio: prevCrea
         }
     }
 
-    const { nombre_evento, direccion_evento, descripcion_evento, alcaldia_id, foto_evento} = camposValidados.data;
+    const { nombre_evento, direccion_evento, descripcion_evento, alcaldia_id, foto_evento } = camposValidados.data;
 
     const foto_data = await foto_evento.arrayBuffer();
     const fotoBuffer = Buffer.from(new Uint8Array(foto_data));
@@ -595,7 +605,7 @@ const EditarEventoInfo = EsquemaEvento.omit({ evento_id: true, asociacion_id: tr
 
 export type prevEditarEventoInfo = {
     errores?: {
-        nombre_evento?: string[] ;
+        nombre_evento?: string[];
         direccion_evento?: string[];
         descripcion_evento?: string[];
         alcaldia_id?: string[];
@@ -603,7 +613,7 @@ export type prevEditarEventoInfo = {
     mensaje?: string | null;
 };
 
-export async function editarEventoInfo(evento_id: string, asociacion_id: string,  estadoPrevio: prevEditarEventoInfo, formData: FormData) {
+export async function editarEventoInfo(evento_id: string, asociacion_id: string, estadoPrevio: prevEditarEventoInfo, formData: FormData) {
 
     const camposValidados = EditarEventoInfo.safeParse({
         nombre_evento: formData.get("nombre_evento"),
@@ -619,7 +629,7 @@ export async function editarEventoInfo(evento_id: string, asociacion_id: string,
         }
     }
 
-    const { nombre_evento, direccion_evento, descripcion_evento, alcaldia_id} = camposValidados.data;
+    const { nombre_evento, direccion_evento, descripcion_evento, alcaldia_id } = camposValidados.data;
 
     try {
         const respuesta = await conn.query(
@@ -644,14 +654,14 @@ export async function editarEventoInfo(evento_id: string, asociacion_id: string,
 
 const EditarEventoFoto = EsquemaEvento.omit({ evento_id: true, asociacion_id: true, nombre_evento: true, direccion_evento: true, descripcion_evento: true, alcaldia_id: true });
 
-export type prevEditarEventoFoto= {
+export type prevEditarEventoFoto = {
     errores?: {
-        foto_evento?: string[] ;
+        foto_evento?: string[];
     };
     mensaje?: string | null;
 };
 
-export async function editarEventoFoto(evento_id: string, asociacion_id: string,  estadoPrevio: prevEditarEventoFoto, formData: FormData) {
+export async function editarEventoFoto(evento_id: string, asociacion_id: string, estadoPrevio: prevEditarEventoFoto, formData: FormData) {
 
     const camposValidados = EditarEventoFoto.safeParse({
         foto_evento: formData.get('foto_evento')
