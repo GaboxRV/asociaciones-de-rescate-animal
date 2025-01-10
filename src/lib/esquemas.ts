@@ -79,7 +79,7 @@ export const EsquemaAsociacion = z.object({
     }),
     direccion_asociacion: z.string().min(5, "Ingrese una dirección valida"),
     puntuacion_asociacion: z.coerce.number().refine((val) => {
-        return val >= 0 && val <= 10;
+        return val >= 1 && val <= 10;
     }, {
         message: "Ingrese una puntuación valida"
     }),
@@ -95,6 +95,14 @@ export const EsquemaAsociacion = z.object({
         message: "Seleccione una alcaldía válida"
     }),
     rol_usuario: z.string()
+});
+
+export const EsquemaPuntuacion = z.object({
+    puntuacion_asociacion: z.coerce.number().refine((val) => {
+        return val >= 0 && val <= 10;
+    }, {
+        message: "Ingrese una puntuación valida"
+    }),
 });
 
 export const EsquemaEvento = z.object({

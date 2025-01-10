@@ -474,7 +474,18 @@ export async function fetchEventos() {
     noStore();
     try {
         const respuesta = await conn.query("SELECT * FROM eventos");
-        return respuesta.rows;
+
+        const datos = respuesta.rows
+
+        for (let index = 0; index < respuesta.rowCount; index++) {
+            const foto_data = datos[index].foto_evento;
+            if (foto_data != null) {
+                const foto = Buffer.from(foto_data).toString("base64");
+                datos[index].foto_evento = foto;
+            }
+        }
+        
+        return datos;
     } catch (error) {
         console.error("Error al obtener los eventos: ", error);
         throw new Error("Error al obtener los eventos");

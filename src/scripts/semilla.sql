@@ -102,3 +102,6 @@ SELECT *
 
 				
 SELECT * FROM alcaldias;
+
+SELECT asociaciones.puntuacion_asociacion, asociaciones.cantidad_puntuaciones_asociacion 
+FROM asociaciones WHERE asociacion_id = 1;

@@ -13,8 +13,6 @@ export default function FormularioPuntuacionAsociacion({ asociacion }: { asociac
     const [estado, mandar] = useFormState(editarPuntuacionConAsociacionId, estadoInicialAsociacionPuntuacion);
     const puntajes = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
 
-    console.log(estado)
-
     return (
         <form action={mandar} className={styles.ficha}>
                     <div className={styles.bloque_info_div}>
@@ -22,7 +20,7 @@ export default function FormularioPuntuacionAsociacion({ asociacion }: { asociac
                         <select
                             name="puntuacion_asociacion"
                         >
-                            <option value="">Selecciona una puntuacion</option>
+                            <option value="">Selecciona una puntuación</option>
                             {
                                 puntajes.map((puntaje: number) => (
                                     <option key={puntaje} value={puntaje}>{puntaje}</option>

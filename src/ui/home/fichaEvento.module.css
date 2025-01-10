@@ -1,0 +1,51 @@
+
+.evento{
+    padding: 1rem;
+    border-radius: 20px;
+    width: 600px;
+    display: flex;
+    align-items: center;
+    word-break: break-all;
+    gap: 1rem;
+    background-color: var(--color-evento);
+}
+
+.bloque_info {
+    margin: 1rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    width: 450px;
+    word-break: break-all;
+    gap: 1rem;
+}
+
+.nombre{
+    color: #ffe299;
+}
+
+.direccion{
+    color: #f8f1ec;
+}
+
+.descripcion{
+
+}
+
+.evento div{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.bloque_img {
+    width: 500px;
+}
+
+.evento img{
+    width: 100%;
+    object-fit: cover;
+    height: 250px;
+    border-radius: 20px;
+}

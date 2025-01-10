@@ -1,0 +1,15 @@
+
+
+.carrusel{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 1rem;
+}
+
+.botones{
+    display: flex;
+    justify-content: center;
+    gap: 1rem;
+}

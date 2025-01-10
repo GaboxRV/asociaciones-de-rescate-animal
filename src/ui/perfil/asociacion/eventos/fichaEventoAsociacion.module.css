@@ -1,7 +1,7 @@
 .ficha {
     display: flex;
     align-items: center;
-    background-color: aquamarine;
+    background-color: var(--color-evento);
     border-radius: 20px;
     width: 950px;
     padding: 2rem;

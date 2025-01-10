@@ -1,0 +1,34 @@
+
+
+.pagina{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+.home_informacion{
+    background-color: #ede0d1;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    margin-bottom: 2rem;
+}
+
+.descripcion{
+    width: 500px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 1rem;
+    margin: 1rem;
+    color: #4e4328;
+
+}
+
+.nombre{
+    font-size: 2rem;
+    font-weight: bold;
+    text-align: center;
+}

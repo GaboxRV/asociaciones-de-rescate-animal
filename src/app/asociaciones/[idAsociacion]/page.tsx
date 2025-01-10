@@ -14,18 +14,20 @@ export default async function PerfilAsociacion({ params }: { params: { idAsociac
 
             <article className={styles.ficha}>
                 <div className={styles.bloque_info}>
-                    <h3>Teléfono: {asociacion.telefono_asociacion}</h3>
-                    <h3>Dirección: {asociacion.direccion_asociacion}</h3>
-                    <h3>Puntuación: {asociacion.puntuacion_asociacion}/10 - <small>{asociacion.cantidad_puntuaciones_asociacion}</small> </h3>
-                    <h3>Descripción: {asociacion.descripcion_asociacion}</h3>
+                    <div className={styles.datos}>
+                        <h3>Teléfono: {asociacion.telefono_asociacion}</h3>
+                        <h3>Dirección: {asociacion.direccion_asociacion}</h3>
+                        <h3>Puntuación: {asociacion.puntuacion_asociacion}/10 - <small>{asociacion.cantidad_puntuaciones_asociacion}</small> </h3>
+                        <text>{asociacion.descripcion_asociacion}</text>
+                    </div>
+                    <FormularioPuntuacionAsociacion asociacion={asociacion} />
                 </div>
-                <FormularioPuntuacionAsociacion asociacion={asociacion} />
 
                 <div className={styles.bloque_img}>
-                    <img 
-                        src={`data:image/jpeg;base64,${asociacion.foto_asociacion}`} 
+                    <img
+                        src={`data:image/jpeg;base64,${asociacion.foto_asociacion}`}
                         alt={`Foto de ${asociacion.nombre_asociacion}`}
-                        className={styles.ficha_img} 
+                        className={styles.ficha_img}
                     />
                 </div>
             </article>
