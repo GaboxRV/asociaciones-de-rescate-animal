@@ -74,6 +74,3 @@ usuario: leonardo@sistema.com
 contraseña: perros1234
 rol: administrador
 ```
-
-
-Hex Codes: #889b70 #ede0d1 #f8f1ec #ffe299 #f2934c

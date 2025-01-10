@@ -15,9 +15,18 @@ export default async function Home() {
           <small>Este proyecto aborda el desarrollo de un sistema web colaborativo enfocado en apoyar a las asociaciones de rescate animal. Este sistema permite que cualquier organización de rescate comparta información sobre los animales que han sido rescatados. El sistema mantendrá un registro de la lista de animales rescatados junto con la información general de la organización que los haya registrado y mostrará la puntuación asignada por los usuarios a esa asociación.</small>
         </div>
       </div>
-      <Carrusel
-        eventos={eventos}
-      />
+      {
+        eventos.length > 0 ? 
+          <div>
+            <h2 className={styles.titulo}>Eventos</h2>
+
+            <Carrusel
+              eventos={eventos}
+            />
+          </div>
+        : <h3>No hay eventos disponibles</h3>
+      }
+
     </main>
   );
 }
