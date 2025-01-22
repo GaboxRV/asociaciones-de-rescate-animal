@@ -233,9 +233,6 @@ export async function crearUsuario(estadoPrevio: prevCrearUsuario, formData: For
 
         const asociacion_id = respuestaAsociacion.rows[0].asociacion_id;
 
-        console.log('intento de id asociacion: ', asociacion_id);
-
-
         const respuestaUsuarios = await conn.query(
             "INSERT INTO usuarios (nombre_usuario, contrasena_usuario, rol_usuario, asociacion_id) VALUES ($1, $2, $3, $4)",
             [nombre_usuario, contrasena_usuario, 'usuario no verificado', asociacion_id]
@@ -245,8 +242,21 @@ export async function crearUsuario(estadoPrevio: prevCrearUsuario, formData: For
 
     } catch (error) {
         await conn.query('ROLLBACK');
+
+        if ((error as any).code === '23505' && (error as any).constraint === 'usuarios_nombre_usuario_key') {
+            return {
+                mensaje: "Error: Ya existe el usuario."
+            };
+        }
+
+        if ((error as any).code === '23505' && (error as any).constraint === 'asociaciones_nombre_asociacion_key') {
+            return {
+                mensaje: "Error: El nombre de la asociacion ya esta registrado."
+            };
+        }
+
         return {
-            mensaje: "Error en la Base de Datos: Error al crear el usuario"
+            mensaje: "Error: Error al crear el usuario"
         }
     }
 

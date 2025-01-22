@@ -46,7 +46,7 @@ export default async function Mascotas({
                 ubicacionAlcaldia={ubicacion}
                 nombres_asociaciones={nombres_asociaciones}
             />
-            
+
             <section className={styles.seccion_mascotas}>
                 <TablaMascotas 
                     ubicacion={ubicacion}
