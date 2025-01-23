@@ -12,7 +12,10 @@ DROP TYPE IF EXISTS tipos_de_mascotas;
 DROP TYPE IF EXISTS tallas_de_mascotas;
 DROP TYPE IF EXISTS roles_de_usuario;
 
+DROP EXTENSION IF EXISTS citext;
 
+
+CREATE EXTENSION IF NOT EXISTS citext;
 CREATE TYPE sexos_de_mascotas AS ENUM ('macho', 'hembra');
 CREATE TYPE tipos_de_mascotas AS ENUM ('perro', 'gato');
 CREATE TYPE tallas_de_mascotas AS ENUM ('chica', 'mediana', 'grande');
@@ -33,7 +36,7 @@ CREATE TABLE IF NOT EXISTS alcaldias (
 
 CREATE TABLE IF NOT EXISTS asociaciones(
 	asociacion_id SERIAL PRIMARY KEY,
-	nombre_asociacion CHARACTER VARYING(255) UNIQUE NOT NULL,
+	nombre_asociacion CITEXT UNIQUE NOT NULL,
 	telefono_asociacion CHARACTER VARYING(255) UNIQUE,
 	direccion_asociacion CHARACTER VARYING(255),
 	puntuacion_asociacion REAL DEFAULT 1,
