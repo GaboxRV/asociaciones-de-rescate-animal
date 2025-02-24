@@ -85,9 +85,12 @@ export const EsquemaAsociacion = z.object({
     }),
     cantidad_puntuaciones_asociacion: z.coerce.number(),
     descripcion_asociacion: z.string().min(5, "Ingrese una descripción valida"),
-    foto_asociacion: z.instanceof(File).refine(file => file.type.startsWith('image/'), {
-        message: "El archivo debe ser una imagen"
-    }),
+    foto_asociacion: z
+    .instanceof(File)
+    .refine(file => file.size === 0 || file.type.startsWith('image/'), {
+      message: "El archivo debe ser una imagen o puede estar vacío",
+    })
+    .optional(),
     alcaldia_id:  z.string().refine((val) => {
         const id = parseInt(val, 10);
         return id >= 1 && id <= 16;
