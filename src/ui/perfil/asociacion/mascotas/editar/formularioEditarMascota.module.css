@@ -1,11 +1,22 @@
 
 .ficha{
     display: flex;
+    flex-direction: column;
     align-items: center;
     background-color: var(--color-mascota);
     border-radius: 20px;
     gap: 1rem;
     padding: 1rem;
+}
+
+.formulario{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.formulario_div{
+    display: flex;
 }
 
 .ficha small{
@@ -23,7 +34,6 @@
 .bloque_info_div{
     display: flex;
     flex-direction: column;
-    gap: 0.5rem;
 }
 
 .bloque_info_div input{
@@ -51,11 +61,9 @@
 
 .bloque_img{
     width: 500px;
-}
-
-.bloque_img form{
     display: flex;
     flex-direction: column;
+    justify-content: center;
     gap: 1rem;
 }
 
@@ -84,6 +92,14 @@
 
 @media screen and (max-width: 600px) {
     .ficha {
+        flex-direction: column;
+    }
+
+    .formulario {
+        flex-direction: column;
+    }
+
+    .formulario_div {
         flex-direction: column;
     }
 

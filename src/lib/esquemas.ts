@@ -18,7 +18,7 @@ export const EsquemaMascota = z.object({
     })
 });
 
-export const EsquemaEditarMascotaInfo = z.object({
+export const EsquemaEditarMascota = z.object({
     mascota_id: z.string(),
     nombre_mascota: z.string().min(3, "El nombre de la mascota debe tener al menos 3 caracteres"),
     edad_mascota: z.coerce.number().positive({ message: "La edad de la mascota debe ser mayor a 0 meses" }),
@@ -30,16 +30,15 @@ export const EsquemaEditarMascotaInfo = z.object({
     }),
     talla_mascota: z.enum(["chica", "mediana", "grande"], {
         errorMap: () => ({ message: "La talla de la mascota debe ser chica, mediana o grande" })
+    }),
+    foto_mascota: z
+    .instanceof(File)
+    .refine(file => file.size === 0 || file.type.startsWith('image/'), {
+      message: "El archivo debe ser una imagen o puede estar vacío",
     })
+    .optional()
 });
 
-
-export const EsquemaEditarMascotaFoto = z.object({
-    mascota_id: z.string(),
-    foto_mascota: z.instanceof(File).refine(file => file.type.startsWith('image/'), {
-        message: "El archivo debe ser una imagen"
-    })
-});
 
 export const EsquemaUsuario = z.object({
     usuario_id: z.string(),
@@ -116,6 +115,21 @@ export const EsquemaEvento = z.object({
     foto_evento: z.instanceof(File).refine(file => file.type.startsWith('image/'), {
         message: "El archivo debe ser una imagen"
     }),
+    asociacion_id: z.string(),
+    alcaldia_id: z.string()
+});
+
+export const EsquemaEditarEvento = z.object({
+    evento_id: z.string(),
+    nombre_evento: z.string().min(5, "Ingrese un nombre válido de al menos 5 caracteres"),
+    direccion_evento: z.string().min(5, "Ingrese una dirección válida de al menos 5 caracteres"),
+    descripcion_evento: z.string(),
+    foto_evento: z
+    .instanceof(File)
+    .refine(file => file.size === 0 || file.type.startsWith('image/'), {
+      message: "El archivo debe ser una imagen o puede estar vacío",
+    })
+    .optional(),
     asociacion_id: z.string(),
     alcaldia_id: z.string()
 });

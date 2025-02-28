@@ -10,13 +10,13 @@ export default function FormularioEditarAsociacionUsuario({ asociacion, alcaldia
     const alcaldia_id = parseInt(asociacion.alcaldia_id);
 
     const estadoInicialInfo = { mensaje: "", errores: {} }
-    const editarAsociacionInfoUsuarioConId = editarAsociacionUsuario.bind(null, asociacion.asociacion_id, asociacion.foto_asociacion);
+    const editarAsociacionInfoUsuarioConId = editarAsociacionUsuario.bind(null, asociacion.asociacion_id);
     const [estado, mandar] = useFormState(editarAsociacionInfoUsuarioConId, estadoInicialInfo);
 
     return (
         <section className={styles.ficha}>
-            <form action={mandar}>
-                <div className={styles.formulario}>
+            <form action={mandar} className={styles.formulario}>
+                <div className={styles.formulario_div}>
                     <div className={styles.bloque_info}>
 
                         <div className={styles.bloque_info_div}>

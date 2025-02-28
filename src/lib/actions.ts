@@ -5,7 +5,7 @@ import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import { signIn } from "../auth";
 import { AuthError } from 'next-auth';
-import { EsquemaMascota, EsquemaEditarMascotaInfo, EsquemaEditarMascotaFoto, EsquemaUsuario, EsquemaAsociacion, EsquemaEvento } from "@/lib/esquemas";
+import { EsquemaMascota, EsquemaEditarMascota, EsquemaUsuario, EsquemaAsociacion, EsquemaEvento, EsquemaEditarEvento } from "@/lib/esquemas";
 
 
 /**
@@ -72,29 +72,30 @@ export async function crearMascota(asociacion_id: string, estadoPrevio: prevCrea
  * Editar la informacion de una mascota desde una asociacion
  */
 
-const EditarMascotaInfo = EsquemaEditarMascotaInfo.omit({ mascota_id: true, asociacion_id: true });
+const EditarMascota = EsquemaEditarMascota.omit({ mascota_id: true, asociacion_id: true });
 
 
-export type prevEditarMascotaInfo = {
+export type prevEditarMascota = {
     errores?: {
         nombre_mascota?: string[];
         edad_mascota?: string[];
         sexo_mascota?: string[];
         tipo_mascota?: string[];
         talla_mascota?: string[];
-        asociacion_id?: string[];
+        foto_mascota?: string[];
     };
     mensaje?: string | null;
 };
 
-export async function editarMascotaInfo(mascota_id: string, asociacion_id: string, estadoPrevio: prevEditarMascotaInfo, formData: FormData) {
+export async function editarMascota(mascota_id: string, asociacion_id: string, estadoPrevio: prevEditarMascota, formData: FormData) {
 
-    const camposValidados = EditarMascotaInfo.safeParse({
+    const camposValidados = EditarMascota.safeParse({
         nombre_mascota: formData.get("nombre_mascota"),
         edad_mascota: formData.get("edad_mascota"),
         sexo_mascota: formData.get("sexo_mascota"),
         tipo_mascota: formData.get("tipo_mascota"),
         talla_mascota: formData.get("talla_mascota"),
+        foto_mascota: formData.get("foto_mascota"),
     });
 
     if (!camposValidados.success) {
@@ -104,13 +105,27 @@ export async function editarMascotaInfo(mascota_id: string, asociacion_id: strin
         }
     }
 
-    const { nombre_mascota, edad_mascota, sexo_mascota, tipo_mascota, talla_mascota } = camposValidados.data;
+    const { nombre_mascota, edad_mascota, sexo_mascota, tipo_mascota, talla_mascota, foto_mascota } = camposValidados.data;
 
 
     try {
-        const respuesta = await conn.query("UPDATE mascotas SET nombre_mascota = $1, edad_mascota = $2, sexo_mascota = $3, tipo_mascota = $4, talla_mascota = $5 WHERE mascota_id = $6",
-            [nombre_mascota, edad_mascota, sexo_mascota, tipo_mascota, talla_mascota, mascota_id]
-        );
+
+        if (foto_mascota && foto_mascota.size > 0) {
+            // Procesa la imagen
+            const foto_data = await foto_mascota.arrayBuffer();
+            const fotoBuffer = Buffer.from(new Uint8Array(foto_data));
+
+            const respuesta = await conn.query("UPDATE mascotas SET nombre_mascota = $1, edad_mascota = $2, sexo_mascota = $3, tipo_mascota = $4, talla_mascota = $5, foto_mascota = $6 WHERE mascota_id = $7",
+                [nombre_mascota, edad_mascota, sexo_mascota, tipo_mascota, talla_mascota, fotoBuffer, mascota_id]
+            );
+
+        } else {
+            // No se ha subido ninguna imagen o el archivo está vacío
+            console.log("No se ha seleccionado una imagen válida.");
+            const respuesta = await conn.query("UPDATE mascotas SET nombre_mascota = $1, edad_mascota = $2, sexo_mascota = $3, tipo_mascota = $4, talla_mascota = $5 WHERE mascota_id = $6",
+                [nombre_mascota, edad_mascota, sexo_mascota, tipo_mascota, talla_mascota, mascota_id]
+            );
+        }
 
     } catch (error) {
         return {
@@ -122,49 +137,6 @@ export async function editarMascotaInfo(mascota_id: string, asociacion_id: strin
     return { mensaje: "Información editada con exito", errores: {} };
 }
 
-/**
- * Editar la foto de una mascota desde una asociacion
- */
-
-const EditarMascotaFoto = EsquemaEditarMascotaFoto.omit({ mascota_id: true });
-
-export type prevEditarMascotaFoto = {
-    errores?: {
-        foto_mascota?: string[];
-    };
-    mensaje?: string | null;
-};
-
-export async function editarMascotaFoto(mascota_id: string, asociacion_id: string, estadoPrevio: prevEditarMascotaFoto, formData: FormData) {
-
-    const camposValidados = EditarMascotaFoto.safeParse({
-        foto_mascota: formData.get("foto_mascota"),
-    });
-
-    if (!camposValidados.success) {
-        return {
-            errores: camposValidados.error.flatten().fieldErrors,
-            mensaje: "Error en los campos del formulario"
-        }
-    }
-
-    try {
-        const { foto_mascota } = camposValidados.data;
-        const foto_data = await foto_mascota.arrayBuffer();
-        const fotoBuffer = Buffer.from(new Uint8Array(foto_data));
-
-        const respuesta = await conn.query("UPDATE mascotas SET foto_mascota = $1 WHERE mascota_id = $2", [fotoBuffer, mascota_id]);
-
-    } catch (error) {
-        return {
-            mensaje: "Error en la Base de Datos: Error al editar la mascota",
-        }
-    }
-
-    revalidatePath(`/perfil/asociacion/${asociacion_id}/mascotas`);
-    return { mensaje: "Foto editada con exito", errores: {} };
-
-}
 
 /**
  * Eliminar una mascota desde una asociacion
@@ -300,7 +272,7 @@ export type prevEditarAsociacionUsuario = {
     mensaje?: string | null;
 };
 
-export async function editarAsociacionUsuario(asociacion_id: string, foto: string, estadoPrevio: prevEditarAsociacionUsuario, formData: FormData) {
+export async function editarAsociacionUsuario(asociacion_id: string, estadoPrevio: prevEditarAsociacionUsuario, formData: FormData) {
 
     const camposValidados = EditarAsociacionUsuario.safeParse({
         nombre_asociacion: formData.get("nombre_asociacion"),
@@ -409,9 +381,9 @@ export async function editarPuntuacionPublico(asociacion_id: string, estadoPrevi
  */
 
 
-const EditarAsociacionInfoAdmin = EsquemaAsociacion.omit({ asociacion_id: true, cantidad_puntuaciones_asociacion: true, foto_asociacion: true });
+const EditarAsociacionAdmin = EsquemaAsociacion.omit({ asociacion_id: true, cantidad_puntuaciones_asociacion: true});
 
-export type prevEditarAsociacionInfoAdmin = {
+export type prevEditarAsociacionAdmin = {
     errores?: {
         nombre_asociacion?: string[];
         direccion_asociacion?: string[];
@@ -424,9 +396,9 @@ export type prevEditarAsociacionInfoAdmin = {
     mensaje?: string | null;
 };
 
-export async function editarAsociacionInfoAdmin(asociacion_id: string, estadoPrevio: prevEditarAsociacionInfoAdmin, formData: FormData) {
+export async function editarAsociacionAdmin(asociacion_id: string, estadoPrevio: prevEditarAsociacionAdmin, formData: FormData) {
 
-    const camposValidados = EditarAsociacionInfoAdmin.safeParse({
+    const camposValidados = EditarAsociacionAdmin.safeParse({
         nombre_asociacion: formData.get("nombre_asociacion"),
         direccion_asociacion: formData.get("direccion_asociacion"),
         alcaldia_id: formData.get("alcaldia_asociacion"),
@@ -434,6 +406,7 @@ export async function editarAsociacionInfoAdmin(asociacion_id: string, estadoPre
         descripcion_asociacion: formData.get("descripcion_asociacion"),
         puntuacion_asociacion: formData.get("puntuacion_asociacion"),
         rol_usuario: formData.get("rol_usuario"),
+        foto_asociacion: formData.get("foto_asociacion"),
     });
 
     if (!camposValidados.success) {
@@ -443,15 +416,32 @@ export async function editarAsociacionInfoAdmin(asociacion_id: string, estadoPre
         };
     }
 
-    const { nombre_asociacion, direccion_asociacion, alcaldia_id, telefono_asociacion, descripcion_asociacion, puntuacion_asociacion, rol_usuario } = camposValidados.data;
+    const { nombre_asociacion, direccion_asociacion, alcaldia_id, telefono_asociacion, descripcion_asociacion, puntuacion_asociacion, rol_usuario, foto_asociacion } = camposValidados.data;
 
     try {
         await conn.query('BEGIN');
-        const respuestaAsociacion = await conn.query("UPDATE asociaciones SET nombre_asociacion = $1, direccion_asociacion = $2, alcaldia_id = $3, telefono_asociacion = $4, descripcion_asociacion = $5, puntuacion_asociacion = $6 WHERE asociacion_id = $7",
-            [nombre_asociacion, direccion_asociacion, alcaldia_id, telefono_asociacion, descripcion_asociacion, puntuacion_asociacion, asociacion_id]
-        );
+        
+        if (foto_asociacion && foto_asociacion.size > 0) {
+            // Procesa la imagen
+            const foto_data = await foto_asociacion.arrayBuffer();
+            const fotoBuffer = Buffer.from(new Uint8Array(foto_data));
 
-        const respuestaUsuarios = await conn.query("UPDATE usuarios SET rol_usuario = $1 WHERE asociacion_id = $2", [rol_usuario, asociacion_id]);
+            const respuestaAsociacion = await conn.query("UPDATE asociaciones SET nombre_asociacion = $1, direccion_asociacion = $2, alcaldia_id = $3, telefono_asociacion = $4, descripcion_asociacion = $5, puntuacion_asociacion = $6, foto_asociacion = $7 WHERE asociacion_id = $8",
+                [nombre_asociacion, direccion_asociacion, alcaldia_id, telefono_asociacion, descripcion_asociacion, puntuacion_asociacion, fotoBuffer, asociacion_id]
+            );
+    
+            const respuestaUsuarios = await conn.query("UPDATE usuarios SET rol_usuario = $1 WHERE asociacion_id = $2", [rol_usuario, asociacion_id]);
+    
+        } else {
+            // No se ha subido ninguna imagen o el archivo está vacío
+            console.log("No se ha seleccionado una imagen válida.");
+            const respuestaAsociacion = await conn.query("UPDATE asociaciones SET nombre_asociacion = $1, direccion_asociacion = $2, alcaldia_id = $3, telefono_asociacion = $4, descripcion_asociacion = $5, puntuacion_asociacion = $6 WHERE asociacion_id = $7",
+                [nombre_asociacion, direccion_asociacion, alcaldia_id, telefono_asociacion, descripcion_asociacion, puntuacion_asociacion, asociacion_id]
+            );
+    
+            const respuestaUsuarios = await conn.query("UPDATE usuarios SET rol_usuario = $1 WHERE asociacion_id = $2", [rol_usuario, asociacion_id]);
+    
+        }
 
         await conn.query('COMMIT');
     } catch (error) {
@@ -464,57 +454,6 @@ export async function editarAsociacionInfoAdmin(asociacion_id: string, estadoPre
     revalidatePath(`/perfil/admin/asociaciones/${asociacion_id}`);
     return { mensaje: "Información editada con exito", errores: {} };
 }
-
-/**
- * Editar la foto de una asociación desde un administrador
- */
-
-const EditarAsociacionFotoAdmin = EsquemaAsociacion.omit({ asociacion_id: true, nombre_asociacion: true, telefono_asociacion: true, direccion_asociacion: true, puntuacion_asociacion: true, cantidad_puntuaciones_asociacion: true, descripcion_asociacion: true, alcaldia_id: true, rol_usuario: true });
-
-export type prevEditarAsociacionFotoAdmin = {
-    errores?: {
-        foto_asociacion?: string[];
-    };
-    mensaje?: string | null;
-};
-
-export async function editarAsociacionFotoAdmin(asociacion_id: string, estadoPrevio: prevEditarAsociacionFotoAdmin, formData: FormData) {
-
-    const camposValidados = EditarAsociacionFotoAdmin.safeParse({
-        foto_asociacion: formData.get("foto_asociacion"),
-    });
-
-    if (!camposValidados.success) {
-        return {
-            errores: camposValidados.error.flatten().fieldErrors,
-            mensaje: "Error en los campos del formulario",
-        };
-    }
-
-    const { foto_asociacion } = camposValidados.data;
-
-    const foto_data = await foto_asociacion.arrayBuffer();
-    const fotoBuffer = Buffer.from(new Uint8Array(foto_data));
-
-    try {
-        await conn.query('BEGIN');
-
-        const respuesta = await conn.query("UPDATE asociaciones SET foto_asociacion = $1 WHERE asociacion_id = $2",
-            [fotoBuffer, asociacion_id]
-        );
-
-        await conn.query('COMMIT');
-    } catch (error) {
-        await conn.query('ROLLBACK');
-        return {
-            mensaje: "Error en la Base de Datos: Error al editar la asociacion",
-        }
-    }
-
-    revalidatePath(`/perfil/admin/asociaciones/${asociacion_id}`);
-    return { mensaje: "Foto editada con exito ", errores: {} };
-}
-
 
 /**
  * Crear un evento
@@ -577,25 +516,27 @@ export async function crearEvento(asociacion_id: string, estadoPrevio: prevCrear
  * Editar la información de un evento
  */
 
-const EditarEventoInfo = EsquemaEvento.omit({ evento_id: true, asociacion_id: true, foto_evento: true });
+const EditarEventoInfo = EsquemaEditarEvento.omit({ evento_id: true, asociacion_id: true});
 
-export type prevEditarEventoInfo = {
+export type prevEditarEvento = {
     errores?: {
         nombre_evento?: string[];
         direccion_evento?: string[];
         descripcion_evento?: string[];
         alcaldia_id?: string[];
+        foto_evento?: string[];
     };
     mensaje?: string | null;
 };
 
-export async function editarEventoInfo(evento_id: string, asociacion_id: string, estadoPrevio: prevEditarEventoInfo, formData: FormData) {
+export async function editarEvento(evento_id: string, asociacion_id: string, estadoPrevio: prevEditarEvento, formData: FormData) {
 
     const camposValidados = EditarEventoInfo.safeParse({
         nombre_evento: formData.get("nombre_evento"),
         direccion_evento: formData.get("direccion_evento"),
         descripcion_evento: formData.get("descripcion_evento"),
         alcaldia_id: formData.get("alcaldia_evento"),
+        foto_evento: formData.get('foto_evento'),
     });
 
     if (!camposValidados.success) {
@@ -605,13 +546,29 @@ export async function editarEventoInfo(evento_id: string, asociacion_id: string,
         }
     }
 
-    const { nombre_evento, direccion_evento, descripcion_evento, alcaldia_id } = camposValidados.data;
+    const { nombre_evento, direccion_evento, descripcion_evento, alcaldia_id, foto_evento } = camposValidados.data;
 
     try {
-        const respuesta = await conn.query(
-            "UPDATE eventos SET nombre_evento = $1, direccion_evento = $2, descripcion_evento = $3, alcaldia_id = $4 WHERE evento_id = $5",
-            [nombre_evento, direccion_evento, descripcion_evento, alcaldia_id, evento_id]
-        );
+
+        if (foto_evento && foto_evento.size > 0) {
+            // Procesa la imagen
+            const foto_data = await foto_evento.arrayBuffer();
+            const fotoBuffer = Buffer.from(new Uint8Array(foto_data));
+
+            const respuesta = await conn.query(
+                "UPDATE eventos SET nombre_evento = $1, direccion_evento = $2, descripcion_evento = $3, alcaldia_id = $4, foto_evento = $5 WHERE evento_id = $6",
+                [nombre_evento, direccion_evento, descripcion_evento, alcaldia_id, fotoBuffer, evento_id]
+            );
+    
+        } else {
+            // No se ha subido ninguna imagen o el archivo está vacío
+            console.log("No se ha seleccionado una imagen válida.");
+            const respuesta = await conn.query(
+                "UPDATE eventos SET nombre_evento = $1, direccion_evento = $2, descripcion_evento = $3, alcaldia_id = $4 WHERE evento_id = $5",
+                [nombre_evento, direccion_evento, descripcion_evento, alcaldia_id, evento_id]
+            );
+    
+        }
 
     } catch (error) {
         return {
@@ -621,53 +578,6 @@ export async function editarEventoInfo(evento_id: string, asociacion_id: string,
 
     revalidatePath(`/perfil/asociacion/${asociacion_id}/eventos/${evento_id}/editar`);
     return { mensaje: "Información editada con exito", errores: {} };
-
-}
-
-/**
- * Editar la foto de un evento
- */
-
-const EditarEventoFoto = EsquemaEvento.omit({ evento_id: true, asociacion_id: true, nombre_evento: true, direccion_evento: true, descripcion_evento: true, alcaldia_id: true });
-
-export type prevEditarEventoFoto = {
-    errores?: {
-        foto_evento?: string[];
-    };
-    mensaje?: string | null;
-};
-
-export async function editarEventoFoto(evento_id: string, asociacion_id: string, estadoPrevio: prevEditarEventoFoto, formData: FormData) {
-
-    const camposValidados = EditarEventoFoto.safeParse({
-        foto_evento: formData.get('foto_evento')
-    });
-
-    if (!camposValidados.success) {
-        return {
-            errores: camposValidados.error.flatten().fieldErrors,
-            mensaje: "Error en los campos del formulario"
-        }
-    }
-
-    const { foto_evento } = camposValidados.data;
-
-    const foto_data = await foto_evento.arrayBuffer();
-    const fotoBuffer = Buffer.from(new Uint8Array(foto_data));
-    try {
-        const respuesta = await conn.query(
-            "UPDATE eventos SET foto_evento = $1 WHERE evento_id = $2",
-            [fotoBuffer, evento_id]
-        );
-
-    } catch (error) {
-        return {
-            mensaje: "Error en la Base de Datos: Error al editar el evento"
-        }
-    }
-
-    revalidatePath(`/perfil/asociacion/${asociacion_id}/eventos/${evento_id}/editar`);
-    return { mensaje: "Foto editada con exito", errores: {} };
 
 }
 

@@ -1,9 +1,20 @@
 .ficha {
     display: flex;
     align-items: center;
+    flex-direction: column;
     background-color: var(--color-mascota);
     border-radius: 20px;
     padding: 1rem;
+}
+
+.formulario{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.formulario_div{
+    display: flex;
 }
 
 .ficha small{
@@ -94,6 +105,10 @@
 
 @media screen and (max-width: 600px) {
     .ficha {
+        flex-direction: column;
+    }
+
+    .formulario_div{
         flex-direction: column;
     }
 
