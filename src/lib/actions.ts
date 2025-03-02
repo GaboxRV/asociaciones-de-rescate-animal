@@ -134,7 +134,7 @@ export async function editarMascota(mascota_id: string, asociacion_id: string, e
     }
 
     revalidatePath(`/perfil/asociacion/${asociacion_id}/mascotas`);
-    return { mensaje: "Información editada con exito", errores: {} };
+    redirect(`/perfil/asociacion/${asociacion_id}/mascotas`);
 }
 
 
@@ -577,8 +577,7 @@ export async function editarEvento(evento_id: string, asociacion_id: string, est
     }
 
     revalidatePath(`/perfil/asociacion/${asociacion_id}/eventos/${evento_id}/editar`);
-    return { mensaje: "Información editada con exito", errores: {} };
-
+    redirect(`/perfil/asociacion/${asociacion_id}/eventos`);
 }
 
 /**
