@@ -1,9 +1,20 @@
 .ficha {
     display: flex;
+    flex-direction: column;
     align-items: center;
     background-color: aquamarine;
     width: 950px;
     padding: 2rem;
+}
+
+.formulario{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.formulario_div{
+    display: flex;
 }
 
 .bloque_info {
@@ -24,7 +35,6 @@
 
 
 .bloque_info_div input {
-    width: 300px;
     height: 30px;
     border-radius: 10px;
 
@@ -42,7 +52,7 @@
 }
 
 .bloque_img {
-    width: 500px;
+    width: 400px;
     display: flex;
     flex-direction: column;
 }
@@ -105,6 +115,15 @@
     .ficha {
         width: 400px;
         flex-direction: column;
+    }
+
+    .formulario {
+        flex-direction: column;
+    }
+
+    .formulario_div {
+        flex-direction: column;
+        align-items: center;
     }
 
     .formulario_img {
