@@ -68,12 +68,9 @@
     border-radius: 5px;
 }
 
-.bloque_img {
-    width: 500px;
-}
-
 .bloque_img_div {
     display: flex;
+    width: 500px;
     flex-direction: column;
     justify-content: flex-end;
     gap: 1rem;
@@ -96,7 +93,7 @@
 }
 
 @media screen and (max-width: 1024px) {
-    .bloque_img{
+    .bloque_img_div{
         width: 400px;
     }
 
@@ -120,7 +117,7 @@
         flex-direction: column;
     }
 
-    .bloque_img{
+    .bloque_img_div{
         width: 300px;
     }
 

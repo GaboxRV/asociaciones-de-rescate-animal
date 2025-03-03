@@ -110,22 +110,6 @@ export default function FormularioRegistroDeUsuario({ alcaldias }: { alcaldias: 
                     </div>
 
                 </div>
-                <div>
-                    <input
-                        type="file"
-                        name="foto_asociacion"
-                    />
-
-                    <div id="error-foto_asociacion">
-                        {estado.errores?.foto_asociacion &&
-                            estado.errores.foto_asociacion.map((error: string) => (
-                                <p key={error}>
-                                    <small>{error}</small>
-                                </p>
-                            ))
-                        }
-                    </div>
-                </div>
 
                 <input 
                     type="submit" 
