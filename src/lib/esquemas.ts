@@ -61,9 +61,6 @@ export const EsquemaUsuario = z.object({
         return id >= 1 && id <= 16;
     }, {
         message: "Seleccione una alcaldía válida"
-    }),
-    foto_asociacion: z.instanceof(File).refine(file => file.type.startsWith('image/'), {
-        message: "El archivo debe ser una imagen"
     })
 });
 

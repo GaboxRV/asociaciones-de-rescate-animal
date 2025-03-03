@@ -6,7 +6,10 @@ import { redirect } from "next/navigation";
 import { signIn } from "../auth";
 import { AuthError } from 'next-auth';
 import { EsquemaMascota, EsquemaEditarMascota, EsquemaUsuario, EsquemaAsociacion, EsquemaEvento, EsquemaEditarEvento } from "@/lib/esquemas";
-
+import imagenUsuario from '@/app/recursos/usuario.png'
+const imageUrl = 'http://localhost:3000/recursos/icono.jpg';
+import fs from 'fs';
+import path from 'path';
 
 /**
  * Crear una mascota
@@ -168,7 +171,6 @@ export type prevCrearUsuario = {
         contrasena_usuario?: string[];
         nombre_asociacion?: string[];
         alcaldia_asociacion?: string[];
-        imagen_asociacion?: string[];
     };
     mensaje?: string | null;
 };
@@ -180,7 +182,6 @@ export async function crearUsuario(estadoPrevio: prevCrearUsuario, formData: For
         contrasena_usuario: formData.get("contrasena"),
         nombre_asociacion: formData.get("nombre_asociacion"),
         alcaldia_asociacion: formData.get("alcaldia_asociacion"),
-        foto_asociacion: formData.get("foto_asociacion")
     });
 
     if (!camposValidados.success) {
@@ -190,10 +191,10 @@ export async function crearUsuario(estadoPrevio: prevCrearUsuario, formData: For
         }
     }
 
-    const { nombre_usuario, contrasena_usuario, nombre_asociacion, alcaldia_asociacion, foto_asociacion } = camposValidados.data;
+    const { nombre_usuario, contrasena_usuario, nombre_asociacion, alcaldia_asociacion } = camposValidados.data;
 
-    const foto_data = await foto_asociacion.arrayBuffer();
-    const fotoBuffer = Buffer.from(new Uint8Array(foto_data));
+    const imagePath = path.join(process.cwd(), 'src', 'app', 'recursos', 'icono.jpg'); 
+    const fotoBuffer = fs.readFileSync(imagePath);
 
     try {
         await conn.query('BEGIN');
